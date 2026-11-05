@@ -1,0 +1,508 @@
+\section{Convergence with Stochastic Gradients, Momentum, and Geometric Error}
+\label{app:convergence}
+
+The preceding geometry identifies an algorithm to which a Riemannian
+convergence theorem can apply. This section separates exact quotient gradient
+descent, biased stochastic updates, transported momentum, and arbitrary
+adaptive directions. These are different algorithms. A proof for one is not
+a proof for all four. In particular, a numerical observation that balance-only
+matches an adaptive QuotientOpt implementation is not an exact theorem about
+the momentum method in the proposal.
+
+\subsection{Assumptions and a directly verifiable smoothness constant}
+\begin{assumption}[Regular iterates and lower-bounded objective]
+\label{ass:regular}
+The iterates and retraction segments used in a stated theorem remain in a
+compact regular neighborhood of $\mathcal K_{a,b}$. The objective
+$f:\mathcal M_r\to\mathbb R$ is differentiable and bounded below by
+$f_\star> -\infty$. A retraction radius $\rho>0$ is chosen so that all
+steps in the theorem are well defined and have lift norm at most $\rho$.
+\end{assumption}
+
+\begin{assumption}[Retraction smoothness]
+\label{ass:retraction-smooth}
+For all used horizontal lifts $\xi$ and base points $X$,
+\begin{equation}
+ f(R_X(\xi))\leq f(X)+g_X(\operatorname{grad}_g f(X),\xi)
+                   +\frac{L_R}{2}\|\xi\|_g^2.
+ \label{eq:retraction-smooth}
+\end{equation}
+Here the norm of a quotient tangent equals the factor norm of its horizontal
+lift. This is a bound on the actual retraction pullback, not merely a
+geodesic-smoothness assertion on a different update.
+\end{assumption}
+
+\begin{lemma}[An ambient sufficient condition]
+\label{lem:ambient-smoothness}
+Suppose an ambient extension of $f$ has an $L_f$-Lipschitz gradient along
+all relevant product segments, $\|\nabla f(X)\|\leq G_f$ at their base
+points, and $\sigma_1(X)\leq b$. For the factor retraction in
+Eq.~\eqref{eq:factor-retraction}, Assumption~\ref{ass:retraction-smooth}
+holds for steps of lift norm at most $\rho$ with
+\begin{equation}
+ L_R=G_f+L_f\left(\sqrt{2b}+\frac\rho2\right)^2.
+ \label{eq:explicit-smoothness}
+\end{equation}
+\end{lemma}
+\begin{proof}
+For a horizontal lift $\xi$, put $Z=\xi_BA+B\xi_A$ and
+$Q=\xi_B\xi_A$. Equation~\eqref{eq:exact-retraction} gives
+$R_X(\xi)-X=Z+Q$. Since
+$\|Z\|\leq\sqrt{2b}\|\xi\|$ and $\|Q\|\leq\|\xi\|^2/2$,
+ambient smoothness implies
+\begin{align}
+ f(R_X(\xi))&\leq f(X)+\langle\nabla f(X),Z\rangle
+       +\langle\nabla f(X),Q\rangle+\tfrac{L_f}{2}\|Z+Q\|^2\\
+ &\leq f(X)+g_X(\operatorname{grad}_g f(X),\xi)
+       +\tfrac12\left[G_f+L_f(\sqrt{2b}+\rho/2)^2\right]\|\xi\|^2.
+\end{align}
+The first-order identity is Theorem~\ref{thm:metric-explicit}. This proves
+the claim without replacing the factor retraction by an ambient Euler step.
+\end{proof}
+
+This lemma is useful for quadratic matrix losses, whose $L_f$ is controlled
+by the measurement operator. For neural networks, bounded activations alone
+do not automatically bound every derivative, particularly for PDE losses
+containing higher derivatives. Their regularity assumptions must be checked
+on the actual parameter neighborhood. For SIREN, the derivative bound
+contains the frequency multiplier; it is not the same as the bound for
+a one-Lipschitz activation.
+
+\subsection{Deterministic descent and the PL regime}
+\begin{theorem}[Deterministic first-order stationarity]
+\label{thm:deterministic}
+Under Assumptions~\ref{ass:regular}--\ref{ass:retraction-smooth}, let
+$g_t=\operatorname{grad}_g f(X_t)$ and $X_{t+1}=R_{X_t}(-\eta_tg_t)$.
+If $0<\eta_t\leq L_R^{-1}$, then
+\begin{equation}
+ f(X_{t+1})\leq f(X_t)-\frac{\eta_t}{2}\|g_t\|_g^2.
+ \label{eq:deterministic-descent}
+\end{equation}
+Consequently
+\begin{equation}
+ \min_{t<T}\|g_t\|_g^2\leq
+ \frac{2(f(X_0)-f_\star)}{\sum_{t<T}\eta_t}.
+ \label{eq:deterministic-stationarity}
+\end{equation}
+For a constant admissible step this is $O(T^{-1})$ in squared gradient
+norm and $O(T^{-1/2})$ in gradient norm.
+\end{theorem}
+\begin{proof}
+Apply Eq.~\eqref{eq:retraction-smooth} with $\xi=-\eta_tg_t$.
+The linear term is $-\eta_t\|g_t\|_g^2$, and the quadratic term is at
+most $\eta_t\|g_t\|_g^2/2$. This proves
+Eq.~\eqref{eq:deterministic-descent}. Sum it and use the lower bound
+$f(X_T)\geq f_\star$; the minimum is at most the stepsize-weighted average.
+\end{proof}
+
+\begin{assumption}[Quotient Polyak--\L{}ojasiewicz inequality]
+\label{ass:pl}
+On the invariant neighborhood of interest, the same minimum $f_\star$
+is attained and
+\begin{equation}
+ \tfrac12\|\operatorname{grad}_g f(X)\|_g^2
+ \geq\mu_g(f(X)-f_\star),\qquad \mu_g>0.
+ \label{eq:quotient-pl}
+\end{equation}
+\end{assumption}
+
+\begin{theorem}[PL contraction and continuous-time dissipation]
+\label{thm:pl}
+Under the preceding assumptions and a constant admissible step,
+\begin{equation}
+ f(X_T)-f_\star\leq(1-\mu_g\eta)^T(f(X_0)-f_\star).
+ \label{eq:pl-linear}
+\end{equation}
+The gradient flow $\dot X=-\mathcal K_X(\nabla f(X))$ satisfies
+\begin{equation}
+ \frac{d}{dt}f(X(t))=-\|\operatorname{grad}_g f(X(t))\|_g^2,
+ \quad f(X(t))-f_\star\leq e^{-2\mu_gt}(f(X(0))-f_\star).
+ \label{eq:flow-dissipation}
+\end{equation}
+If an embedded-metric PL inequality holds with constant $\mu_E$ on
+the same domain, Eq.~\eqref{eq:gradient-equivalence} implies
+$\mu_g\geq a\mu_E$. This comparison does not supply the missing PL
+inequality for a general nonconvex network.
+\end{theorem}
+\begin{proof}
+Insert Eq.~\eqref{eq:quotient-pl} into
+Eq.~\eqref{eq:deterministic-descent} and iterate. Along the flow, the
+chain rule and the definition of the Riemannian gradient give the
+dissipation identity. Gronwall's inequality applied to
+$\dot\Delta\leq-2\mu_g\Delta$ yields its exponential bound. Finally,
+Eq.~\eqref{eq:gradient-equivalence} bounds the quotient squared gradient
+below by $a$ times the embedded squared gradient.
+\end{proof}
+
+Balancing minimizes factor condition numbers on an orbit, whereas $a\mu_E$
+depends on the represented product and the restricted loss landscape. These
+are separate quantities. In particular, neither the PL constant nor an
+improved iteration complexity follows from the factor condition lock alone.
+
+\subsection{Stochastic stationarity with explicit bias}
+Let $\mathcal F_t$ contain the iterate and optimizer history before drawing
+the current stochastic sample. Write a horizontal estimator as
+\begin{equation}
+ \widehat g_t=g_t+b_t+\zeta_t,\qquad
+ \mathbb E[\zeta_t\mid\mathcal F_t]=0,\qquad
+ \mathbb E[\|\zeta_t\|_g^2\mid\mathcal F_t]\leq\nu_t^2.
+ \label{eq:biased-estimator}
+\end{equation}
+The predictable vector $b_t$ is the conditional mean bias. It can include
+the horizontal component of an inexact solve or a controlled coordinate
+error; its size is not presumed zero because a program calls its output
+a quotient gradient.
+
+\begin{theorem}[Biased stochastic quotient descent]
+\label{thm:stochastic}
+Suppose Assumptions~\ref{ass:regular}--\ref{ass:retraction-smooth} hold
+almost surely and $X_{t+1}=R_{X_t}(-\eta_t\widehat g_t)$ with
+$0<\eta_t\leq(4L_R)^{-1}$. Then
+\begin{align}
+ \mathbb E[f(X_{t+1})\mid\mathcal F_t]
+ &\leq f(X_t)-\frac{\eta_t}{2}\|g_t\|_g^2
+     +2\eta_t\|b_t\|_g^2+\frac{L_R\eta_t^2}{2}\nu_t^2.
+ \label{eq:biased-descent}
+\end{align}
+For $S_T=\sum_{t<T}\eta_t$,
+\begin{equation}
+ \frac{\sum_{t<T}\eta_t\mathbb E\|g_t\|_g^2}{S_T}
+ \leq\frac{2\Delta_0}{S_T}
+ +\frac{4\sum_{t<T}\eta_t\mathbb E\|b_t\|_g^2}{S_T}
+ +\frac{L_R\sum_{t<T}\eta_t^2\nu_t^2}{S_T},
+ \label{eq:stochastic-bound}
+\end{equation}
+where $\Delta_0=f(X_0)-f_\star$. This is also a bound for a random
+output iterate chosen with probability $\eta_t/S_T$.
+\end{theorem}
+\begin{proof}
+Conditional expectation in Eq.~\eqref{eq:retraction-smooth} gives
+\begin{align}
+ \mathbb E_t f(X_{t+1})
+ &\leq f(X_t)-\eta_t\|g_t\|_g^2-\eta_t\langle g_t,b_t\rangle_g\\
+ &\quad+\tfrac12L_R\eta_t^2\{\|g_t+b_t\|_g^2+\nu_t^2\}.
+\end{align}
+Use $|\langle g_t,b_t\rangle_g|\leq\|g_t\|_g^2/4+\|b_t\|_g^2$
+and $\|g_t+b_t\|_g^2\leq2\|g_t\|_g^2+2\|b_t\|_g^2$.
+The coefficient of $\eta_t\|g_t\|_g^2$ is at most
+$-3/4+L_R\eta_t\leq-1/2$. The bias coefficient is at most
+$1+L_R\eta_t\leq5/4\leq2$. This proves
+Eq.~\eqref{eq:biased-descent}. Take total expectations, telescope the
+objective terms, and divide by $S_T/2$ to obtain
+Eq.~\eqref{eq:stochastic-bound}. The random-iterate interpretation is
+the definition of its conditional sampling distribution.
+\end{proof}
+
+For constant $\nu_t\leq\nu$ and $\eta=c/\sqrt T$, the unbiased bound
+is $2\Delta_0/(c\sqrt T)+L_Rc\nu^2/\sqrt T$, subject to the step-radius
+restriction. A nonvanishing bias adds its nonvanishing mean-square floor.
+To retain an $O(T^{-1/2})$ squared-stationarity rate, it is sufficient
+that the weighted mean squared bias be $O(T^{-1/2})$; a fixed numerical
+tolerance need not satisfy that condition at arbitrarily large horizons.
+
+\begin{corollary}[Stochastic PL neighborhood]
+\label{cor:stochastic-pl}
+If Eq.~\eqref{eq:quotient-pl} also holds, $\|b_t\|_g\leq B$,
+$\nu_t\leq\nu$, and $\eta$ is constant, then
+\begin{equation}
+ \mathbb E[f(X_T)-f_\star]
+ \leq(1-\mu_g\eta)^T\Delta_0+
+ \frac{2B^2+L_R\eta\nu^2/2}{\mu_g}.
+ \label{eq:stochastic-pl-floor}
+\end{equation}
+\end{corollary}
+\begin{proof}
+Apply the PL inequality to the negative gradient term in
+Eq.~\eqref{eq:biased-descent}, then sum the resulting affine recursion.
+The geometric sum is bounded by $(\mu_g\eta)^{-1}$.
+\end{proof}
+
+\subsection{From geometric errors to the bias term}
+Suppose a computation at a balanced point uses an approximate projected
+direction. Proposition~\ref{prop:connection-error} bounds the factor error
+by a quantity $E_{{\rm conn},t}$. Its horizontal projection has norm at
+most $E_{{\rm conn},t}$ because the exact projector is nonexpansive.
+However, the computed factor direction may also retain a vertical part.
+Projecting that part away changes the implemented product by the exact
+mixed-term expression in Eq.~\eqref{eq:correct-cross-terms}.
+Consequently there are two errors to control: a tangent estimator error of
+size $E_{{\rm conn},t}$ and a finite-step product error of size
+$\eta_t^2q_t$. On a regular local chart with inverse differential norm
+bounded by $C_{\rm chart}$, the latter can be represented as an additional
+effective tangent error of order $C_{\rm chart}\eta_tq_t$, with higher
+orders controlled by the chart radius.
+
+The bound in Eq.~\eqref{eq:stochastic-bound} can therefore be used with
+an explicitly justified estimate of the form
+\begin{equation}
+ \|b_t\|_g\leq E_{{\rm conn},t}+E_{{\rm coord},t}
+       +E_{{\rm transport},t}+C_{\rm chart}\eta_tq_t.
+ \label{eq:error-budget}
+\end{equation}
+This is an error accounting formula, not a claim that all implementations
+have those errors bounded. In particular, computing gradients before a
+nonorthogonal balance change and then treating them as gradients at the
+new factors can give an uncontrolled $E_{{\rm coord},t}$. Correct
+recomputation after balancing makes this specific coordinate error zero.
+State transport without a uniform norm bound can likewise invalidate a
+bounded-transport assumption near rank deficiency.
+
+\subsection{Transported momentum: a complete tracking argument}
+We next analyze the normalized momentum convention used in the proposal:
+\begin{align}
+ v_t&=\beta\mathcal T_{t-1\to t}v_{t-1}
+          +(1-\beta)\widehat g_t,\qquad v_{-1}=0,\\
+ X_{t+1}&=R_{X_t}(-\eta v_t),\qquad 0\leq\beta<1.
+ \label{eq:momentum-algorithm}
+\end{align}
+For this theorem $\widehat g_t=g_t+\zeta_t$ is unbiased. The transport
+is an isometry on the used tangents; parallel transport is one example.
+Assume, on the same neighborhood,
+\begin{equation}
+ \|\mathcal T_{t-1\to t}g_{t-1}-g_t\|_g
+       \leq L_Tc_R\eta\|v_{t-1}\|_g,
+ \label{eq:transported-grad-lipschitz}
+\end{equation}
+and $\mathbb E_t\|\zeta_t\|_g^2\leq\nu^2$. These assumptions explicitly
+include the gradient variation along the chosen update and transport.
+An arbitrary coordinate transport through a large nonorthogonal gauge
+change is not automatically an isometry.
+
+\begin{lemma}[Momentum tracking recurrence]
+\label{lem:momentum-tracking}
+Let $e_t=v_t-g_t$, $q_t=\mathbb E\|e_t\|_g^2$, and
+$V_t=\mathbb E\|v_t\|_g^2$. For $t\geq1$,
+\begin{equation}
+ q_t\leq\beta q_{t-1}+
+ \frac{\beta^2L_T^2c_R^2\eta^2}{1-\beta}V_{t-1}
+ +(1-\beta)^2\nu^2.
+ \label{eq:tracking-recursion}
+\end{equation}
+Consequently
+\begin{equation}
+ \sum_{t<T}q_t\leq\frac{q_0}{1-\beta}+
+ \frac{\beta^2L_T^2c_R^2\eta^2}{(1-\beta)^2}
+       \sum_{t<T}V_t+T(1-\beta)\nu^2,
+ \label{eq:tracking-sum}
+\end{equation}
+where $q_0\leq\beta^2\|g_0\|_g^2+(1-\beta)^2\nu^2$.
+\end{lemma}
+\begin{proof}
+Set $d_t=\mathcal T_{t-1\to t}g_{t-1}-g_t$. Subtract $g_t$ from
+Eq.~\eqref{eq:momentum-algorithm} to obtain
+\begin{equation}
+ e_t=\beta\mathcal T e_{t-1}+\beta d_t+(1-\beta)\zeta_t.
+\end{equation}
+The first two terms are measurable before the current sample. Their cross
+term with $\zeta_t$ has zero conditional mean. Isometry and the weighted
+Young inequality give
+\begin{equation}
+ \|\beta\mathcal T e_{t-1}+\beta d_t\|_g^2
+ \leq\beta\|e_{t-1}\|_g^2+
+       \frac{\beta^2}{1-\beta}\|d_t\|_g^2.
+\end{equation}
+Insert Eq.~\eqref{eq:transported-grad-lipschitz} to prove the recurrence.
+Summing it from $1$ to $T-1$ and moving the $\beta\sum q_t$ terms to
+the left proves Eq.~\eqref{eq:tracking-sum}; extending the nonnegative
+$V_t$ sum to $T-1$ only enlarges its right side. At the first iteration,
+$e_0=-\beta g_0+(1-\beta)\zeta_0$, whose expected squared norm gives
+the initial bound.
+\end{proof}
+
+\begin{theorem}[Stationarity of transported horizontal momentum]
+\label{thm:momentum}
+Under the stated momentum assumptions, choose
+\begin{equation}
+ \eta\leq\min\left\{\frac1{2L_R},
+ \frac{1-\beta}{2\beta L_Tc_R}\right\},
+ \label{eq:momentum-step}
+\end{equation}
+where the second restriction is omitted for $\beta=0$. Then
+\begin{equation}
+ \frac1T\sum_{t<T}\mathbb E\|g_t\|_g^2
+ \leq\frac{2\Delta_0}{\eta T}
+       +\frac{q_0}{(1-\beta)T}+(1-\beta)\nu^2.
+ \label{eq:momentum-rate}
+\end{equation}
+For deterministic gradients and fixed $\beta<1$, this yields an
+$O(T^{-1})$ squared-stationarity bound. For stochastic gradients, taking
+$1-\beta=T^{-1/2}$ and $\eta=cT^{-1/2}$ with a sufficiently small
+constant $c$ gives an $O(T^{-1/2})$ bound for $T\geq4$.
+\end{theorem}
+\begin{proof}
+The polarization identity gives
+$2\langle g_t,v_t\rangle_g=\|g_t\|_g^2+\|v_t\|_g^2-\|e_t\|_g^2$.
+Applying retraction smoothness to the step in
+Eq.~\eqref{eq:momentum-algorithm} and using $L_R\eta\leq1/2$ yields
+\begin{equation}
+ \mathbb E f(X_{t+1})\leq\mathbb E f(X_t)
+ -\tfrac\eta2\mathbb E\|g_t\|_g^2
+ -\tfrac\eta4 V_t+\tfrac\eta2 q_t.
+ \label{eq:momentum-descent}
+\end{equation}
+Sum this inequality and use Lemma~\ref{lem:momentum-tracking}.
+The second stepsize restriction implies
+$\beta^2L_T^2c_R^2\eta^2/(1-\beta)^2\leq1/4$.
+The contribution of the resulting $V_t$ term is at most
+$\eta\sum V_t/8$, which is absorbed by the negative
+$-\eta\sum V_t/4$. Drop the remaining nonpositive term and divide by
+$\eta T/2$ to prove Eq.~\eqref{eq:momentum-rate}.
+For $1-\beta=T^{-1/2}$, the first two terms are $O(T^{-1/2})$ because
+$q_0$ is bounded; the variance term is $\nu^2T^{-1/2}$.
+\end{proof}
+
+This is a conservative tracking theorem. For a fixed stochastic momentum
+coefficient it displays a variance floor; it is not a claim that the
+empirically used fixed $\beta=0.9$ must converge to zero gradient under
+constant noise. Tighter fixed-momentum results require a different
+Lyapunov argument and additional regularity. If the implemented transport
+is only approximately isometric, its norm inflation and consistency
+errors must be included in the tracking recurrence. A large transport
+condition number cannot be dropped from that calculation.
+
+\begin{corollary}[Momentum with a slightly norm-inflating transport]
+\label{cor:approximate-momentum}
+Replace isometry in Theorem~\ref{thm:momentum} by
+$\|\mathcal T\xi\|\leq(1+c\eta)\|\xi\|$ and retain
+Eq.~\eqref{eq:transported-grad-lipschitz}. If
+\begin{equation}
+ \beta(1+c\eta)^2\leq\frac{1+\beta}{2},\qquad
+ \eta\leq\min\left\{\frac1{2L_R},
+ \frac{1-\beta}{2\sqrt2\beta L_Tc_R}\right\},
+ \label{eq:approximate-transport-step}
+\end{equation}
+then
+\begin{equation}
+ \frac1T\sum_{t<T}\mathbb E\|g_t\|_g^2
+ \leq\frac{2\Delta_0}{\eta T}
+ +\frac{2q_0}{(1-\beta)T}+2(1-\beta)\nu^2.
+ \label{eq:approximate-momentum-rate}
+\end{equation}
+For $\beta=0$ the transport restrictions are unnecessary. The same
+$O(T^{-1/2})$ stochastic schedule is available with a sufficiently small
+constant when $c,L_T,c_R$ are uniform.
+\end{corollary}
+\begin{proof}
+The weighted Young step in Lemma~\ref{lem:momentum-tracking} now gives
+\begin{equation}
+ q_t\leq\beta(1+c\eta)^2q_{t-1}
+ +\frac{\beta^2L_T^2c_R^2\eta^2}{1-\beta}V_{t-1}
+ +(1-\beta)^2\nu^2.
+\end{equation}
+The first coefficient is at most $\rho=(1+\beta)/2$ by assumption.
+Summing therefore gives
+\begin{equation}
+ \sum_{t<T}q_t\leq\frac{2q_0}{1-\beta}
+ +\frac{2\beta^2L_T^2c_R^2\eta^2}{(1-\beta)^2}\sum_{t<T}V_t
+ +2T(1-\beta)\nu^2.
+\end{equation}
+The second restriction in Eq.~\eqref{eq:approximate-transport-step}
+makes the coefficient of $\sum V_t$ at most $1/4$.
+Insert this sum into Eq.~\eqref{eq:momentum-descent}; the velocity terms
+are absorbed as in Theorem~\ref{thm:momentum}. Division by $\eta T/2$
+proves Eq.~\eqref{eq:approximate-momentum-rate}.
+\end{proof}
+
+\begin{proposition}[Local applicability to balance--project transport]
+\label{prop:implemented-transport}
+Consider an exact horizontal factor step from a balanced pair in a compact
+regular neighborhood. Copy the factor arrays as an ambient tangent at
+the new unbalanced pair, change coordinates by a smooth near-identity
+balancing gauge $Q$, and project horizontally at the new balanced pair.
+If the step's horizontal velocity has norm at most $M$, this transport
+has norm at most $1+C\eta^2M^2$ for sufficiently small steps, with
+$C$ depending on the regular neighborhood. If the gradient is continuously
+differentiable there, it also satisfies a bound of the form
+Eq.~\eqref{eq:transported-grad-lipschitz}. Thus it fits
+Corollary~\ref{cor:approximate-momentum} with local uniform constants.
+The assertion concerns exact horizontal projection; damping and solve
+errors require their additional terms in Eq.~\eqref{eq:error-budget}.
+\end{proposition}
+\begin{proof}
+For a horizontal velocity $v$, the factors after the step have balance
+defect
+\begin{equation}
+ (B-\eta v_B)^\top(B-\eta v_B)
+ -(A-\eta v_A)(A-\eta v_A)^\top
+ =\eta^2(v_B^\top v_B-v_Av_A^\top).
+\end{equation}
+The first-order term is zero because $C_p(v)=0$. The smooth local
+balancing equation has an invertible symmetric-gauge derivative, a
+Sylvester operator whose inverse is bounded on the compact regular
+domain. The implicit-function bound therefore gives a balancing gauge
+with $\|Q-I\|_2+\|Q^{-1}-I\|_2\leq C\eta^2M^2$.
+The orthogonal ambiguity may be fixed by smooth Procrustes alignment;
+its action is an isometry and does not change the norm estimate.
+Equation~\eqref{eq:coordinate-transport} bounds the coordinate-change
+operator norm by $1+C\eta^2M^2$, and horizontal projection has norm at
+most one. This proves the transport bound.
+
+At zero step the transport is the identity on horizontal tangents.
+In a smooth frame, its difference from the identity is bounded by the
+step displacement, and the continuously differentiable gradient has a
+bounded derivative on the compact neighborhood. Applying the mean-value
+bound to their composition yields a constant times
+$\eta\|v\|$, which is Eq.~\eqref{eq:transported-grad-lipschitz}
+after incorporating the local retraction displacement constant.
+\end{proof}
+
+The bounded-velocity premise is a substantive regularity condition,
+particularly with stochastic gradients. For almost surely bounded oracle
+gradients and a fixed finite horizon it can be checked from the momentum
+recursion and the local transport bound; a horizon-independent bound
+needs a small-step invariant velocity bound. It is not supplied by a
+variance bound alone. These qualifications make the relationship between
+the ideal isometric theorem and the implemented first-moment transport
+explicit, instead of silently equating the two.
+
+\subsection{Predictable preconditioners and the Adam boundary}
+\begin{proposition}[Bounded predictable tangent preconditioning]
+\label{prop:predictable-preconditioner}
+Let $H_t$ be a self-adjoint tangent operator measurable with respect to
+$\mathcal F_t$, with $\alpha I\preceq H_t\preceq\gamma I$, $\alpha>0$.
+For the unbiased estimator $g_t+\zeta_t$, update
+$X_{t+1}=R_{X_t}(-\eta H_t(g_t+\zeta_t))$.
+If $\eta\leq\alpha/(L_R\gamma^2)$, then
+\begin{equation}
+ \frac1T\sum_{t<T}\mathbb E\|g_t\|_g^2
+ \leq\frac{2\Delta_0}{\alpha\eta T}
+            +\frac{L_R\eta\gamma^2\nu^2}{\alpha}.
+ \label{eq:preconditioned-rate}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Predictability makes the conditional mean update equal to $H_tg_t$.
+The first-order descent is at least $\eta\alpha\|g_t\|_g^2$ and the
+conditional squared update norm is at most
+$\gamma^2(\|g_t\|_g^2+\nu^2)$. Retraction smoothness, the stepsize
+restriction, and telescoping give the asserted result.
+\end{proof}
+
+An Adam denominator computed from the current sample is not predictable
+in this sense, and its elementwise coordinates do not automatically define
+a self-adjoint quotient operator with uniform spectral bounds. The present
+proposition therefore does not prove convergence of ordinary AdamW,
+balance-projected AdamW, or the archived adaptive heuristic. Those are
+empirical comparators whose behavior must be measured. The momentum
+algorithm has no elementwise second-moment state and has a different
+justified analysis.
+
+\subsection{Interpretation of long-horizon experiments}
+The deterministic and stochastic bounds concern the minimum or a weighted
+random iterate, not necessarily the last iterate. A best validation
+checkpoint is selected by validation data and is not necessarily the
+minimum training-gradient iterate. PL assumptions allow an objective-gap
+statement for the last iterate, but they must be supplied separately.
+Likewise, small raw gradient energy in the vertical space is an algebraic
+identity and does not test convergence. We therefore log the quotient
+gradient proxy, loss trajectory, numerical residuals, rank margin,
+and actual task metric separately. For a near-zero $a$, the regular-domain
+constants and the transport assumptions can fail even when a finite
+training loss is reported.
+
+The main practical consequence of the theory is a falsifiable set of
+conditions: gradients must be evaluated in the current section, the
+rank margin must be monitored, the joint connection residual must be small
+for deep chains, and any claim of non-accumulation must be tied to the
+actual update-map contraction. None of these conditions alone predicts
+that balancing wins on every task family or at every learning rate.

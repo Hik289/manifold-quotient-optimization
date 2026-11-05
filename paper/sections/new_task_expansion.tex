@@ -1,0 +1,111 @@
+\section{Fixed Expansion to Four Additional Tasks}
+\label{app:new-task-expansion}
+This exploratory expansion fixes four tasks before its formal runs:
+CiteSeer/GCN \citep{kipf2017gcn} with a rank-4 input adapter; a synthetic sphere signed
+distance field with a rank-8 SIREN \citep{sitzmann2020siren}; Burgers solution-operator learning
+with a rank-8 DeepONet \citep{lu2019deeponet}; and $128\times128$ rank-8 matrix completion
+with planted condition number 100. It is an additional task study,
+not an independently confirmed or completed exhaustive proposal grid.
+The SDF is synthetic. Burgers uses the documented Cole--Hopf
+quadrature data and parameter-held-out splits from
+Appendix~\ref{app:full-protocol}; it is not relabeled as a public
+benchmark data set.
+
+Each task crosses all four methods with exactly the same nine learning
+rates
+\[
+\{10^{-5},3\!\times\!10^{-5},10^{-4},3\!\times\!10^{-4},
+10^{-3},3\!\times\!10^{-3},10^{-2},3\!\times\!10^{-2},10^{-1}\}.
+\]
+We fix $\beta=0.9$, $\varepsilon=10^{-6}$, balance interval one,
+and seed 42. The two larger step sizes extend the proposal's original
+learning-rate slice equally for every method, to examine the
+underfitting seen at its central setting. Graph runs have 1000 epochs;
+the other runs have 2000. The four task blocks contain 36 attempts
+each, for 144 total. Low-resource execution checks provide timing
+estimates only and never enter the result tables.
+
+\paragraph{Validation and test separation.}
+Within a run, the earliest minimum-validation-loss checkpoint is
+selected: cross-entropy for graphs and MSE for the other tasks.
+Across learning rates, the minimum validation score selects a run,
+with ties broken by smaller learning rate and then earlier epoch.
+Test metrics never enter these choices. The additional implementation
+does not evaluate the test set every epoch: it evaluates the
+validation-selected checkpoint and final-horizon model after training.
+The graph split is the official public transductive split; its metrics
+are not presented as IID population-risk certificates.
+
+Matrix completion uses disjoint fixed masks with 50\% training,
+10\% validation, and 40\% test entries. Selection uses only the
+validation-entry MSE. Full planted-matrix reconstruction error is
+retained as a separate diagnostic and is not a validation criterion.
+The other data and model definitions match the documented
+implementation, including frozen base matrices and the shared
+optimizer for non-factor parameters.
+
+\paragraph{Complete blocks, stopped trials, and interpretation.}
+A selected initial-slice comparison is published only after all 36
+prescribed attempts for that task have terminated. The primary table selects from
+completed full-horizon runs. If a later-stopped trial has a finite best
+validation checkpoint, its test metric and status are retained in a
+separate sensitivity analysis. A claim of improvement over all controls
+must also survive that sensitivity analysis. Stopped runs are not
+converted into complete-horizon results. Every attempted task,
+learning rate, method, and failure remains in the full record below;
+unfavorable outcomes are retained. One fixed seed does not establish
+seed robustness or a confidence interval. Near-ties with balance-only
+do not establish a distinct task-accuracy gain from projection.
+
+\paragraph{Sequential factor-step extension.}
+The initial 144-run plan remains unchanged and its complete comparisons
+are retained separately in Table~\ref{tab:new-task-initial}.
+Motivated by training underfitting and the different factor and
+non-factor step scales, we add four factor learning rates
+$\{0.3,1,3,10\}$ for every method and every task, fixing the shared
+non-factor AdamW learning rate at $10^{-3}$.
+Matrix completion has no non-factor parameters, so its four added
+settings simply extend the factor learning-rate range.
+This is a disclosed exploratory extension, not a setting fixed before
+the initial study. It adds 64 trials. The joint budget has 13 settings
+per method and 52 attempts per task, for 208 attempts in total.
+All four methods receive the same two regimes: nine coupled learning
+rates and four larger factor-only learning rates.
+Joint selection minimizes validation loss over their union; a joint
+comparison is reported only after all 52 attempts for that task have
+terminated. The failed-trial sensitivity rule also applies to this
+joint selection. Values below a validation MSE scale of $10^{-14}$
+are treated as numerically limited when selecting substantive
+case-study figures; percentage differences between such values do
+not establish an optimization advantage.
+
+\input{figures/new_task_summary}
+\input{figures/new_task_initial_scores}
+\input{figures/new_task_scores}
+\input{figures/new_task_curves_input}
+\FloatBarrier
+\paragraph{Descriptive validation iteration profiles.}
+For regression tasks we additionally report the complete family of
+relative-MSE targets $\{10^{-1},10^{-2},10^{-3},10^{-4},10^{-6}\}$.
+With the same initial model and validation data for all methods,
+define the finite-prefix tuning envelope
+\begin{equation}
+ e_{m,t}=\min_{\lambda\in\Lambda_m}
+ \min_{0\le s\le\min\{t,T_{m,\lambda}\}}
+ \frac{L_{\rm val}(z_{m,\lambda,s})}{L_{\rm val}(z_0)},
+ \qquad
+ \tau_m(a)=\inf\{t:e_{m,t}\le a\}.
+\end{equation}
+Every method has the same 13 optimizer settings. Retained finite
+prefixes of stopped runs are eligible, so failed configurations do not
+erase a baseline's earlier finite progress. An unreached target is
+censored at the horizon. These are descriptive validation tuning
+profiles, with test metrics excluded, rather than an independently
+registered confirmation or a single executable optimizer trajectory.
+They compare iteration budgets; shared-machine wall times are not a
+controlled speed benchmark. The common initial validation scale is
+checked against saved initial model states across methods and settings.
+\input{figures/new_task_convergence_input}
+\FloatBarrier
+\input{figures/new_task_all_results}
+\FloatBarrier

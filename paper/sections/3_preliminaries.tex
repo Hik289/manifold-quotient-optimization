@@ -1,0 +1,12 @@
+\section{Problem Setup}
+Write $\mathcal K_{a,b}=\{X:\operatorname{rank}(X)=r,\ a\leq\sigma_r(X)\leq\sigma_1(X)\leq b\}$, with $0<a\leq b$. We study product losses $F(B,A)=f(BA)$ on full-rank factors. For a tangent $u=(u_B,u_A)$, the product differential is $D\pi[u]=u_BA+Bu_A$, whose kernel is $\mathcal V=\{(B\Omega,-\Omega A)\}$. At balanced factors $B^\top B=AA^\top=H$, the horizontal lift satisfies $B^\top u_B-u_AA^\top=0$. Its orthogonal projection is computed by
+\begin{equation}
+\begin{aligned}
+H\Omega+\Omega H&=B^\top u_B-u_AA^\top,\\
+\Pi_Hu&=(u_B-B\Omega,u_A+\Omega A).
+\end{aligned}
+ \label{eq:sylvester_connection}
+\end{equation}
+Away from balance, the exact Euclidean projector uses $B^\top B$ and $AA^\top$ on the two different sides of the Sylvester equation. This unbalanced projection must not be mistaken for a globally invariant Euclidean $\mathrm{GL}(r)$ connection.
+
+For $X=U\Sigma V^\top$, balanced representatives are $(U\Sigma^{1/2}R,R^\top\Sigma^{1/2}V^\top)$ with $R\in\mathrm O(r)$. They attain $\kappa(B)=\kappa(A)=\sqrt{\kappa(X)}$ at the point where balance is applied. The update energy statistic is $\rho_{\rm upd}=\|u-\Pi_Hu\|^2/\|u\|^2$, measured in the same factor coordinates in which $u$ is defined. A denominator based on the target matrix's condition number is a different statistic from one based on the current product.

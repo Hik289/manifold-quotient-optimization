@@ -1,0 +1,169 @@
+{
+  "study": "focused_poisson_v1",
+  "status": "predeclared_before_new_runs",
+  "reason": "Original seed-42 full-grid rank-16 Poisson/PINN cohort favored QuotientOpt; hold the task and optimizer settings fixed and repeat with model initializations 43 and 44, including all four controls.",
+  "data_and_shuffle_seed": 42,
+  "initialization_seeds": [
+    42,
+    43,
+    44
+  ],
+  "learning_rates": [
+    0.001
+  ],
+  "methods": [
+    "adamw",
+    "sgdm",
+    "balance_only",
+    "quotientopt"
+  ],
+  "original_reference_run_ids": {
+    "adamw": "eb320c4540efad0889e0",
+    "sgdm": "3074b1d44f19ceeb82f3",
+    "balance_only": "a2d4cb3a2cde06a2d34d",
+    "quotientopt": "bb304a3161d8fe131b0c"
+  },
+  "selection": "Fixed configuration; all 2000-epoch final test endpoints and validation-selected checkpoints retained; no test-based omission.",
+  "tasks": [
+    {
+      "name": "poisson_pinn_r16",
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000
+    }
+  ],
+  "configs": [
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "adamw",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 43,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "sgdm",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 43,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "balance_only",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 43,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "quotientopt",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 43,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "adamw",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 44,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "sgdm",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 44,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "balance_only",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 44,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    },
+    {
+      "family": "sciml",
+      "dataset": "poisson",
+      "model": "pinn",
+      "rank": 16,
+      "epochs": 2000,
+      "method": "quotientopt",
+      "lr": 0.001,
+      "beta": 0.9,
+      "eps": 1e-06,
+      "balance_interval": 1,
+      "seed": 42,
+      "initialization_seed": 44,
+      "task_name": "poisson_pinn_r16",
+      "protocol": "focused_poisson_v1"
+    }
+  ],
+  "planned_new_runs": 8,
+  "planned_total_including_existing_seed42": 12
+}

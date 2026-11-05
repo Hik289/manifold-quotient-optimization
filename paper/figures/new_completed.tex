@@ -1,0 +1,32 @@
+\begin{longtable}{p{.31\linewidth}p{.13\linewidth}rrrr}
+\caption{Completed matched main-experiment four-method cohorts. Gauge and ablation runs are reported separately. Values are final task metrics: planted-operator reconstruction error for matrix/chain tasks, held-out metrics for other tasks. Lower error is better; higher accuracy/PSNR is better. Only the first 30 cohorts are typeset here; all records remain in the machine-readable progress artifact.}\label{tab:new-results}\\
+\toprule Task & Metric & AdamW & SGD-M & Balance & QO \\ \midrule\endfirsthead
+\toprule Task & Metric & AdamW & SGD-M & Balance & QO \\ \midrule\endhead
+\shortstack[l]{poisson/pinn\\r16, lr=0.001} & Rel. $L_2$ & 0.06223 & 0.07767 & 0.05577 & 0.05384\\
+\shortstack[l]{synthetic/chain\\r8/L2, lr=0.001} & Rel. error & 0.06798 & 0.06799 & 0.9579 & 0.9579\\
+\shortstack[l]{cora/gcn\\r4, lr=1e-05} & Accuracy & 0.452 & 0.4 & 0.401 & 0.401\\
+\shortstack[l]{synthetic/chain\\r8/L2, lr=0.001} & Rel. error & 0.01359 & 0.01363 & 0.959 & 0.959\\
+\shortstack[l]{cifar10/mlp\\r32, lr=0.001} & Accuracy & 0.4942 & 0.4782 & 0.4723 & 0.4724\\
+\shortstack[l]{image/mlp\\r8, lr=0.001} & PSNR & 4.536 & 4.539 & 4.539 & 4.539\\
+\shortstack[l]{sensing/factorization\\r16, lr=0.001} & Rel. error & 0.02616 & 0.2498 & 0.9277 & 0.9277\\
+\shortstack[l]{image/mlp\\r32, lr=0.001} & PSNR & 4.538 & 4.542 & 4.542 & 4.542\\
+\shortstack[l]{sensing/factorization\\r8, lr=0.001} & Rel. error & 0.02687 & 0.2578 & 0.9675 & 0.9675\\
+\shortstack[l]{cora/gcn\\r4, lr=0.001} & Accuracy & 0.665 & 0.702 & 0.699 & 0.699\\
+\shortstack[l]{image/mlp\\r16, lr=0.001} & PSNR & 4.543 & 4.545 & 4.545 & 4.545\\
+\shortstack[l]{cifar10/mlp\\r16, lr=0.001} & Accuracy & 0.4885 & 0.4808 & 0.4771 & 0.4776\\
+\shortstack[l]{cifar10/mlp\\r4, lr=0.001} & Accuracy & 0.477 & 0.4684 & 0.4744 & 0.4721\\
+\shortstack[l]{cora/gcn\\r4, lr=0.0001} & Accuracy & 0.631 & 0.711 & 0.712 & 0.712\\
+\shortstack[l]{cora/gcn\\r4, lr=0.01} & Accuracy & 0.665 & 0.73 & 0.698 & 0.698\\
+\shortstack[l]{cifar10/mlp\\r8, lr=0.001} & Accuracy & 0.4837 & 0.4719 & 0.4767 & 0.4704\\
+\shortstack[l]{cora/gcn\\r4, lr=3e-05} & Accuracy & 0.603 & 0.621 & 0.622 & 0.621\\
+\shortstack[l]{poisson/pinn\\r8, lr=0.001} & Rel. $L_2$ & 0.05951 & 0.07489 & 0.07868 & 0.07868\\
+\shortstack[l]{cora/gcn\\r8, lr=0.001} & Accuracy & 0.745 & 0.709 & 0.703 & 0.7\\
+\shortstack[l]{wikitext2/10m\\r8, lr=0.001} & Perplexity & 1.104e+08 & 1.135e+16 & 2.833e+14 & 3.499e+14\\
+\shortstack[l]{wikitext2/10m\\r4, lr=0.001} & Perplexity & 1.864e+09 & 1.777e+15 & 6.815e+13 & 5.979e+13\\
+\shortstack[l]{cora/gcn\\r16, lr=0.001} & Accuracy & 0.734 & 0.71 & 0.701 & 0.703\\
+\shortstack[l]{sensing/factorization\\r4, lr=0.001} & Rel. error & 0.03213 & 0.2173 & 0.8936 & 0.8936\\
+\shortstack[l]{cora/gcn\\r4, lr=0.003} & Accuracy & 0.646 & 0.711 & 0.702 & 0.702\\
+\shortstack[l]{synthetic/chain\\r8/L2, lr=0.001} & Rel. error & 7.996e-05 & 0.000742 & 0.9592 & 0.9592\\
+\shortstack[l]{cora/gcn\\r4, lr=0.0003} & Accuracy & 0.64 & 0.7 & 0.701 & 0.702\\
+\bottomrule
+\end{longtable}

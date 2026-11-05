@@ -1,0 +1,257 @@
+\subsection{Differentiating balance and the actual persistent-state map}
+\label{app:rigid-state}
+\begin{definition}[A smooth SPD balancing gauge]
+For full-rank factors, set
+\begin{align}
+G_B&=B^\top B,&G_A&=AA^\top,\\
+T&=(G_B^{1/2}G_AG_B^{1/2})^{1/2},&
+P&=G_B^{-1/2}TG_B^{-1/2},&
+Q&=P^{1/2},\\
+\mathcal B(B,A)&=(BQ,Q^{-1}A).
+\label{eq:rigid-spd-balance}
+\end{align}
+All square roots in this definition are positive definite.
+\end{definition}
+
+\begin{proposition}[Exact balance differential]
+For $\delta p=(\delta B,\delta A)$,
+\begin{align}
+PG_BP&=G_A,\qquad Q^\top G_BQ=Q^{-1}G_AQ^{-\top},\\
+\delta G_B&=B^\top\delta B+\delta B^\top B,\\
+\delta G_A&=\delta A A^\top+A\delta A^\top,\\
+(\delta P)G_BP+PG_B(\delta P)
+&=\delta G_A-P(\delta G_B)P,\\
+C&=G_B^{1/2}(\delta P)G_B^{1/2},\\
+CT+TC&=G_B^{1/2}\{\delta G_A-P(\delta G_B)P\}G_B^{1/2},\\
+Q\,\delta Q+\delta Q\,Q&=\delta P,\\
+(D\mathcal B_p[\delta p])_B&=\delta BQ+B\delta Q,\\
+(D\mathcal B_p[\delta p])_A&=Q^{-1}\delta A-Q^{-1}\delta Q Q^{-1}A .
+\label{eq:rigid-balance-differential}
+\end{align}
+Thus two positive-definite Sylvester solves determine the gauge
+differential without differentiating individual eigenvectors.
+\end{proposition}
+\begin{proof}
+\begin{align}
+PG_BP
+&=G_B^{-1/2}T^2G_B^{-1/2}=G_A,\\
+Q^2G_BQ^2=G_A
+&\Longrightarrow QG_BQ=Q^{-1}G_AQ^{-1},\\
+D(PG_BP)&=(\delta P)G_BP+P(\delta G_B)P+PG_B(\delta P),\\
+D(Q^2)&=Q\delta Q+\delta Q Q,&
+D(Q^{-1})&=-Q^{-1}\delta Q Q^{-1}.
+\end{align}
+Congruence of the $\delta P$ equation by $G_B^{1/2}$ gives the
+Sylvester equation in $C$. Both coefficients $T,Q$ are positive
+definite, so both linear equations have unique symmetric solutions.
+\end{proof}
+
+\begin{corollary}[First-order balance is a tangent projection]
+At $G_B=G_A=H$,
+\begin{align}
+P=Q&=I,&
+H\delta Q+\delta QH&=-\qsym C_p(\delta p),\\
+D\mathcal B_p[\delta p]&=\delta p+V_p(\delta Q),&
+D\mathcal B_p&=\operatorname{Proj}_{T_p\mathcal S},\\
+\|D\mathcal B_p\|&=1,&
+\delta p\in T_p\mathcal S&\Longrightarrow\delta Q=0 .
+\end{align}
+\end{corollary}
+\begin{proof}
+Since $\delta G_A-\delta G_B=-2\qsym C_p(\delta p)$ and
+$\delta P=2\delta Q$, the Sylvester equation follows.
+For symmetric $\delta Q$, $V_p(\delta Q)$ is normal to
+$T_p\mathcal S$. Furthermore,
+\begin{equation}
+\qsym C_p(\delta p+V_p(\delta Q))
+=\qsym C_p(\delta p)+H\delta Q+\delta QH=0 .
+\end{equation}
+The tangential component is unchanged and the normal component is
+removed.
+\end{proof}
+
+\begin{lemma}[Differential of the horizontal projector]
+For $V=V_p$, $N=V^*V$, $V^\dagger=N^{-1}V^*$, and
+$\Pi=I-VV^\dagger$,
+\begin{align}
+\delta V(\Omega)&=(\delta B\Omega,-\Omega\delta A),\\
+D\Pi_p[\delta p]
+&=-\Pi(\delta V)V^\dagger-(V^\dagger)^*(\delta V)^*\Pi .
+\label{eq:rigid-projector-state-derivative}
+\end{align}
+If $G_B,G_A\succeq\alpha I$, then
+\begin{equation}
+\|D\Pi_p[\delta p]\|_{\rm op}
+\leq\sqrt{2/\alpha}\,\|\delta p\| .
+\end{equation}
+\end{lemma}
+\begin{proof}
+Differentiate $\Pi=I-VN^{-1}V^*$ and use
+$\delta N=(\delta V)^*V+V^*(\delta V)$:
+\begin{align}
+\delta\Pi
+&=-(\delta V)N^{-1}V^*-VN^{-1}(\delta V)^*
++VN^{-1}(\delta N)N^{-1}V^*\\
+&=-\Pi(\delta V)V^\dagger-(V^\dagger)^*(\delta V)^*\Pi,\\
+\|\delta V\|_{\rm op}&\leq\|\delta p\|,&
+\sigma_{\min}(V)^2&=\lambda_{\min}(N)\geq2\alpha .
+\end{align}
+The norm bound follows from $\|V^\dagger\|\leq(2\alpha)^{-1/2}$.
+\end{proof}
+
+\begin{proposition}[Finite uniform constants on a Gram band]
+Suppose
+$\alpha I\preceq G_A,G_B\preceq\gamma I$ and put
+\begin{align}
+h&=(\gamma/\alpha)^{1/4},&
+C_\Pi&=\sqrt{2/\alpha},\\
+C_Q&=\frac{\gamma^{3/2}}{2\alpha^2}
+(\gamma/\alpha)^{1/4}\sqrt{1+(\gamma/\alpha)^2},&
+C_{\mathcal B}&=h+\sqrt\gamma\sqrt{1+h^4}\,C_Q .
+\end{align}
+Then
+\begin{align}
+\|Q\|_2,\|Q^{-1}\|_2&\leq h,&
+\|DQ_p[\delta p]\|_F&\leq C_Q\|\delta p\|,\\
+\|D\mathcal B_p[\delta p]\|&\leq C_{\mathcal B}\|\delta p\|,\\
+\|D(T_{Q(p)}m)[\delta p,\delta m]\|
+&\leq h\|\delta m\|+h^2\|m\|C_Q\|\delta p\|,
+\end{align}
+where $T_Qm=(m_BQ,Q^{-1}m_A)$.
+For $\|G_z\|_F\leq G_f$ and
+$\|\nabla^2 f_z\|_{F\to F}\leq L_f$, the fresh factor gradient obeys
+\begin{align}
+g_z(p)&=(G_zA^\top,B^\top G_z),\\
+\|g_z(p)\|&\leq\sqrt{2\gamma}G_f=:G_{\rm fac},&
+\|Dg_z(p)\|_{\rm op}&\leq2\gamma L_f+G_f=:L_{\rm fac}.
+\label{eq:rigid-state-constants}
+\end{align}
+\end{proposition}
+\begin{proof}
+\begin{align}
+\alpha P^2\preceq PG_BP=G_A\preceq\gamma I
+&\Longrightarrow\|P\|_2\leq\sqrt{\gamma/\alpha},\\
+\gamma P^2\succeq G_A\succeq\alpha I
+&\Longrightarrow\lambda_{\min}(P)\geq\sqrt{\alpha/\gamma},\\
+\alpha I\preceq T\preceq\gamma I,\qquad
+\|\delta P\|_F
+&\leq\frac{\gamma}{2\alpha^2}
+\|\delta G_A-P(\delta G_B)P\|_F,\\
+\|\delta G_A-P(\delta G_B)P\|_F
+&\leq2\sqrt\gamma\sqrt{1+(\gamma/\alpha)^2}\|\delta p\|,\\
+\|\delta Q\|_F&\leq
+\frac{\|\delta P\|_F}{2\lambda_{\min}(Q)} .
+\end{align}
+Apply the exact differentials to obtain $C_Q,C_{\mathcal B}$.
+For $L_p=D\pi_p$,
+\begin{align}
+Dg_z(p)[\delta p]
+&=L_p^*\nabla^2f_z[L_p\delta p]
++(G_z\delta A^\top,\delta B^\top G_z),\\
+\|L_p\|_{\rm op}&\leq\sqrt{2\gamma},&
+\|(G_z\delta A^\top,\delta B^\top G_z)\|
+&\leq G_f\|\delta p\|.
+\end{align}
+These imply the factor-gradient bounds.
+\end{proof}
+
+\begin{theorem}[Jacobian of the exact balanced momentum state]
+\label{thm:rigid-actual-state-jacobian}
+For an exact, undamped connection, use a state $(p,m)$ with
+$p\in\mathcal S$ and $\Pi_pm=m$:
+\begin{align}
+u&=\beta m+(1-\beta)g_z(p),&
+v&=\Pi_pu,&z_p&=p-\eta v,\\
+Q&=Q(z_p),&p^+&=\mathcal B(z_p),&
+w&=T_Qv,&m^+&=\Pi_{p^+}w .
+\label{eq:rigid-canonical-state}
+\end{align}
+This is the first-moment iteration expressed with the next balance and
+state projection performed at the end of the current step.
+Its exact differential is
+\begin{align}
+\delta v
+&=(D\Pi_p[\delta p])u+
+\Pi_p\{\beta\delta m+(1-\beta)Dg_z(p)[\delta p]\},\\
+\delta z_p&=\delta p-\eta\delta v,&
+\delta Q&=DQ_{z_p}[\delta z_p],\\
+\delta p^+&=D\mathcal B_{z_p}[\delta z_p],\\
+\delta w_B&=\delta v_BQ+v_B\delta Q,&
+\delta w_A&=Q^{-1}\delta v_A-Q^{-1}\delta Q Q^{-1}v_A,\\
+\delta m^+
+&=(D\Pi_{p^+}[\delta p^+])w+\Pi_{p^+}\delta w .
+\label{eq:rigid-actual-state-jacobian}
+\end{align}
+\end{theorem}
+\begin{proof}
+Projection is linear in its vector argument and $g_z(p)$ is horizontal:
+\begin{equation}
+\Pi_p\{\beta m+(1-\beta)g_z(p)\}
+=\beta\Pi_pm+(1-\beta)g_z(p).
+\end{equation}
+At the next iteration, projecting transported $v$ before or after
+forming the new first moment gives the same result. This proves the
+state equivalence. The differential follows successively from the
+product rule, Eq.~\eqref{eq:rigid-balance-differential}, and
+Eq.~\eqref{eq:rigid-projector-state-derivative}.
+\end{proof}
+
+\begin{corollary}[An explicit state sensitivity matrix]
+Assume the preceding Gram band holds at $p,z_p,p^+$ and along all
+connecting state and oracle interpolation paths. Let $\|m\|\leq M$ and put
+\begin{align}
+U&=\beta M+(1-\beta)G_{\rm fac},\\
+A_v&=C_\Pi U+(1-\beta)L_{\rm fac},&
+C_m&=U(C_\Pi hC_{\mathcal B}+h^2C_Q).
+\end{align}
+Then the componentwise Jacobian bound is
+\begin{equation}
+\begin{pmatrix}\|\delta p^+\|\\\|\delta m^+\|\end{pmatrix}
+\leq
+\underbrace{\begin{pmatrix}
+C_{\mathcal B}(1+\eta A_v)&C_{\mathcal B}\eta\beta\\
+hA_v+C_m(1+\eta A_v)&h\beta+C_m\eta\beta
+\end{pmatrix}}_{\mathsf M}
+\begin{pmatrix}\|\delta p\|\\\|\delta m\|\end{pmatrix}.
+\label{eq:rigid-state-sensitivity-matrix}
+\end{equation}
+For $d_\lambda=\|p-p'\|+\lambda\|m-m'\|$, $\lambda>0$,
+\begin{align}
+d_\lambda(U_zs,U_zs')
+&\leq\Lambda_\lambda d_\lambda(s,s'),\\
+\Lambda_\lambda
+&=\max\{\mathsf M_{11}+\lambda\mathsf M_{21},
+\mathsf M_{22}+\mathsf M_{12}/\lambda\},\\
+d_\lambda(U_zs,U_{z'}s)
+&\leq2G_{\rm fac}(1-\beta)
+\{\eta C_{\mathcal B}+\lambda(h+\eta C_m)\}.
+\label{eq:rigid-explicit-state-sensitivity}
+\end{align}
+\end{corollary}
+\begin{proof}
+The exact Jacobian gives
+\begin{align}
+\|\delta v\|&\leq A_v\|\delta p\|+\beta\|\delta m\|,\\
+\|\delta z_p\|&\leq\|\delta p\|+\eta\|\delta v\|,\\
+\|\delta p^+\|&\leq C_{\mathcal B}\|\delta z_p\|,\\
+\|\delta m^+\|&\leq h\|\delta v\|+C_m\|\delta z_p\|.
+\end{align}
+Substitution yields $\mathsf M$. Multiplying by $(1,\lambda)$ proves
+the common-example bound by integration along the prescribed path.
+For a changed example at a fixed state,
+$\|\delta v\|\leq(1-\beta)\|g_z-g_{z'}\|
+\leq2(1-\beta)G_{\rm fac}$ and
+$\|\delta z_p\|\leq\eta\|\delta v\|$.
+The same last two inequalities give the data perturbation bound.
+\end{proof}
+For $0<\beta<1$ and $\lambda=\eta\beta/(1-\beta)$, its injection
+constant divided by $2\eta$ is
+\begin{equation}
+C_U=G_{\rm fac}\{(1-\beta)C_{\mathcal B}
++\beta(h+\eta C_m)\}.
+\end{equation}
+The coarse matrix $\mathsf M$ supplies finite bounds; it does not
+establish $\Lambda_\lambda=1+O(\eta)$ with a step-independent constant.
+Such a sharper statement must preserve the cancellations in the exact
+Jacobian. In particular, no contraction follows by deleting its state
+blocks.

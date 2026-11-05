@@ -1,0 +1,8 @@
+% Local working-draft adapter, not an official ICML 2027 style.
+% The official 2027 archive returned HTTP 404 on 2026-11-02.
+% Base style is the unmodified official ICML 2026 release.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{icml2027_draft}[2026/11/02 ICML 2027 working-draft adapter]
+\DeclareOption*{\PassOptionsToPackage{\CurrentOption}{icml2026}}
+\ProcessOptions\relax
+\RequirePackage{icml2026}

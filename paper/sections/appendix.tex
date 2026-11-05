@@ -1,0 +1,49 @@
+\input{sections/expanded_guarantees}
+\input{sections/rigid_geometry}
+\input{sections/rigid_calculus}
+\input{sections/rigid_chain}
+\input{sections/rigid_convergence}
+\input{sections/rigid_local_dynamics}
+\input{sections/rigid_noise_averaging}
+\input{sections/rigid_generalization}
+\input{sections/rigid_local_statistics}
+\input{sections/theory_diagnostics}
+\input{sections/full_protocol}
+\input{sections/archive_evidence_audit}
+\input{sections/fresh_evidence_cases}
+\input{sections/failure_recovery}
+\input{sections/new_task_expansion}
+\input{sections/failure_retry_appendix}
+\input{sections/initialization_confirmation}
+\input{sections/supporting_loss_curves}
+\input{sections/initial_central_cases}
+\FloatBarrier
+\section{Completed Replacement Experiments}
+\label{app:new-results}
+Only complete runs with the configured horizon and a saved result record enter these tables. Runs from the two-epoch implementation checks are excluded. This snapshot is generated from the experiment artifacts and can grow as the full grid executes. A cohort requires all four methods at a matched task/rank/hyperparameter setting; partial cohorts remain in the progress record without a winner label.
+\input{figures/new_completed}
+\subsection{RU01 completions and narrowed continuation}
+The formal RU01 report increased from 139 to 158 full-horizon results
+between the recorded snapshots, and from 20 to 26 complete four-method
+cohorts. Table~\ref{tab:ru01-latest} includes every new completion in
+that interval, without selecting rows by test performance. Final-epoch
+values in this table are distinct from the validation-selected
+checkpoints of the additional four-task search.
+\input{figures/ru01_latest_results}
+\paragraph{Frozen Poisson/PINN follow-up.}
+The original grid workers were paused after the 158-run snapshot; four
+in-progress job trees retain checkpoints and trajectories. The separate
+follow-up fixes the Poisson/PINN model, rank 16, factor learning rate
+$10^{-3}$, momentum $0.9$, damping $10^{-6}$, and 2000 epochs from
+the completed seed-42 four-method cohort. Data and shuffle seed remain
+42. Model initializations 43 and 44 are crossed with AdamW, SGD-M,
+balance-only, and QuotientOpt, for eight new runs with no per-method
+retuning. All test outcomes and numerical stops enter the follow-up
+report; results are not pooled into the original grid counts. All eight
+new runs complete the prescribed 2000 epochs. The earliest minimum
+validation-MSE checkpoint is evaluated on held-out data; the complete
+per-initialization records and final-horizon endpoints are in
+Table~\ref{tab:poisson-initialization-all}. The eight saved selected
+checkpoints were independently re-evaluated and agree with their
+reported test metrics.
+\input{figures/poisson_initialization_all}

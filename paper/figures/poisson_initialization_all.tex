@@ -1,0 +1,18 @@
+\begin{longtable}{@{}lrlrrr@{}}
+\caption{\textbf{All Poisson/PINN initialization outcomes.} Best epoch minimizes validation MSE; the selected test and final-horizon columns are held-out relative $L_2$ errors. Seed 42 is the pre-existing original-grid run; seeds 43 and 44 are the separately predeclared follow-up.}\label{tab:poisson-initialization-all}\\
+\toprule Init. & Method & Best epoch & Best val. MSE & Selected test & Final test \\ \midrule\endfirsthead
+\toprule Init. & Method & Best epoch & Best val. MSE & Selected test & Final test \\ \midrule\endhead
+42 & AdamW & 1945 & $0.000203$ & 0.06143 & 0.06223\\
+42 & SGD-M & 1989 & $0.000331$ & 0.07777 & 0.07767\\
+42 & Balance-only & 1995 & $0.000147$ & 0.05022 & 0.05577\\
+\rowcolor{oursbg}42 & QuotientOpt & 1986 & $0.000148$ & 0.04994 & 0.05384\\
+43 & AdamW & 1993 & $0.000191$ & 0.05875 & 0.05945\\
+43 & SGD-M & 1969 & $0.000226$ & 0.06438 & 0.06500\\
+43 & Balance-only & 1992 & $0.000129$ & 0.04655 & 0.04733\\
+\rowcolor{oursbg}43 & QuotientOpt & 1987 & $0.000128$ & 0.04663 & 0.04737\\
+44 & AdamW & 1915 & $0.000229$ & 0.06472 & 0.06732\\
+44 & SGD-M & 1986 & $0.000297$ & 0.07450 & 0.07526\\
+44 & Balance-only & 1996 & $0.000155$ & 0.05255 & 0.05726\\
+\rowcolor{oursbg}44 & QuotientOpt & 1996 & $0.000155$ & 0.05255 & 0.05731\\
+\bottomrule
+\end{longtable}

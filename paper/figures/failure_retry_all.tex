@@ -1,0 +1,30 @@
+\begingroup\small\setlength{\tabcolsep}{4pt}
+\begin{longtable}{@{}lrrrrr@{}}
+\caption{All 22 adjusted fixed-step runs. Every row completes 2000 epochs. The parent learning rate produced a recorded numerical stop, and the adjusted learning rate uses the original initialization. Validation MSE determines the checkpoint; test MSE is measured at that selected checkpoint.}\label{tab:retry-all}\\
+\toprule Task / method & Parent LR & Retry LR & Epoch & Val. MSE & Test MSE\\\midrule\endfirsthead
+\toprule Task / method & Parent LR & Retry LR & Epoch & Val. MSE & Test MSE\\\midrule\endhead
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 0.01 & 0.00255 & 1780 & 0.0021 & 0.0025\\
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 0.03 & 0.0021 & 1792 & 0.0031 & 0.0037\\
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 0.1 & 0.00165 & 1695 & 0.0031 & 0.0036\\
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 0.3 & 0.00255 & 1992 & 0.0029 & 0.0034\\
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 1 & 0.00225 & 1995 & 0.0029 & 0.0035\\
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 3 & 0.00195 & 1993 & 0.0028 & 0.0033\\
+\rowcolor{oursbg}Burgers / DeepONet / QuotientOpt & 10 & 0.00165 & 1995 & 0.0031 & 0.0037\\
+SDF / SIREN / SGD-M & 0.03 & 0.0085 & 1785 & $1.12\!\times\!10^{-4}$ & $1.09\!\times\!10^{-4}$\\
+SDF / SIREN / SGD-M & 0.1 & 0.0055 & 1934 & $1.68\!\times\!10^{-4}$ & $1.85\!\times\!10^{-4}$\\
+SDF / SIREN / SGD-M & 0.3 & 0.0085 & 1981 & $2.17\!\times\!10^{-4}$ & $2.52\!\times\!10^{-4}$\\
+SDF / SIREN / SGD-M & 1 & 0.0075 & 1997 & $2.26\!\times\!10^{-4}$ & $2.49\!\times\!10^{-4}$\\
+SDF / SIREN / SGD-M & 3 & 0.0065 & 1977 & $2.53\!\times\!10^{-4}$ & $2.81\!\times\!10^{-4}$\\
+SDF / SIREN / SGD-M & 10 & 0.0055 & 1994 & $2.73\!\times\!10^{-4}$ & $3.00\!\times\!10^{-4}$\\
+SDF / SIREN / Balance-only & 0.1 & 0.0255 & 146 & 0.0018 & 0.0018\\
+SDF / SIREN / Balance-only & 3 & 0.85 & 1974 & $1.20\!\times\!10^{-4}$ & $1.35\!\times\!10^{-4}$\\
+SDF / SIREN / Balance-only & 10 & 0.55 & 1998 & $1.36\!\times\!10^{-4}$ & $1.45\!\times\!10^{-4}$\\
+\rowcolor{oursbg}SDF / SIREN / QuotientOpt & 0.1 & 0.0255 & 163 & 0.0014 & 0.0015\\
+\rowcolor{oursbg}SDF / SIREN / QuotientOpt & 3 & 0.85 & 1984 & $1.41\!\times\!10^{-4}$ & $1.40\!\times\!10^{-4}$\\
+\rowcolor{oursbg}SDF / SIREN / QuotientOpt & 10 & 0.55 & 1957 & $1.29\!\times\!10^{-4}$ & $1.40\!\times\!10^{-4}$\\
+Matrix completion / SGD-M & 1 & 0.255 & 2000 & $2.24\!\times\!10^{-8}$ & $2.48\!\times\!10^{-8}$\\
+Matrix completion / SGD-M & 3 & 0.21 & 2000 & $3.77\!\times\!10^{-8}$ & $4.06\!\times\!10^{-8}$\\
+Matrix completion / SGD-M & 10 & 0.165 & 2000 & $3.69\!\times\!10^{-8}$ & $4.08\!\times\!10^{-8}$\\
+\bottomrule
+\end{longtable}
+\endgroup

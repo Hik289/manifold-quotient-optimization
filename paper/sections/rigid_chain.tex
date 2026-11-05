@@ -1,0 +1,359 @@
+\section{Joint Deep-Chain Geometry: Exact Spectra and Depth Dependence}
+\label{app:rigid-chain}
+\subsection{Joint group action and the normal operator}
+\begin{definition}
+For $L\geq2$,
+\begin{align}
+W_1&\in\R_*^{r\times d},&
+W_i&\in{\rm GL}(r)\ (1<i<L),&
+W_L&\in\R_*^{m\times r},\\
+\pi_L(W)&=W_L\cdots W_1,&
+\mathcal G_L&={\rm GL}(r)^{L-1},\\
+W_1'&=Q_1^{-1}W_1,&
+W_i'&=Q_i^{-1}W_iQ_{i-1},&
+W_L'&=W_LQ_{L-1}.
+\end{align}
+Let $\Omega=(\Omega_1,\ldots,\Omega_{L-1})$ and
+\begin{align}
+(\mathcal V_W\Omega)_1&=-\Omega_1W_1,\\
+(\mathcal V_W\Omega)_i&=W_i\Omega_{i-1}-\Omega_iW_i,\quad1<i<L,\\
+(\mathcal V_W\Omega)_L&=W_L\Omega_{L-1},\\
+(\mathcal V_W^*u)_i&=W_{i+1}^\top u_{i+1}-u_iW_i^\top .
+\label{eq:rigid-chain-vertical}
+\end{align}
+\end{definition}
+
+\begin{proposition}[Joint projection, not pairwise projection]
+\label{prop:joint-chain}
+\begin{align}
+D\pi_L(W)[u]&=\sum_{i=1}^L L_i u_i R_i,\\
+L_i&=W_L\cdots W_{i+1},&
+R_i&=W_{i-1}\cdots W_1,\\
+L_L&=I_m,&R_1&=I_d,\\
+\ker D\pi_L(W)&=\qrange\mathcal V_W,\\
+\Omega_u&=(\mathcal V_W^*\mathcal V_W)^{-1}\mathcal V_W^*u,&
+\Pi_Wu&=u-\mathcal V_W\Omega_u .
+\end{align}
+For $\mathcal N_W=\mathcal V_W^*\mathcal V_W$,
+\begin{align}
+(\mathcal N_W\Omega)_i
+&=W_{i+1}^\top W_{i+1}\Omega_i+\Omega_iW_iW_i^\top\notag\\
+&\quad-W_i\Omega_{i-1}W_i^\top
+-W_{i+1}^\top\Omega_{i+1}W_{i+1}.
+\label{eq:rigid-block-tridiagonal}
+\end{align}
+Terms involving $\Omega_0,\Omega_L$ are omitted.
+\end{proposition}
+\begin{proof}
+\begin{align}
+D\pi_L[\mathcal V_W\Omega]
+&=-L_1\Omega_1W_1
++\sum_{i=2}^{L-1}L_i(W_i\Omega_{i-1}-\Omega_iW_i)R_i
++W_L\Omega_{L-1}R_L=0,\\
+\sum_i\ii{u_i}{(\mathcal V_W\Omega)_i}
+&=\sum_{i=1}^{L-1}
+\ii{W_{i+1}^\top u_{i+1}-u_iW_i^\top}{\Omega_i}.
+\end{align}
+If $\mathcal V_W\Omega=0$,
+\begin{align}
+\Omega_1W_1=0&\Longrightarrow\Omega_1=0,\\
+W_i\Omega_{i-1}-\Omega_iW_i=0,\ \Omega_{i-1}=0
+&\Longrightarrow\Omega_i=0.
+\end{align}
+Thus $\mathcal N_W\succ0$. The prefix coordinates
+$T_i=W_i\cdots W_1$ determine all gauge matrices by
+$Q_i=T_i(T_i')^\dagger$. Hence
+\begin{align}
+\{D\pi_L[u]:u_2=\cdots=u_{L-1}=0\}
+&\supseteq\{UZ_1+Z_2V^\top:Z_1\in\R^{r\times d},\
+Z_2\in\R^{m\times r}\}\\
+&=T_X\mathcal M_r .
+\end{align}
+Here the endpoint multipliers have column space $\qrange U$ and row
+space $\qrange V^\top$, respectively; arbitrary endpoint perturbations
+therefore realize both displayed summands. Surjectivity gives
+\begin{align}
+\dim\ker D\pi_L
+&=rd+mr+(L-2)r^2-r(m+d-r)=(L-1)r^2\\
+&=\dim\qrange\mathcal V_W .
+\end{align}
+The kernel inclusion and dimension identity prove equality.
+Expanding $\mathcal V_W^*\mathcal V_W$ gives
+Eq.~\eqref{eq:rigid-block-tridiagonal}.
+\end{proof}
+
+\subsection{Jointly balanced representatives}
+\begin{theorem}[Canonical chain and residual orthogonal gauges]
+For $X=U\Sigma V^\top$, define $D=\Sigma^{1/L}$ and
+\begin{align}
+W_1^0&=DV^\top,&W_i^0&=D\ (1<i<L),&
+W_L^0&=UD .
+\label{eq:rigid-canonical-chain}
+\end{align}
+Then
+\begin{align}
+\pi_L(W^0)&=X,&
+(W_{i+1}^0)^\top W_{i+1}^0&=W_i^0(W_i^0)^\top=D^2,\\
+\kappa(W_i^0)&=\kappa(X)^{1/L}.
+\end{align}
+All jointly balanced chains in a fixed regular product fiber differ by
+$\mathcal G_L^O={\rm O}(r)^{L-1}$.
+\end{theorem}
+\begin{proof}
+For a jointly balanced chain, put $H_i=W_iW_i^\top=W_{i+1}^\top W_{i+1}$.
+Then
+\begin{align}
+H_iW_i&=W_iH_{i-1}\quad(1<i<L),\\
+T_iT_i^\top&=H_i^i,\qquad T_i=W_i\cdots W_1,\\
+XX^\top&=(W_LW_L^\top)^L,&
+X^\top X&=(W_1^\top W_1)^L .
+\end{align}
+The identities follow inductively from
+\begin{equation}
+W_iH_{i-1}^{\,i-1}W_i^\top
+=H_i^{\,i-1}W_iW_i^\top=H_i^i .
+\end{equation}
+If $W,W'$ have the same product, $T_i'=Q_i^{-1}T_i$, and both are balanced,
+\begin{align}
+W_1'^\top W_1'&=(X^\top X)^{1/L}=W_1^\top W_1,\\
+W_1^\top(Q_1^{-\top}Q_1^{-1}-I)W_1&=0
+\Longrightarrow Q_1Q_1^\top=I .
+\end{align}
+Using $W_i'=Q_i^{-1}W_iQ_{i-1}$ and $Q_{i-1}\in{\rm O}(r)$,
+\begin{align}
+W_i'^\top W_i'&=W_{i-1}'(W_{i-1}')^\top
+=Q_{i-1}^\top W_i^\top W_iQ_{i-1}\\
+&\Longrightarrow W_i^\top(Q_i^{-\top}Q_i^{-1}-I)W_i=0
+\Longrightarrow Q_iQ_i^\top=I .
+\end{align}
+This proves the claim by induction.
+\end{proof}
+
+\subsection{Exact normal-equation spectrum and a fast spectral solve}
+\begin{theorem}[Discrete-sine diagonalization]
+\label{thm:joint-spectrum}
+At Eq.~\eqref{eq:rigid-canonical-chain}, put
+$d_a=\sigma_a^{1/L}$ and $\theta_k=k\pi/L$.
+The complete spectrum of $\mathcal N_W$ is
+\begin{equation}
+\lambda_{abk}=d_a^2+d_b^2-2d_ad_b\cos\theta_k,
+\quad a,b\leq r,\quad1\leq k<L.
+\label{eq:rigid-chain-eigenvalues}
+\end{equation}
+Consequently
+\begin{align}
+\lambda_{\min}(\mathcal N_W)
+&=2\sigma_r^{2/L}(1-\cos(\pi/L)),\\
+\lambda_{\max}(\mathcal N_W)
+&=2\sigma_1^{2/L}(1+\cos(\pi/L)),\\
+\kappa(\mathcal N_W)
+&=\kappa(X)^{2/L}\cot^2\!\left(\frac{\pi}{2L}\right).
+\label{eq:rigid-chain-condition}
+\end{align}
+\end{theorem}
+\begin{proof}
+For each matrix entry $(a,b)$, write
+$\omega_i=(\Omega_i)_{ab}$. Equation~\eqref{eq:rigid-block-tridiagonal} becomes
+\begin{align}
+(\mathcal N_W\omega)_i
+&=(d_a^2+d_b^2)\omega_i-d_ad_b(\omega_{i-1}+\omega_{i+1}),\\
+\omega_0&=\omega_L=0,\\
+s_i^{(k)}&=\sqrt{2/L}\sin(ik\pi/L),\\
+s_{i-1}^{(k)}+s_{i+1}^{(k)}
+&=2\cos(k\pi/L)s_i^{(k)},&
+\sum_{i=1}^{L-1}s_i^{(k)}s_i^{(\ell)}&=\delta_{k\ell}.
+\end{align}
+Hence $\mathcal N_Ws^{(k)}=\lambda_{abk}s^{(k)}$.
+Moreover
+\begin{align}
+\lambda_{abk}
+&=(d_a-d_b)^2+2d_ad_b(1-\cos\theta_k)\\
+&\geq2\sigma_r^{2/L}(1-\cos(\pi/L)),\\
+\lambda_{abk}
+&\leq d_a^2+d_b^2+2d_ad_b\cos(\pi/L)\\
+&\leq2\sigma_1^{2/L}(1+\cos(\pi/L)).
+\end{align}
+Equality is attained at $(a,b,k)=(r,r,1)$ and $(1,1,L-1)$.
+\end{proof}
+
+\begin{corollary}[Damped inverse and residual-to-projection error]
+For $F_i=(\mathcal V_W^*u)_i$ and $\varepsilon\geq0$,
+\begin{align}
+\widehat F_{abk}
+&=\sqrt{2/L}\sum_{i=1}^{L-1}\sin(ik\pi/L)(F_i)_{ab},\\
+\widehat\Omega_{abk}
+&=\frac{\widehat F_{abk}}{\lambda_{abk}+2\varepsilon},\\
+(\Omega_i)_{ab}
+&=\sqrt{2/L}\sum_{k=1}^{L-1}\sin(ik\pi/L)\widehat\Omega_{abk}.
+\label{eq:rigid-dst-solve}
+\end{align}
+The canonical solve takes $O(Lr^2\log L)$ operations using sine transforms.
+If $\|(\mathcal N_W+2\varepsilon I)\widetilde\Omega-F\|_F\leq\tau$,
+\begin{align}
+\nn{\widetilde\Omega-\Omega_\varepsilon}
+&\leq\frac{\tau}{\lambda_{\min}+2\varepsilon},\\
+\nn{\mathcal V_W(\widetilde\Omega-\Omega_\varepsilon)}
+&\leq\frac{\sqrt{\lambda_{\max}}\tau}
+{\lambda_{\min}+2\varepsilon},\\
+\nn{\mathcal V_W(\Omega_\varepsilon-\Omega_0)}
+&\leq\frac{2\varepsilon\sqrt{\lambda_{\max}}}
+{\lambda_{\min}(\lambda_{\min}+2\varepsilon)}\nn F .
+\end{align}
+\end{corollary}
+\begin{proof}
+Use Eq.~\eqref{eq:rigid-chain-eigenvalues} entrywise and
+\begin{equation}
+\|\mathcal V_W\|^2=\lambda_{\max}(\mathcal N_W),\qquad
+\left|\frac1{\lambda+2\varepsilon}-\frac1\lambda\right|
+=\frac{2\varepsilon}{\lambda(\lambda+2\varepsilon)}.
+\end{equation}
+\end{proof}
+
+\begin{corollary}[Depth asymptotics and CG complexity]
+\begin{align}
+1-\cos(\pi/L)&=\frac{\pi^2}{2L^2}+O(L^{-4}),\\
+\lambda_{\min}(\mathcal N_W)
+&=\frac{\pi^2\sigma_r^{2/L}}{L^2}(1+O(L^{-2})),\\
+\kappa(\mathcal N_W)
+&=\frac{4L^2}{\pi^2}\kappa(X)^{2/L}(1+O(L^{-2})).
+\end{align}
+For exact arithmetic conjugate gradients,
+\begin{equation}
+\|\Omega^{(k)}-\Omega_*\|_{\mathcal N}
+\leq2\left(\frac{\sqrt{\kappa(\mathcal N)}-1}
+{\sqrt{\kappa(\mathcal N)}+1}\right)^k
+\|\Omega^{(0)}-\Omega_*\|_{\mathcal N}.
+\end{equation}
+These are normal-solve conditioning statements, not task-speedup guarantees.
+\end{corollary}
+
+\subsection{Product metric and optimization spectrum of a depth-$L$ chain}
+\begin{theorem}[Depth-dependent product preconditioner]
+\label{thm:chain-product-metric}
+At a jointly balanced representative,
+\begin{align}
+K_X^{(L)}(G)
+&=\sum_{i=1}^L L_iL_i^\top G R_i^\top R_i\\
+&=\sum_{i=1}^L(XX^\top)^{(L-i)/L}
+G(X^\top X)^{(i-1)/L},\\
+g_X^{(L)}(Z,Y)&=\ii Z{(K_X^{(L)})^\dagger Y}.
+\end{align}
+Zero exponents in this formula denote $I_m$ or $I_d$.
+The tangent eigenvalues are
+\begin{align}
+\chi_{ab}^{(L)}
+&=\sum_{i=1}^L\sigma_a^{2(L-i)/L}\sigma_b^{2(i-1)/L},\\
+\chi_{a,\perp}^{(L)}&=\sigma_a^{\,2-2/L},&
+\chi_{\perp,b}^{(L)}&=\sigma_b^{\,2-2/L},\\
+\chi_{ab}^{(L)}
+&=\begin{cases}
+\displaystyle\frac{\sigma_a^2-\sigma_b^2}
+{\sigma_a^{2/L}-\sigma_b^{2/L}},&\sigma_a\ne\sigma_b,\\
+L\sigma_a^{\,2-2/L},&\sigma_a=\sigma_b.
+\end{cases}
+\label{eq:rigid-chain-metric-spectrum}
+\end{align}
+In particular,
+\begin{equation}
+a^{2-2/L}\|P_XG\|_F^2
+\leq\|\qgrad_{g^{(L)}}f\|_{g^{(L)}}^2
+\leq Lb^{2-2/L}\|P_XG\|_F^2 .
+\end{equation}
+\end{theorem}
+\begin{proof}
+For $J_W=D\pi_L(W)$,
+\begin{align}
+(J_W^*G)_i&=L_i^\top G R_i^\top,&
+J_WJ_W^*G&=\sum_i L_iL_i^\top G R_i^\top R_i .
+\end{align}
+At the canonical chain, the top-left block acts entrywise by
+$\chi_{ab}^{(L)}$; the two off-diagonal tangent blocks receive only the
+first and last summands, respectively. Finally,
+\begin{equation}
+\sum_{j=0}^{L-1}u^{L-1-j}v^j
+=\frac{u^L-v^L}{u-v},\qquad
+\lim_{v\to u}\frac{u^L-v^L}{u-v}=Lu^{L-1}.
+\end{equation}
+\end{proof}
+
+\subsection{Aligned spectral dynamics and a finite-horizon obstruction}
+\begin{proposition}[Exact aligned dynamics]
+Assume fixed singular bases and
+$G=U\qdiag(\gamma_i)V^\top$. Then
+\begin{align}
+\dot X&=-K_X^{(L)}G,&
+\dot\sigma_i&=-L\sigma_i^{\,2-2/L}\gamma_i.
+\end{align}
+For $f(X)=\tfrac12\|X-X_*\|_F^2$ with
+$X_*=U\qdiag(s_i)V^\top$,
+\begin{align}
+\dot\sigma_i&=L\sigma_i^{\,2-2/L}(s_i-\sigma_i),\\
+\sigma_i^+
+&=\sigma_i\left[1+\eta(s_i-\sigma_i)
+\sigma_i^{(L-2)/L}\right]^L
+\label{eq:rigid-aligned-discrete}
+\end{align}
+provided the factor update preserves positive singular coordinates.
+\end{proposition}
+\begin{proof}
+For diagonal balanced factors $w_i=\sigma_i^{1/L}$,
+\begin{align}
+\partial_{w_i}f&=(\sigma_i-s_i)\sigma_i^{(L-1)/L},\\
+w_i^+&=\sigma_i^{1/L}
+-\eta(\sigma_i-s_i)\sigma_i^{(L-1)/L},&
+\sigma_i^+&=(w_i^+)^L.
+\end{align}
+\end{proof}
+
+\begin{corollary}[Small-mode hitting time]
+Let $0<\sigma_0<\theta s<s$, $0<\theta<1$.
+For $L=2$,
+\begin{equation}
+\sigma(t)=\frac{s}{1+(s/\sigma_0-1)e^{-2st}} .
+\end{equation}
+For $L>2$, $p=2-2/L>1$, the time $\tau_\theta$ to reach $\theta s$ satisfies
+\begin{align}
+\tau_\theta&=\int_{\sigma_0}^{\theta s}\frac{du}{Lu^p(s-u)},\\
+\frac{\sigma_0^{1-p}-(\theta s)^{1-p}}{Ls(p-1)}
+&\leq\tau_\theta\leq
+\frac{\sigma_0^{1-p}-(\theta s)^{1-p}}{L(1-\theta)s(p-1)} .
+\label{eq:rigid-small-mode-time}
+\end{align}
+\end{corollary}
+\begin{proof}
+On $u\in[\sigma_0,\theta s]$,
+$(1-\theta)s\leq s-u\leq s$. Integrate
+$u^{-p}/(Ls)$ and $u^{-p}/(L(1-\theta)s)$.
+\end{proof}
+
+\subsection{Global orbit energy of a deep factorization}
+\begin{theorem}[Schatten variational identity and factor conditioning]
+Let $p=2/L$. Over all compatible full-rank chains with product $X$,
+\begin{align}
+\inf_{\pi_L(W)=X}\frac1L\sum_{i=1}^L\nn{W_i}^2
+&=\sum_{a=1}^r\sigma_a(X)^{2/L}
+=\|X\|_{S_p}^{\,p},\\
+\inf_{\pi_L(W)=X}\max_i\kappa(W_i)
+&=\kappa(X)^{1/L}.
+\label{eq:rigid-chain-orbit-energy}
+\end{align}
+The canonical jointly balanced chain attains both infima.
+\end{theorem}
+\begin{proof}
+Multiplicative singular-value majorization and scalar H\"older imply
+\begin{align}
+\sum_a\sigma_a(X)^{2/L}
+&\leq\sum_a\prod_{i=1}^L\sigma_a(W_i)^{2/L}\\
+&\leq\prod_{i=1}^L
+\left(\sum_a\sigma_a(W_i)^2\right)^{1/L}\\
+&=\prod_{i=1}^L\nn{W_i}^{2/L}
+\leq\frac1L\sum_i\nn{W_i}^2,\\
+\kappa(X)&\leq\prod_i\kappa(W_i)
+\leq\left(\max_i\kappa(W_i)\right)^L.
+\end{align}
+At Eq.~\eqref{eq:rigid-canonical-chain},
+\begin{equation}
+\nn{W_i^0}^2=\sum_a\sigma_a^{2/L},
+\qquad\kappa(W_i^0)=\kappa(X)^{1/L}.
+\end{equation}
+\end{proof}

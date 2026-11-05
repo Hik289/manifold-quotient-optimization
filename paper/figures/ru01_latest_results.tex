@@ -1,0 +1,25 @@
+\begin{longtable}{@{}p{.42\linewidth}p{.18\linewidth}p{.19\linewidth}r@{}}
+\caption{\textbf{Nineteen full-horizon RU01 completions since the 139-run snapshot.} Fixed-setting, final-epoch held-out endpoints at learning rate $10^{-3}$ and seed 42; no test-based row selection. All nineteen are listed, including unfavorable outcomes. CIFAR-10/MLP rank 32 and rank-16 matrix sensing are complete four-method cohorts led by AdamW. Cora/GCN hidden rank 4 has only an AdamW--QuotientOpt pair at this snapshot.}\label{tab:ru01-latest}\\
+\toprule Task / setting & Method & Metric & Final test \\ \midrule\endfirsthead
+\toprule Task / setting & Method & Metric & Final test \\ \midrule\endhead
+CIFAR-10 / MLP, $r=32$ & AdamW & Accuracy (\%) & 49.42\\
+CIFAR-10 / MLP, $r=32$ & SGD-M & Accuracy (\%) & 47.82\\
+CIFAR-10 / MLP, $r=32$ & Balance-only & Accuracy (\%) & 47.23\\
+\rowcolor{oursbg}CIFAR-10 / MLP, $r=32$ & \cellcolor{oursbg}\textbf{QuotientOpt} & Accuracy (\%) & 47.24\\
+Cora / GCN, hidden, $r=4$ & AdamW & Accuracy (\%) & 77.10\\
+\rowcolor{oursbg}Cora / GCN, hidden, $r=4$ & \cellcolor{oursbg}\textbf{QuotientOpt} & Accuracy (\%) & 77.70\\
+WikiText-2 / 10M decoder, $r=16$ & AdamW & NLL & 17.230\\
+WikiText-2 / 10M decoder, $r=16$ & SGD-M & NLL & 36.777\\
+WikiText-2 / 25M decoder, $r=4$ & AdamW & NLL & 36.610\\
+Poisson / DeepONet, $r=8$ & SGD-M & Relative $L_2$ & 0.4047\\
+Synthetic image / SIREN, $r=8$ & Balance-only & MSE & 0.04949\\
+Matrix sensing / factorization, $r=32$ & SGD-M & Relative error & 0.21516\\
+Deep linear chain / depth-2 chain, $r=8$ & Balance-only & Relative error & 0.98476\\
+Synthetic image / MLP, $r=32$ & SGD-M & MSE & 0.35142\\
+\rowcolor{oursbg}Matrix sensing / factorization, $r=16$ & \cellcolor{oursbg}\textbf{QuotientOpt} & Relative error & 0.92767\\
+Matrix sensing / factorization, $r=16$ & AdamW & Relative error & 0.02616\\
+\rowcolor{oursbg}WikiText-2 / 10M decoder, $r=8$ & \cellcolor{oursbg}\textbf{QuotientOpt} & NLL & 33.489\\
+Deep linear chain / depth-2 chain, $r=8$ & SGD-M & Relative error & 0.06799\\
+Cora / GCN, input, $r=16$ & Balance-only & Accuracy (\%) & 70.10\\
+\bottomrule
+\end{longtable}

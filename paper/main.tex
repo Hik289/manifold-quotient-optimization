@@ -1,0 +1,92 @@
+% !TeX program = pdflatex
+\documentclass{article}
+\PassOptionsToPackage{table}{xcolor}
+\usepackage[preprint]{icml2027_draft}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\ifdefined\DeclareUnicodeCharacter
+\DeclareUnicodeCharacter{2192}{$\to$}
+\DeclareUnicodeCharacter{03BA}{$\kappa$}
+\DeclareUnicodeCharacter{0394}{$\Delta$}
+\fi
+\usepackage{hyperref}
+\usepackage{url,xurl}
+\hypersetup{hidelinks,hypertexnames=false,pdftitle={Gauge-Invariant Low-Rank Optimization},pdfauthor={Anonymous Authors},pdfsubject={ICML 2027 working draft; official ICML 2026 base style}}
+\usepackage{booktabs}
+\usepackage{array,tabularx}
+\usepackage[table]{xcolor}
+\usepackage{pifont}
+\definecolor{checkgreen}{RGB}{21,128,61}
+\definecolor{crossred}{RGB}{190,35,45}
+\definecolor{oursbg}{RGB}{230,244,233}
+\definecolor{oursgoodbg}{RGB}{198,232,205}
+\newcommand{\cmark}{\textcolor{checkgreen}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{crossred}{\ding{55}}}
+\usepackage{amsfonts,amsmath,amssymb,amsthm,mathrsfs,mathtools}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{enumitem}
+\usepackage{longtable}
+\newtheorem{corollary}{Corollary}
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{plain}
+\providecommand{\R}{\mathbb R}
+\providecommand{\E}{\mathbb E}
+\providecommand{\Id}{I}
+\DeclareMathOperator{\rnk}{rank}
+\DeclareMathOperator{\qtr}{tr}
+\DeclareMathOperator{\qdiag}{diag}
+\DeclareMathOperator{\qsym}{sym}
+\DeclareMathOperator{\qskew}{skew}
+\DeclareMathOperator{\qgrad}{grad}
+\DeclareMathOperator{\qHess}{Hess}
+\DeclareMathOperator{\qrange}{range}
+\newcommand{\nn}[1]{\left\lVert#1\right\rVert_F}
+\newcommand{\on}[1]{\left\lVert#1\right\rVert_2}
+\newcommand{\ii}[2]{\left\langle#1,#2\right\rangle_F}
+\newcommand{\qipg}[2]{\left\langle#1,#2\right\rangle_g}
+\newcommand{\gn}[1]{\left\lVert#1\right\rVert_g}
+\allowdisplaybreaks[2]
+\renewcommand{\arraystretch}{1.14}
+\setlength{\tabcolsep}{4pt}
+\icmltitlerunning{Balanced Quotient Optimization}
+\newcommand{\papertitle}{Gauge-Invariant Low-Rank Optimization:\\Balanced Quotient Geometry, Convergence, and Generalization}
+\begin{document}
+\twocolumn[
+\icmltitle{\papertitle}
+\begin{icmlauthorlist}
+\icmlauthor{Anonymous Authors}{}
+\end{icmlauthorlist}
+\icmlkeywords{Manifold optimization, quotient geometry, low-rank learning}
+\vskip 0.3in
+]
+\printAffiliationsAndNotice{}
+\begin{abstract}
+Low-rank factors carry a general-linear symmetry that makes optimizer state depend on the chosen representative. We construct the balanced quotient geometry, derive its product-space metric and gradient, and combine coordinate transport with a Sylvester projection of persistent first-moment state. A second-order pullback identity yields the sharp Hessian bound $2bL_f+\|\nabla f\|_2$; exact residual-gap and deep-chain spectra lead to Schur momentum rates and a Lyapunov-certified local basin. Hessian whitening gives finite-sample risk bounds with quadratic-model coefficient $1/2$, and an identifiable homoscedastic sensing model has leading risk $\sigma_\varepsilon^2r(m+d-r)/(2n)$, matching its Fisher information. Experiments include 208 matched-budget task-search attempts and 36 frozen-configuration initialization checks: across three model initializations, mean validation-selected test loss decreases by $22.6\%$ on Cora and $82.2\%$ on synthetic SDF fitting relative to AdamW. Twelve-gauge sensing tests attain product-trajectory disagreement at most $5.2\times10^{-5}$, and complete loss trajectories connect the geometric analysis with measured optimization behavior.
+\end{abstract}
+\input{sections/1_introduction}
+\input{sections/2_related_work}
+\input{sections/3_preliminaries}
+\input{sections/4_methodology}
+\input{sections/5_experiments}
+\FloatBarrier
+\input{sections/6_conclusion}
+\bibliographystyle{icml2026}
+\bibliography{references}
+\clearpage
+\onecolumn
+\appendix
+\input{sections/appendix}
+\end{document}

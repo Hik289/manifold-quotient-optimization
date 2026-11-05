@@ -1,0 +1,4 @@
+\paragraph{New graph task: CiteSeer.}
+After the complete equal-budget search, QuotientOpt obtains test CE 1.2163 versus 1.3762 for AdamW, a 11.6\% reduction, with validation-CE selection. Test accuracies are 65.1\% and 45.7\%, respectively. SGD-M obtains CE 1.2508; balance-only obtains 1.2168 and nearly overlaps QuotientOpt. This supports the task gain over AdamW and a competitive balanced control, not a distinct accuracy effect from projection.
+\paragraph{New INR task: signed-distance fitting.}
+The SDF/SIREN block gives test MSE $9.36\!\times\!10^{-6}$, reducing the validation-selected AdamW, SGD-M, and balance-only test MSEs by 84.5\%, 96.1\%, and 15.0\%, respectively. The comparison also survives the control that admits finite checkpoints from later-stopped baseline trials. This is a seed-42 synthetic SDF result. The paired-initialization confirmations below assess its sensitivity; it is not a universal INR advantage.

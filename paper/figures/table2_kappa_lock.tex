@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\caption{$\kappa$-factor lock results (matrix sensing, $r=16$, 2000 epochs).
+  Balance-only and QuotientOpt maintain $\kappa_{\rm fac}/\sqrt{\kappa(X)}=1.0000$ exactly
+  (Eckart--Young--Mirsky, Lemma~2), while AdamW drifts $7.6\times$ ($\kappa=100$) and
+  $17.5\times$ ($\kappa=1000$). Both balance methods reach the reconstruction target;
+  AdamW never does within the 2000-epoch budget.}
+\label{tab:kappa-lock}
+\vspace{4pt}
+\begin{tabular}{llccccr}
+\toprule
+\textbf{Method} & $\kappa(X)$ & $\kappa_{\rm fac}/\sqrt{\kappa}$ & Drift & $\rho_{\rm upd}$ & Final rel.\ err. & Epoch$\to$tgt \\
+\midrule
+AdamW & 100 & $7.58$ & $2.19$ & $6.72\times 10^{-2}$ & $6.49\times 10^{-3}$ & --- \\
+AdamW & 1000 & $17.47$ & $9.41$ & $7.90\times 10^{-2}$ & $3.87\times 10^{-3}$ & --- \\
+\midrule
+Balance-only & 100 & $1.0000$ & $0.89$ & $1.58\times 10^{-2}$ & $1.44\times 10^{-3}$ & 173 \\
+Balance-only & 1000 & $1.0000$ & $0.79$ & $9.79\times 10^{-3}$ & $3.42\times 10^{-3}$ & 312 \\
+\midrule
+\rowcolor{oursbg}QuotientOpt & 100 & $1.0000$ & $0.76$ & $3.16\times 10^{-13}$ & $1.45\times 10^{-3}$ & 175 \\
+\rowcolor{oursbg}QuotientOpt & 1000 & $1.0000$ & $0.72$ & $9.08\times 10^{-12}$ & $8.39\times 10^{-4}$ & 314 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,475 @@
+\section{Exact Local Momentum Dynamics, Damping, and a Certified Nonlinear Basin}
+\label{app:local-dynamics}
+\subsection{The quotient state near a nondegenerate critical point}
+\begin{definition}
+Let $X_\star\in\mathcal M_r$ be a critical point of $f|_{\mathcal M_r}$,
+$D=r(m+d-r)$, and let $f$ be $C^3$ locally. Choose a normal chart
+$\psi:B_R(0)\subset\R^D\to\mathcal M_r$ and a smooth tangent frame
+$E(x)$ such that
+\begin{align}
+\psi(0)&=X_\star,&g_{ij}(0)&=\delta_{ij},&
+\Gamma^k_{ij}(0)&=0,\\
+E(0)^\top g_\star E(0)&=I_D,&
+\mathsf H&=[\qHess_g f(X_\star)]_{E(0)}=\mathsf H^\top .
+\end{align}
+The reduced state is $s=(x,\omega)\in\R^{2D}$, where $\omega$
+contains the incoming first moment in that frame.
+Set $\alpha=\eta(1-\beta)$.
+\end{definition}
+
+\begin{theorem}[Exact Jacobian on the quotient tangent bundle]
+\label{thm:local-exact-jacobian}
+For the exact first-moment iteration in
+Eq.~\eqref{eq:rigid-canonical-state}, its reduced state map
+$\mathscr U$ satisfies
+\begin{align}
+\mathscr U(0,0)&=(0,0),\\
+D\mathscr U(0,0)
+&=\mathsf J
+=\begin{pmatrix}
+I_D-\alpha\mathsf H&-\eta\beta I_D\\
+(1-\beta)\mathsf H&\beta I_D
+\end{pmatrix}.
+\label{eq:local-J}
+\end{align}
+For $\mathsf He_i=\lambda_i e_i$, the two-dimensional invariant
+mode $(x_i,\omega_i)$ has matrix
+\begin{align}
+\mathsf J_{\lambda_i}
+&=\begin{pmatrix}1-\alpha\lambda_i&-\eta\beta\\
+(1-\beta)\lambda_i&\beta\end{pmatrix},\\
+\chi_{\lambda_i}(z)
+&=z^2-(1+\beta-\alpha\lambda_i)z+\beta,\\
+z_{\pm}(\lambda_i)
+&=\frac{1+\beta-\alpha\lambda_i
+\pm\sqrt{(1+\beta-\alpha\lambda_i)^2-4\beta}}{2}.
+\label{eq:local-roots}
+\end{align}
+\end{theorem}
+\begin{proof}
+In the chosen chart and frame,
+\begin{align}
+[\qgrad_g f(\psi(x))]_{E(x)}
+&=\mathsf Hx+O(\|x\|^2),\\
+[\mathcal T_{X,Y}]_{E(X),E(Y)}
+&=I_D+O(\|x\|+\|y\|),\\
+[\operatorname{Retr}_{\psi(x)}(-\eta v)]_\psi
+&=x-\eta[v]_{E(x)}+O((\|x\|+\|v\|)^2).
+\end{align}
+At $(x,\omega)=(0,0)$, every derivative of transport or of the
+horizontal projector that multiplies the current gradient or moment
+vanishes. Hence
+\begin{align}
+\delta v&=(1-\beta)\mathsf H\,\delta x+\beta\,\delta\omega,\\
+\delta x^+&=\delta x-\eta\delta v,&
+\delta\omega^+&=\delta v .
+\end{align}
+These are precisely Eq.~\eqref{eq:local-J}. The characteristic
+polynomial follows from
+\begin{equation}
+\det(zI-\mathsf J_\lambda)
+=(z-1+\alpha\lambda)(z-\beta)
++\eta\beta(1-\beta)\lambda .
+\end{equation}
+The cancellations use the actual transported state and the
+quotient Hessian; the ambient Hessian is not substituted for
+$\mathsf H$.
+\end{proof}
+
+\subsection{An exact stability interval and optimal quadratic tuning}
+The following modal calculation is the local heavy-ball analysis
+in the present normalized-momentum convention
+\cite{lessard2016iqc}.
+
+\begin{theorem}[Necessary and sufficient Schur condition]
+\label{thm:local-schur}
+Suppose $0\leq\beta<1$ and $0<\mu\leq\lambda_i\leq\Lambda$.
+Then
+\begin{equation}
+\rho(\mathsf J)<1
+\quad\Longleftrightarrow\quad
+0<\alpha\Lambda<2(1+\beta).
+\label{eq:local-schur}
+\end{equation}
+For an individual positive mode, the upper bound is
+$\alpha\lambda_i<2(1+\beta)$.
+\end{theorem}
+\begin{proof}
+Put $t_\lambda=1+\beta-\alpha\lambda$ and
+$z=(1+w)/(1-w)$. Direct expansion gives
+\begin{align}
+(1-w)^2\chi_\lambda((1+w)/(1-w))
+&=\alpha\lambda+2(1-\beta)w\\
+&\quad+\{2(1+\beta)-\alpha\lambda\}w^2 .
+\end{align}
+The unit disk in $z$ corresponds to $\operatorname{Re}w<0$.
+A real quadratic $aw^2+bw+c$, $b,c>0$, has both roots with
+negative real parts exactly when $a>0$; this follows either from
+their sum and product or from the conjugate-root case.
+The strict endpoint conditions also exclude $z=\pm1$.
+Apply this criterion to each $\lambda_i$.
+\end{proof}
+
+\begin{theorem}[Optimal interval-wide local spectral factor]
+\label{thm:local-optimal-hb}
+Let $0<\mu<\Lambda$ and $\kappa_H=\Lambda/\mu$. Over constant
+$\eta>0$ and $0\leq\beta<1$,
+\begin{align}
+\inf_{\eta,\beta}\sup_{\lambda\in[\mu,\Lambda]}
+\rho(\mathsf J_\lambda)
+&=q_\star
+=\frac{\sqrt\Lambda-\sqrt\mu}{\sqrt\Lambda+\sqrt\mu},\\
+\beta_\star&=q_\star^2,&
+\alpha_\star&=\frac4{(\sqrt\Lambda+\sqrt\mu)^2},&
+\eta_\star&=\frac1{\sqrt{\mu\Lambda}} .
+\label{eq:local-optimal-hb}
+\end{align}
+The infimum concerns the linearized quadratic family.
+\end{theorem}
+\begin{proof}
+Suppose all modal roots satisfy $|z_\pm|\leq q<1$. Since
+$\chi_\lambda(1)=\alpha\lambda$,
+\begin{align}
+(1-q)^2&\leq
+|(1-z_+(\lambda))(1-z_-(\lambda))|
+=\alpha\lambda\leq(1+q)^2,\\
+\frac{\Lambda}{\mu}
+&\leq\left(\frac{1+q}{1-q}\right)^2
+\Longrightarrow q\geq q_\star .
+\end{align}
+For the displayed parameters,
+\begin{align}
+1+q_\star^2-\alpha_\star\mu&=2q_\star,&
+1+q_\star^2-\alpha_\star\Lambda&=-2q_\star,\\
+-2q_\star\leq1+q_\star^2-\alpha_\star\lambda
+&\leq2q_\star .
+\end{align}
+Thus every mode has either a conjugate pair of modulus $q_\star$
+or a double root $\pm q_\star$. Finally,
+\begin{equation}
+1-\beta_\star=
+\frac{4\sqrt{\mu\Lambda}}{(\sqrt\Lambda+\sqrt\mu)^2}
+\end{equation}
+gives the normalized step $\eta_\star$.
+\end{proof}
+
+\begin{proposition}[Defective endpoints and finite-time powers]
+\label{prop:local-jordan}
+At $\lambda=\mu,\Lambda$ with the optimal parameters,
+$\mathsf J_\lambda$ has a nontrivial size-two Jordan block.
+For $z_0=\pm q_\star$,
+\begin{equation}
+\mathsf J_\lambda^k
+=z_0^kI+kz_0^{k-1}(\mathsf J_\lambda-z_0I).
+\label{eq:local-jordan}
+\end{equation}
+Consequently $\|\mathsf J^k\|=O((k+1)q_\star^k)$, and for
+every $\widetilde q\in(q_\star,1)$ there is a finite
+$C_{\widetilde q}$ with
+$\|\mathsf J^k\|\leq C_{\widetilde q}\widetilde q^k$.
+A one-step Euclidean contraction factor $q_\star$ does not follow.
+\end{proposition}
+\begin{proof}
+The off-diagonal entry $-\eta_\star\beta_\star$ is nonzero, so a
+double-root mode is not $z_0I$. Cayley--Hamilton gives
+$(\mathsf J_\lambda-z_0I)^2=0$, and the binomial formula gives the
+identity. The final bound follows from
+$\sup_{k\geq0}(k+1)(q_\star/\widetilde q)^k<\infty$.
+If $\mu=\Lambda$, the choice $\beta=0,\eta=1/\mu$ instead makes
+$\mathsf J^2=0$; the position error vanishes in one linearized step.
+\end{proof}
+
+\begin{proposition}[Negative quotient curvature produces an unstable mode]
+If $\eta>0$, $0\leq\beta<1$, and $\lambda<0$, then
+\begin{equation}
+z_+(\lambda)>1,\qquad
+0\leq z_-(\lambda)=\beta/z_+(\lambda)<1 .
+\end{equation}
+For $\lambda=0$, the roots are $1,\beta$.
+Thus the number of eigenvalues outside the unit circle contributed
+by negative-curvature modes is exactly the negative index of
+$\mathsf H$.
+\end{proposition}
+\begin{proof}
+$\chi_\lambda(1)=\alpha\lambda<0$ and
+$\chi_\lambda(z)\to+\infty$ as $z\to+\infty$ imply a real root
+larger than one. Their product is $\beta$.
+For a zero mode,
+$\chi_0(z)=(z-1)(z-\beta)$.
+\end{proof}
+
+\subsection{Damping and projection ablations at first order}
+\begin{proposition}[Transverse-memory spectrum of a damped connection]
+\label{prop:local-damped-memory}
+At a balanced critical representative $p_\star$ with
+$H_\star=\operatorname{diag}(\sigma_1,\ldots,\sigma_r)$, allow the
+incoming moment to have both horizontal and full vertical parts.
+For the update as ordered in Eq.~\eqref{eq:main-iteration}, the
+linearization on quotient position, horizontal memory, and vertical
+memory is block diagonal:
+\begin{align}
+D\mathscr U_\varepsilon(0)
+&\simeq
+\mathsf J\oplus
+\beta\,2\varepsilon(\mathscr L_\star+2\varepsilon I)^{-1},\\
+\mathscr L_\star(\Omega)&=H_\star\Omega+\Omega H_\star,\\
+\operatorname{spec}_{\rm vert}(D\mathscr U_\varepsilon(0))
+&=\left\{\frac{2\beta\varepsilon}
+{\sigma_i+\sigma_j+2\varepsilon}\right\}_{i,j\leq r}.
+\label{eq:local-damped-memory}
+\end{align}
+The exact projection has zero transverse-memory eigenvalues.
+Balance-only has transverse-memory eigenvalue $\beta$.
+The joint depth-$L$ formula replaces $\sigma_i+\sigma_j$ by
+$\lambda_{abk}$ in Eq.~\eqref{eq:rigid-chain-eigenvalues}.
+\end{proposition}
+\begin{proof}
+At $p_\star$ write the pre-projection direction as $h+V_\star\Omega$.
+Then
+\begin{align}
+C_\star(h)&=0,&
+C_\star(V_\star\Omega)&=\mathscr L_\star\Omega,\\
+\Pi_\varepsilon(h+V_\star\Omega)
+&=h+V_\star\{2\varepsilon
+(\mathscr L_\star+2\varepsilon I)^{-1}\Omega\},\\
+D\pi_\star V_\star\Omega&=0 .
+\end{align}
+The fresh-gradient differential at criticality is horizontal:
+\begin{equation}
+D(C_pg(p))[\delta p]=0,\quad g(p_\star)=0
+\Longrightarrow C_\star Dg(p_\star)[\delta p]=0 .
+\end{equation}
+Every coordinate-transport derivative multiplies the zero base
+moment. Horizontal position and memory therefore give $\mathsf J$,
+whereas only $\beta$ times the displayed damped projector acts on
+vertical memory. Balanced representative rotations disappear after
+passing to quotient position.
+\end{proof}
+
+\begin{corollary}[Equality of the linearized spectral radii]
+If $\mathsf H\succ0$ and the Schur condition holds, then
+\begin{equation}
+\rho(D\mathscr U_\varepsilon(0))
+=\rho(\mathsf J)
+=\rho(D\mathscr U_{\rm balance\text{-}only}(0)).
+\end{equation}
+\end{corollary}
+\begin{proof}
+Each horizontal mode has determinant $\beta$, hence its spectral
+radius is at least $\sqrt\beta$. Every transverse-memory eigenvalue
+lies in $[0,\beta]$, and $\beta\leq\sqrt\beta$.
+This is a first-order statement at a regular critical point.
+The mixed finite-step terms in Eq.~\eqref{eq:rigid-mixed} remain.
+\end{proof}
+
+\subsection{From Schur stability to a quantified nonlinear basin}
+\begin{theorem}[An explicit Lyapunov contraction neighborhood]
+\label{thm:local-nonlinear-basin}
+Assume $\rho(\mathsf J)<1$, $\mathscr U\in C^2(B_R)$,
+$\mathscr U(0)=0$, and
+\begin{equation}
+\sup_{\|s\|_2\leq R}\|D^2\mathscr U(s)\|_{\rm op}\leq K_2 .
+\end{equation}
+Define
+\begin{align}
+\mathsf P&=\sum_{k=0}^\infty(\mathsf J^k)^\top\mathsf J^k,&
+\|s\|_{\mathsf P}&=(s^\top\mathsf Ps)^{1/2},\\
+q_0&=\sqrt{1-\lambda_{\max}(\mathsf P)^{-1}},&
+C_{\mathsf P}&=\frac{K_2\sqrt{\lambda_{\max}(\mathsf P)}}
+{\lambda_{\min}(\mathsf P)},\\
+r_{\mathsf P}
+&\leq\min\left\{R\sqrt{\lambda_{\min}(\mathsf P)},
+\frac{1-q_0}{2C_{\mathsf P}}\right\},&
+q_{\mathsf P}&=(1+q_0)/2 .
+\label{eq:local-certified-radius}
+\end{align}
+If $C_{\mathsf P}=0$, the second radius restriction is omitted.
+Then $B_{\mathsf P}(r_{\mathsf P})$ is invariant and
+\begin{align}
+\|\mathscr U(s)-\mathscr U(s')\|_{\mathsf P}
+&\leq q_{\mathsf P}\|s-s'\|_{\mathsf P},\\
+\|s_T\|_{\mathsf P}
+&\leq q_{\mathsf P}^T\|s_0\|_{\mathsf P}.
+\label{eq:local-nonlinear-contraction}
+\end{align}
+If $f\circ\psi-f(X_\star)\leq\Lambda_{\rm loc}\|x\|_2^2/2$ there,
+\begin{equation}
+f(X_T)-f(X_\star)
+\leq\frac{\Lambda_{\rm loc}}
+{2\lambda_{\min}(\mathsf P)}
+q_{\mathsf P}^{2T}\|s_0\|_{\mathsf P}^2 .
+\end{equation}
+\end{theorem}
+\begin{proof}
+Schur stability makes the series convergent and
+\begin{align}
+\mathsf J^\top\mathsf P\mathsf J&=\mathsf P-I,&
+\mathsf P&\succeq I,\\
+\|\mathsf J\|_{\mathsf P\to\mathsf P}^2
+&=\sup_{s\ne0}
+\frac{s^\top(\mathsf P-I)s}{s^\top\mathsf Ps}
+=1-\lambda_{\max}(\mathsf P)^{-1}.
+\end{align}
+The derivative-Lipschitz bound gives
+\begin{align}
+\|D\mathscr U(s)-\mathsf J\|_{\mathsf P\to\mathsf P}
+&\leq\sqrt{\frac{\lambda_{\max}(\mathsf P)}
+{\lambda_{\min}(\mathsf P)}}K_2\|s\|_2\\
+&\leq C_{\mathsf P}\|s\|_{\mathsf P},\\
+\sup_{\|s\|_{\mathsf P}\leq r_{\mathsf P}}
+\|D\mathscr U(s)\|_{\mathsf P\to\mathsf P}
+&\leq q_0+C_{\mathsf P}r_{\mathsf P}
+\leq q_{\mathsf P}<1 .
+\end{align}
+Integrate along the segment joining $s,s'$ in the convex
+$\mathsf P$ ball. Setting $s'=0$ proves invariance and then the
+iterate bound. The risk bound follows from the position block.
+\end{proof}
+
+\begin{corollary}[Robustness inside the certified basin]
+For $s_{t+1}=\mathscr U(s_t)+e_t$ with
+$\|e_t\|_{\mathsf P}\leq\epsilon\leq
+(1-q_{\mathsf P})r_{\mathsf P}$ and
+$\|s_0\|_{\mathsf P}\leq r_{\mathsf P}$,
+\begin{equation}
+\|s_T\|_{\mathsf P}
+\leq q_{\mathsf P}^T\|s_0\|_{\mathsf P}
++\frac{\epsilon(1-q_{\mathsf P}^T)}{1-q_{\mathsf P}} .
+\end{equation}
+\end{corollary}
+\begin{proof}
+The one-step bound is
+$\|s_{t+1}\|_{\mathsf P}\leq
+q_{\mathsf P}\|s_t\|_{\mathsf P}+\epsilon\leq r_{\mathsf P}$.
+Induction and a geometric sum give the result.
+\end{proof}
+
+
+\subsection{Eckart--Young critical points and their complete quotient spectrum}
+\begin{theorem}[Exact residual-gap Hessian spectrum]
+\label{thm:sharp-critical-spectrum}
+Let $f(X)=\frac12\|X-Y\|_F^2$ and let $X=U\Sigma V^\top$ be a
+regular rank-$r$ critical point. Put $p=m-r$, $q=d-r$, and
+$s=\min(p,q)$. Then
+\begin{align}
+Y&=U\Sigma V^\top+U_\perp N V_\perp^\top,\\
+\tau_1\geq\cdots\geq\tau_s&\geq0
+\quad\text{are the singular values of }N .
+\end{align}
+The complete quotient Hessian spectrum, with multiplicities, is
+\begin{equation}
+\{\sigma_i+\sigma_j\}_{i,j\leq r}
+\;\cup\;
+\{\sigma_i+\tau_k,\sigma_i-\tau_k\}_{i\leq r,k\leq s}
+\;\cup\;
+\{\sigma_i\}_{i\leq r}^{\,|p-q|}.
+\label{eq:sharp-critical-spectrum}
+\end{equation}
+Its negative index is exactly
+$\sum_{i,k}\mathbf1_{\{\tau_k>\sigma_i\}}$ and its nullity is
+$\sum_{i,k}\mathbf1_{\{\tau_k=\sigma_i\}}$.
+\end{theorem}
+\begin{proof}
+Stationarity is $P_X(X-Y)=0$, which gives the displayed block form
+of $Y$. At $B=U\Sigma^{1/2}$, $A=\Sigma^{1/2}V^\top$, write a
+horizontal lift as
+\begin{align}
+\xi_B&=UC_B+U_\perp D_B,&
+\xi_A&=C_AV^\top+E_AV_\perp^\top,\\
+\Sigma^{1/2}C_B&=C_A\Sigma^{1/2}.
+\end{align}
+The core subspace is orthogonal to the off-core subspace in factor
+norm. On the core, $L_p^*L_p$ has eigenvalues $\sigma_i+\sigma_j$.
+For column $d_i$ of $D_B$ and transposed row $e_i$ of $E_A$,
+the pullback identity gives the remaining quadratic forms
+\begin{align}
+{\rm Hess}_g f[L_p\xi,L_p\xi]
+&=\|L_p\xi_{\rm core}\|_F^2+
+\sum_{i=1}^r
+\begin{pmatrix}d_i\\e_i\end{pmatrix}^{\!\top}
+\begin{pmatrix}\sigma_i I_p&-N\\-N^\top&\sigma_i I_q\end{pmatrix}
+\begin{pmatrix}d_i\\e_i\end{pmatrix}.
+\end{align}
+An SVD of $N$ makes each $2\times2$ coupled block have eigenvalues
+$\sigma_i\pm\tau_k$; unmatched rectangular coordinates contribute
+$\sigma_i$. The count is
+$r^2+r(2s+|p-q|)=r(m+d-r)$.
+All core and unmatched eigenvalues are positive, proving the two
+index formulas.
+\end{proof}
+
+\begin{corollary}[A sharp spectral-gap condition number]
+\label{cor:sharp-gap-condition}
+If $m>r$ or $d>r$, $X$ is the best rank-$r$ approximation to $Y$,
+and $\sigma_r(Y)>\sigma_{r+1}(Y)$, then
+\begin{align}
+\lambda_{\min}(\qHess_g f(X))
+&=\sigma_r(Y)-\sigma_{r+1}(Y),\\
+\lambda_{\max}(\qHess_g f(X))&=2\sigma_1(Y),\\
+\kappa(\qHess_g f(X))
+&=\frac{2\sigma_1(Y)}
+{\sigma_r(Y)-\sigma_{r+1}(Y)} .
+\label{eq:sharp-gap-condition}
+\end{align}
+Use $\sigma_{r+1}(Y)=0$ when $r=\min(m,d)$.
+Every regular critical point is either a global rank-$r$ minimum
+or has a negative-curvature direction.
+\end{corollary}
+\begin{proof}
+The Eckart--Young theorem \cite{eckart1936approximation} identifies
+the best approximation with the retained leading singular values.
+The exact spectrum then has smallest eigenvalue
+$\sigma_r-\tau_1$ and largest $2\sigma_1$.
+At an arbitrary critical point, $\tau_1\leq\sigma_r$ makes all
+retained singular values at least all omitted singular values, so
+Eckart--Young makes it a global minimum. If $\tau_1>\sigma_r$,
+Eq.~\eqref{eq:sharp-critical-spectrum} supplies a strictly negative
+eigenvalue. Spectral ties account for the stated zero modes.
+\end{proof}
+
+\subsection{Exact local task conditioning versus connection conditioning}
+\begin{theorem}[Reconstruction spectra at an exact planted solution]
+\label{thm:local-reconstruction-conditioning}
+For $f(X)=\tfrac12\|X-X_\star\|_F^2$ at a regular solution,
+the quotient Hessian is $K_{X_\star}$.
+For the depth-$L$ balanced metric it is $K_{X_\star}^{(L)}$.
+Writing $\kappa_\star=\sigma_1(X_\star)/\sigma_r(X_\star)$,
+\begin{align}
+\kappa(\qHess_g f(X_\star))
+&=\begin{cases}
+2\kappa_\star,&m>r\text{ or }d>r,\\
+\kappa_\star,&m=d=r,
+\end{cases}\\
+\kappa(\qHess_{g^{(L)}}f(X_\star))
+&=\begin{cases}
+L\kappa_\star^{\,2-2/L},&m>r\text{ or }d>r,\\
+\kappa_\star^{\,2-2/L},&m=d=r .
+\end{cases}
+\label{eq:local-reconstruction-conditioning}
+\end{align}
+In contrast, the joint connection normal equation has
+\begin{equation}
+\kappa(\mathcal N_W)
+=\kappa_\star^{2/L}\cot^2(\pi/(2L)).
+\end{equation}
+\end{theorem}
+\begin{proof}
+At $X_\star$, the ambient gradient vanishes and the ambient Hessian
+is the identity. Thus Eq.~\eqref{eq:rigid-hessian-form} reduces to
+$\qHess_g f=K_{X_\star}$.
+Its core eigenvalues are $\sigma_i+\sigma_j$; any nonempty
+off-diagonal block supplies eigenvalues $\sigma_i$.
+For depth $L$, each core eigenvalue is the sum of $L$ positive
+monomials, so
+\begin{align}
+L\sigma_r^{2-2/L}\leq\chi_{ab}^{(L)}
+&\leq L\sigma_1^{2-2/L},\\
+\min\chi_{ab}^{(L)}&=L\sigma_r^{2-2/L},&
+\max\chi_{ab}^{(L)}&=L\sigma_1^{2-2/L}.
+\end{align}
+If present, off-diagonal eigenvalues are
+$\sigma_i^{2-2/L}$. Take the exact ratios and apply
+Eq.~\eqref{eq:rigid-chain-condition}.
+The conditioning of the Sylvester solve and the conditioning of the
+task Hessian can therefore change in different directions with depth.
+\end{proof}

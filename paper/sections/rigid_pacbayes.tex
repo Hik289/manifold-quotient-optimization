@@ -1,0 +1,198 @@
+\subsection{PAC--Bayes on quotient coordinates and volume cancellation}
+\label{app:rigid-pacbayes}
+The change-of-measure step below is the standard exponential
+PAC--Bayes construction \cite{seldin2012pac}; the chart, volume,
+and gauge cancellations are made explicit for $\mathcal M_r$.
+
+\begin{definition}
+For probability measures $Q\ll P$,
+\begin{align}
+{\rm KL}(Q\|P)&=\int\log\!\left(\frac{dQ}{dP}\right)dQ,\\
+R(Q)&=\int R(X)\,dQ(X),&
+R_S(Q)&=\int R_S(X)\,dQ(X).
+\end{align}
+A prior is independent of $S$. A posterior may be any measurable
+function of $S$ and of the optimization randomness.
+\end{definition}
+
+\begin{lemma}[Variational change of measure]
+For measurable $F$ with $\int e^F\,dP<\infty$,
+\begin{equation}
+\int F\,dQ\leq {\rm KL}(Q\|P)+\log\int e^F\,dP .
+\label{eq:rigid-dv}
+\end{equation}
+\end{lemma}
+\begin{proof}
+Writing $q=dQ/dP$, Jensen's inequality gives
+\begin{align}
+\int F\,dQ-{\rm KL}(Q\|P)
+&=\int\log(e^F/q)\,dQ\\
+&\leq\log\int_{\{q>0\}}e^Fq^{-1}\,dQ
+\leq\log\int e^F\,dP .
+\end{align}
+Truncation proves the extended-valued form whenever the right side
+is finite.
+\end{proof}
+
+\begin{theorem}[Simultaneous posterior and temperature bound]
+\label{thm:rigid-pacbayes}
+Let $0\leq\ell\leq1$, $S\sim\mathcal D^n$, and let $P$ be a fixed prior
+on a measurable predictor space. Fix $\lambda_0>0$ independently of $S$,
+and put
+\begin{align}
+\lambda_j&=2^j\lambda_0,&
+w_j&=\frac{6}{\pi^2(j+1)^2},\qquad j=0,1,\ldots .
+\end{align}
+With probability at least $1-q$, simultaneously for every $j$ and
+every posterior $Q\ll P$,
+\begin{equation}
+R(Q)-R_S(Q)
+\leq
+\frac{{\rm KL}(Q\|P)+\log\!\frac{\pi^2(j+1)^2}{6q}}
+{\lambda_j n}
++\frac{\lambda_j}{8}.
+\label{eq:rigid-pacbayes}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For fixed $X$, independence and the range-one exponential bound imply
+\begin{align}
+\E_S\exp\{\lambda n(R(X)-R_S(X))\}
+&=\prod_{i=1}^n
+\E_{z_i}\exp\{\lambda(R(X)-\ell(X;z_i))\}\\
+&\leq\exp(n\lambda^2/8).
+\end{align}
+Tonelli's theorem and prior independence yield
+\begin{align}
+Z_j(S)&=\int
+\exp\{\lambda_jn(R(X)-R_S(X))-n\lambda_j^2/8\}\,dP(X),\\
+\E_S Z_j(S)&\leq1,&
+\Pr\{Z_j>(qw_j)^{-1}\}&\leq qw_j .
+\end{align}
+Since $\sum_{j\geq0}w_j=1$, with probability at least $1-q$,
+\begin{equation}
+\log Z_j(S)\leq\log(1/(qw_j))
+\quad\text{for all }j .
+\end{equation}
+On this single event, apply Eq.~\eqref{eq:rigid-dv} to
+$F=\lambda_jn(R-R_S)-n\lambda_j^2/8$ for arbitrary $Q$.
+No union bound over posteriors is needed.
+\end{proof}
+
+\begin{proposition}[Pushforward KL and Riemannian volume]
+\label{prop:rigid-volume-cancellation}
+Let $\Psi:\Theta\subset\R^{D_r}\to\mathcal M_r$ be an injective regular
+Schur chart. For Lebesgue densities $p,q$ and coordinate metric
+$g_{ij}(\theta)$, set
+\begin{align}
+J_g(\theta)&=\sqrt{\det(g_{ij}(\theta))},&
+d{\rm vol}_g(\Psi(\theta))&=J_g(\theta)\,d\theta .
+\end{align}
+Then
+\begin{align}
+\frac{d\Psi_\#P}{d{\rm vol}_g}(\Psi(\theta))
+&=\frac{p(\theta)}{J_g(\theta)},&
+\frac{d\Psi_\#Q}{d{\rm vol}_g}(\Psi(\theta))
+&=\frac{q(\theta)}{J_g(\theta)},\\
+{\rm KL}(\Psi_\#Q\|\Psi_\#P)&={\rm KL}(Q\|P).
+\label{eq:rigid-volume-cancellation}
+\end{align}
+\end{proposition}
+\begin{proof}
+The coordinate volume formula and the Radon--Nikodym chain rule give
+\begin{align}
+{\rm KL}(\Psi_\#Q\|\Psi_\#P)
+&=\int_\Theta
+\log\!\left(\frac{q(\theta)/J_g(\theta)}
+{p(\theta)/J_g(\theta)}\right)
+\frac{q(\theta)}{J_g(\theta)}J_g(\theta)\,d\theta\\
+&=\int_\Theta q(\theta)\log(q(\theta)/p(\theta))\,d\theta .
+\end{align}
+In particular, a Jacobian factor cannot be dropped from only one of
+the two densities.
+\end{proof}
+
+\begin{theorem}[Local quotient dimension in a deterministic-predictor bound]
+\label{thm:rigid-localized-pacbayes}
+Fix finitely many charts $\Psi_a$ and coordinate balls
+$B(\theta_{0,a},R_a)\subset\Theta_a$, independently of $S$.
+Let prior chart weights $\pi_a>0$ satisfy $\sum_a\pi_a=1$.
+On the disjoint union of the labeled balls, take
+\begin{align}
+P(a,d\theta)
+&=\pi_a\,\frac{\mathbf1_{\{\|\theta-\theta_{0,a}\|\leq R_a\}}}
+{v_{D_r}R_a^{D_r}}\,d\theta,\\
+v_D&=\frac{\pi^{D/2}}{\Gamma(D/2+1)} .
+\end{align}
+Suppose $\Psi_a$ is $C_a$-Lipschitz and
+$\ell$ is $L_\ell$-Lipschitz in product Frobenius distance.
+On the event in Eq.~\eqref{eq:rigid-pacbayes}, for every possibly
+data-dependent $a,\theta,\rho$ with
+$\|\theta-\theta_{0,a}\|+\rho\leq R_a$ and $\rho>0$,
+\begin{align}
+R(\Psi_a(\theta))-R_S(\Psi_a(\theta))
+&\leq 2L_\ell C_a\rho+\frac{\lambda_j}{8}\notag\\
+&\quad+\frac{
+D_r\log(R_a/\rho)+\log(1/\pi_a)
++\log\!\frac{\pi^2(j+1)^2}{6q}}
+{\lambda_jn},
+\qquad j\geq0 .
+\label{eq:rigid-localized-pacbayes}
+\end{align}
+The dimensional term is $D_r=r(m+d-r)$.
+\end{theorem}
+\begin{proof}
+Take the posterior concentrated on label $a$ and uniform on
+$B(\theta,\rho)$. Its density ratio on its support is constant:
+\begin{align}
+\frac{dQ}{dP}
+&=\frac{v_{D_r}R_a^{D_r}}
+{\pi_a v_{D_r}\rho^{D_r}},&
+{\rm KL}(Q\|P)
+&=D_r\log(R_a/\rho)+\log(1/\pi_a).
+\end{align}
+For $\vartheta\sim Q$,
+\begin{align}
+\|\Psi_a(\vartheta)-\Psi_a(\theta)\|_F
+&\leq C_a\rho,\\
+|R(Q)-R(\Psi_a(\theta))|&\leq L_\ell C_a\rho,&
+|R_S(Q)-R_S(\Psi_a(\theta))|&\leq L_\ell C_a\rho .
+\end{align}
+Add the two approximation terms to Eq.~\eqref{eq:rigid-pacbayes}.
+Overlapping chart images cause no problem: the labeled union is the
+hypothesis space, and the loss depends on its product image.
+\end{proof}
+
+\begin{corollary}[Radius minimization and gauge variables]
+For fixed $a,\theta,j$ and $L_\ell C_a>0$, the optimal radius in
+Eq.~\eqref{eq:rigid-localized-pacbayes} is
+\begin{equation}
+\rho_*=\min\left\{R_a-\|\theta-\theta_{0,a}\|,
+\frac{D_r}{2L_\ell C_a\lambda_jn}\right\},
+\end{equation}
+provided the first argument is positive. If the second argument is
+feasible, the radius-dependent terms equal
+\begin{equation}
+\frac{D_r}{\lambda_jn}
+\left[1+\log\!\left(
+\frac{2L_\ell C_aR_a\lambda_jn}{D_r}\right)\right].
+\end{equation}
+For any fixed probability law $\nu$ on auxiliary gauge coordinates,
+\begin{equation}
+{\rm KL}(Q\otimes\nu\|P\otimes\nu)={\rm KL}(Q\|P).
+\label{eq:rigid-gauge-kl}
+\end{equation}
+\end{corollary}
+\begin{proof}
+For $F(\rho)=2L_\ell C_a\rho+
+D_r\log(R_a/\rho)/(\lambda_jn)$,
+\begin{align}
+F'(\rho)&=2L_\ell C_a-\frac{D_r}{\lambda_jn\rho},&
+F''(\rho)&=\frac{D_r}{\lambda_jn\rho^2}>0 .
+\end{align}
+The density ratio for the product measures is
+$(dQ/dP)(\theta)$; integrating over $\nu$ proves
+Eq.~\eqref{eq:rigid-gauge-kl}. Gauge cancellation compares priors and
+posteriors with the same gauge law. It does not authorize replacing a
+data-dependent prior by a fixed prior without a correction.
+\end{proof}

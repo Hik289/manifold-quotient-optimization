@@ -1,0 +1,688 @@
+\section{Statistical Generalization: State Stability and Intrinsic Capacity}
+\label{app:generalization}
+\subsection{Statistical model and product sensitivity}
+\begin{assumption}
+\begin{align}
+S&=(z_1,\ldots,z_n)\sim\mathcal D^n,&
+R(X)&=\E_{z\sim\mathcal D}\ell(X;z),\\
+R_S(X)&=n^{-1}\sum_i\ell(X;z_i),&
+0&\leq\ell(X;z)\leq1,\\
+|\ell(X;z)-\ell(Y;z)|&\leq L_\ell\nn{X-Y}.
+\label{eq:rigid-statistical-model}
+\end{align}
+All connecting quotient paths used below lie in the stated regular spectral band.
+\end{assumption}
+
+\begin{lemma}
+\begin{align}
+\nn{X-Y}&\leq\sqrt{2b}\,d_g(X,Y),\\
+|\ell(X;z)-\ell(Y;z)|
+&\leq C_\ell d_g(X,Y),\qquad C_\ell=L_\ell\sqrt{2b}.
+\end{align}
+\end{lemma}
+\begin{proof}
+For every admissible connecting path $\gamma$,
+\begin{align}
+\nn{X-Y}&\leq\int_0^1\nn{\dot\gamma(t)}\,dt
+\leq\sqrt{2b}\int_0^1\|\dot\gamma(t)\|_g\,dt .
+\end{align}
+Take the infimum over paths.
+\end{proof}
+
+\subsection{Uniform replace-one stability for the full optimizer state}
+\begin{definition}
+Let $S^{(j)}=(z_1,\ldots,z_j',\ldots,z_n)$, with independent $z_j'$.
+The two runs use the same initialization and sampled indices.
+Let $s_t=(X_t,\mathsf m_t,\mathsf v_t,\ldots)$ contain every persistent
+optimizer variable, and let $d_*(s,s')\geq d_g(X,X')$.
+\end{definition}
+\begin{assumption}[Actual state-map regularity]
+For the implemented one-example map $U_{t,z}$,
+\begin{align}
+d_*(U_{t,z}s,U_{t,z}s')&\leq(1+L_U\eta_t)d_*(s,s'),\\
+d_*(U_{t,z}s,U_{t,z'}s)&\leq2C_U\eta_t,\\
+|\ell(X(s);z)-\ell(X(s');z)|&\leq C_\ell d_*(s,s').
+\label{eq:rigid-state-regularity}
+\end{align}
+\end{assumption}
+
+\begin{theorem}[Stability with all expansion factors retained]
+\label{thm:stability}
+For $I_t\sim{\rm Unif}\{1,\ldots,n\}$,
+\begin{align}
+\E d_*(s_T(S),s_T(S^{(j)}))
+&\leq\frac{2C_U}{n}\sum_{t<T}\eta_t
+\prod_{k=t+1}^{T-1}(1+L_U\eta_k),\\
+\epsilon_{\rm stab}
+&\leq\frac{2C_\ell C_U}{n}\sum_{t<T}\eta_t
+\prod_{k=t+1}^{T-1}(1+L_U\eta_k),\\
+|\E[R(X_T)-R_S(X_T)]|
+&\leq\epsilon_{\rm stab}.
+\label{eq:rigid-stability}
+\end{align}
+\end{theorem}
+\begin{proof}
+Let $\Delta_t=d_*(s_t,s_t')$, $a_t=1+L_U\eta_t$.
+\begin{align}
+I_t\ne j&\Longrightarrow\Delta_{t+1}\leq a_t\Delta_t,\\
+I_t=j&\Longrightarrow
+\Delta_{t+1}\leq
+d_*(U_{t,z_j}s_t,U_{t,z_j}s_t')
++d_*(U_{t,z_j}s_t',U_{t,z_j'}s_t')\\
+&\hspace{27mm}\leq a_t\Delta_t+2C_U\eta_t,\\
+\E_t\Delta_{t+1}&\leq a_t\Delta_t+2C_U\eta_t/n,\\
+\E\Delta_T&\leq
+\left(\prod_{k<T}a_k\right)\Delta_0
++\frac{2C_U}{n}\sum_{t<T}\eta_t\prod_{k>t}a_k .
+\end{align}
+Since $\Delta_0=0$, this proves the first two claims. Exchangeability gives
+\begin{align}
+\E[R(X_T(S))-R_S(X_T(S))]
+&=\frac1n\sum_j\E[
+\ell(X_T(S^{(j)});z_j)-\ell(X_T(S);z_j)].
+\end{align}
+Bound each summand in absolute value by $\epsilon_{\rm stab}$.
+\end{proof}
+
+\begin{corollary}[Closed forms for nonexpansive, expansive, and contractive maps]
+For constant $\eta$,
+\begin{align}
+L_U=0&\Longrightarrow
+\epsilon_{\rm stab}\leq\frac{2C_\ell C_U\eta T}{n},\\
+L_U>0&\Longrightarrow
+\epsilon_{\rm stab}\leq
+\frac{2C_\ell C_U}{nL_U}\{(1+L_U\eta)^T-1\},\\
+d_*(U_zs,U_zs')\leq(1-\mu_U\eta)d_*(s,s')
+&\Longrightarrow
+\epsilon_{\rm stab}\leq
+\frac{2C_\ell C_U}{n\mu_U}
+\{1-(1-\mu_U\eta)^T\}.
+\label{eq:rigid-stability-cases}
+\end{align}
+In the last line, $0\leq1-\mu_U\eta<1$ is required.
+\end{corollary}
+\begin{proof}
+Use the exact sums
+\begin{equation}
+\eta\sum_{j=0}^{T-1}(1+L_U\eta)^j
+=\frac{(1+L_U\eta)^T-1}{L_U},
+\quad
+\eta\sum_{j=0}^{T-1}(1-\mu_U\eta)^j
+=\frac{1-(1-\mu_U\eta)^T}{\mu_U}.
+\end{equation}
+\end{proof}
+
+
+\begin{corollary}[Stability constants from the implemented factor-state Jacobian]
+\label{cor:rigid-explicit-state-stability}
+Suppose the domain and interpolation assumptions of
+Eq.~\eqref{eq:rigid-explicit-state-sensitivity} hold uniformly for the
+coupled runs, with constant $\eta,\lambda,\Lambda_\lambda,C_U$.
+For $0\leq\ell\leq1$ with product Lipschitz constant $L_\ell$,
+\begin{align}
+C_{\ell,{\rm fac}}&=L_\ell\sqrt{2\gamma},\\
+\epsilon_{\rm stab}
+&\leq\frac{2C_{\ell,{\rm fac}}C_U\eta}{n}
+\sum_{j=0}^{T-1}\Lambda_\lambda^j\\
+&=\frac{2C_{\ell,{\rm fac}}C_U\eta}{n}
+\begin{cases}
+T,&\Lambda_\lambda=1,\\
+(\Lambda_\lambda^T-1)/(\Lambda_\lambda-1),
+&\Lambda_\lambda\ne1 .
+\end{cases}
+\label{eq:rigid-explicit-state-stability}
+\end{align}
+\end{corollary}
+\begin{proof}
+For two balanced factor states in the Gram band,
+\begin{align}
+\|BA-B'A'\|_F
+&\leq\|(B-B')A\|_F+\|B'(A-A')\|_F\\
+&\leq\sqrt\gamma(\|B-B'\|_F+\|A-A'\|_F)
+\leq\sqrt{2\gamma}\|p-p'\|.
+\end{align}
+Thus the loss is $C_{\ell,{\rm fac}}$-Lipschitz in $d_\lambda$.
+Eq.~\eqref{eq:rigid-explicit-state-sensitivity} gives the coupled
+recursion
+\begin{equation}
+\E\Delta_{t+1}\leq\Lambda_\lambda\E\Delta_t+2C_U\eta/n,
+\qquad\Delta_0=0 .
+\end{equation}
+Unroll it and use the exact geometric sum. This argument uses the
+full factor-state Jacobian; neither $C_U$ nor its momentum contribution
+is assigned zero.
+\end{proof}
+
+\subsection{An explicit momentum-state sensitivity calculation}
+\begin{proposition}[Weighted state metric in a flat chart]
+For
+\begin{align}
+v^+&=\beta v+(1-\beta)\nabla\ell_z(x),&
+x^+&=x-\eta v^+,\\
+\|\nabla\ell_z(x)\|&\leq G,&
+\|\nabla\ell_z(x)-\nabla\ell_z(x')\|&\leq L\|x-x'\|,
+\end{align}
+set $\delta_x=\|x-x'\|$, $\delta_v=\|v-v'\|$.
+Then
+\begin{align}
+\begin{pmatrix}\delta_x^+\\\delta_v^+\end{pmatrix}
+&\leq
+\begin{pmatrix}
+1+\eta(1-\beta)L&\eta\beta\\
+(1-\beta)L&\beta
+\end{pmatrix}
+\begin{pmatrix}\delta_x\\\delta_v\end{pmatrix}
++2(1-\beta)G\begin{pmatrix}\eta\\1\end{pmatrix}\mathbf1_{\{I_t=j\}}.
+\end{align}
+For $0<\beta<1$ and
+\begin{equation}
+D_\eta=\delta_x+\lambda_\eta\delta_v,\qquad
+\lambda_\eta=\frac{\eta\beta}{1-\beta},
+\end{equation}
+\begin{equation}
+D_\eta^+\leq(1+\eta L)D_\eta+2\eta G\mathbf1_{\{I_t=j\}}.
+\label{eq:rigid-momentum-stability}
+\end{equation}
+\end{proposition}
+\begin{proof}
+The row-vector identity is
+\begin{align}
+(1,\lambda_\eta)
+\begin{pmatrix}
+1+\eta(1-\beta)L&\eta\beta\\
+(1-\beta)L&\beta
+\end{pmatrix}
+&=(1+\eta L,\lambda_\eta),\\
+(1,\lambda_\eta)\,2(1-\beta)G
+\begin{pmatrix}\eta\\1\end{pmatrix}
+&=2\eta G .
+\end{align}
+\end{proof}
+On the quotient, Eq.~\eqref{eq:rigid-state-regularity} must additionally
+include retraction and transport derivatives. Equations
+\eqref{eq:rigid-DK}--\eqref{eq:rigid-Hessian-bound} provide finite local
+constants on the regular band; they are not set to zero.
+For varying steps,
+\begin{equation}
+D_{\eta_{t+1}}(s_{t+1},s_{t+1}')
+\leq\max\{1,\lambda_{\eta_{t+1}}/\lambda_{\eta_t}\}
+D_{\eta_t}(s_{t+1},s_{t+1}').
+\end{equation}
+
+\subsection{Symmetrization and a nuclear-norm capacity bound}
+\begin{definition}
+For $\mathcal X_\tau=\{X:\|X\|_*\leq\tau\}$ and
+$h_X(z)=h_0(z)+\langle X,Z(z)\rangle$,
+\begin{align}
+\widehat{\mathfrak R}_S(\mathcal H_\tau)
+&=\frac1n\E_\epsilon\sup_{X\in\mathcal X_\tau}
+\sum_i\epsilon_i h_X(z_i),\\
+\Pr(\epsilon_i=1)&=\Pr(\epsilon_i=-1)=\tfrac12 .
+\end{align}
+Assume $\nn{Z(z)}\leq R_Z$.
+\end{definition}
+
+\begin{theorem}[Exact dual-norm reduction]
+\label{thm:nuclear-generalization}
+\begin{align}
+\widehat{\mathfrak R}_S(\mathcal H_\tau)
+&=\frac{\tau}{n}\E_\epsilon
+\left\|\sum_i\epsilon_i Z(z_i)\right\|_2\\
+&\leq\frac{\tau R_Z}{\sqrt n}.
+\label{eq:rigid-nuclear-complexity}
+\end{align}
+For $0\leq\ell(h;z)\leq1$ and scalar Lipschitz constant $L_h$,
+with probability at least $1-q$,
+\begin{equation}
+\sup_{\|X\|_*\leq\tau}|R(X)-R_S(X)|
+\leq\frac{2L_h\tau R_Z}{\sqrt n}
++3\sqrt{\frac{\log(4/q)}{2n}} .
+\label{eq:rigid-nuclear-generalization}
+\end{equation}
+For balanced factors,
+$\|X\|_*=\frac12(\nn B^2+\nn A^2)$; if $\rnk X\leq r$ and
+$\|X\|_2\leq b$, one may take $\tau=rb$.
+\end{theorem}
+\begin{proof}
+The fixed offset has zero sign expectation. Nuclear--spectral duality gives
+\begin{align}
+\sup_{\|X\|_*\leq\tau}\ii X{\sum_i\epsilon_iZ_i}
+&=\tau\left\|\sum_i\epsilon_iZ_i\right\|_2,\\
+\E_\epsilon\left\|\sum_i\epsilon_iZ_i\right\|_2
+&\leq
+\left(\E_\epsilon\left\|\sum_i\epsilon_iZ_i\right\|_F^2\right)^{1/2}\\
+&=\left(\sum_i\nn{Z_i}^2\right)^{1/2}\leq R_Z\sqrt n .
+\end{align}
+For a one-Lipschitz scalar map $\phi$ and arbitrary $a_h,t_h$,
+\begin{align}
+&\tfrac12\sup_h(a_h+\phi(t_h))
++\tfrac12\sup_h(a_h-\phi(t_h))\notag\\
+&=\tfrac12\sup_{h,h'}[a_h+a_{h'}+\phi(t_h)-\phi(t_{h'})]\\
+&\leq\tfrac12\sup_{h,h'}[a_h+a_{h'}+|t_h-t_{h'}|]\\
+&=\tfrac12\sup_h(a_h+t_h)+\tfrac12\sup_h(a_h-t_h).
+\end{align}
+Iterating over coordinates gives
+$\widehat{\mathfrak R}_S(\ell\circ\mathcal H_\tau)
+\leq L_h\widehat{\mathfrak R}_S(\mathcal H_\tau)$.
+For an independent ghost sample $S'$,
+\begin{align}
+\E_S\sup_X(R(X)-R_S(X))
+&\leq\E_{S,S'}\sup_X\frac1n
+\sum_i[\ell(X;z_i')-\ell(X;z_i)]\\
+&=\E_{S,S',\epsilon}\sup_X\frac1n
+\sum_i\epsilon_i[\ell(X;z_i')-\ell(X;z_i)]\\
+&\leq2\E_S\widehat{\mathfrak R}_S(\ell\circ\mathcal H_\tau).
+\end{align}
+Both the supremum gap and empirical loss complexity change by at most
+$1/n$ when one observation is replaced. Bounded differences and a union
+bound give
+\begin{align}
+\sup_X(R-R_S)
+&\leq2\E_S\widehat{\mathfrak R}_S
++\sqrt{\log(2/q)/(2n)},\\
+\E_S\widehat{\mathfrak R}_S
+&\leq\widehat{\mathfrak R}_S+\sqrt{\log(2/q)/(2n)}.
+\end{align}
+Apply these one-sided bounds to both $\ell$ and $-\ell$, each with
+failure probability $q/2$. The loss ranges have length one, and their
+centered empirical complexities obey the same contraction bound.
+Substitution and a union bound prove
+Eq.~\eqref{eq:rigid-nuclear-generalization}.
+\end{proof}
+
+\subsection{Explicit intrinsic covers from Schur coordinates}
+\begin{theorem}[A Lipschitz constant for the rank chart]
+\label{thm:rigid-chart-Lipschitz}
+On a Schur-chart domain with
+\begin{equation}
+\on{C^{-1}},\on{(C')^{-1}}\leq s^{-1},\qquad
+\nn D,\nn{D'},\nn E,\nn{E'}\leq h ,
+\end{equation}
+the map in Eq.~\eqref{eq:schur-chart} obeys
+\begin{equation}
+\nn{\Psi(C,D,E)-\Psi(C',D',E')}
+\leq\left(1+\frac{h^2}{s^2}\right)
+\sqrt{\nn{C-C'}^2+\nn{D-D'}^2+\nn{E-E'}^2}.
+\label{eq:rigid-chart-Lipschitz}
+\end{equation}
+\end{theorem}
+\begin{proof}
+With $F=EC^{-1}D$,
+\begin{align}
+F-F'&=(E-E')C^{-1}D+
+E'C^{-1}(D-D')+E'(C^{-1}-(C')^{-1})D',\\
+C^{-1}-(C')^{-1}&=-C^{-1}(C-C')(C')^{-1},\\
+\nn{F-F'}
+&\leq(h/s)\nn{E-E'}+(h/s)\nn{D-D'}
++(h^2/s^2)\nn{C-C'},\\
+\nn{F-F'}^2
+&\leq(2h^2/s^2+h^4/s^4)
+(\nn{C-C'}^2+\nn{D-D'}^2+\nn{E-E'}^2).
+\end{align}
+The squared norm of the full chart difference adds the three coordinate
+block norms, and $1+2h^2/s^2+h^4/s^4=(1+h^2/s^2)^2$.
+\end{proof}
+
+\begin{theorem}[A fully explicit global regular-band cover]
+\label{thm:rigid-global-cover}
+Put
+\begin{align}
+D_r&=r(m+d-r),&
+J_r&={m\choose r}{d\choose r},\\
+s_0&=\frac{a^r}{b^{r-1}\sqrt{J_r}},&
+C_0&=1+\frac{rb^2}{s_0^2},&
+R_0&=\sqrt r\,b .
+\end{align}
+Then
+\begin{equation}
+N(\mathcal K_{a,b},\nn{\cdot},\varepsilon)
+\leq J_r(1+2C_0R_0/\varepsilon)^{D_r}.
+\label{eq:rigid-global-cover}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For $X=U\Sigma V^\top$, Cauchy--Binet gives
+\begin{align}
+\sum_{|I|=r}\det(U_I)^2&=\det(U^\top U)=1,&
+\sum_{|J|=r}\det(V_J)^2&=1 .
+\end{align}
+Hence there are $I,J$ with
+\begin{align}
+|\det X_{I,J}|
+&=|\det U_I|\,\det\Sigma\,|\det V_J|
+\geq a^r/\sqrt{J_r},\\
+\sigma_r(X_{I,J})
+&\geq\frac{|\det X_{I,J}|}{\sigma_1(X_{I,J})^{r-1}}
+\geq s_0 .
+\end{align}
+After row and column permutations, $X$ lies in a Schur chart whose
+coordinate norm is at most $\nn X\leq R_0$ and whose two off-diagonal
+block norms are at most $h=\sqrt r\,b$.
+The preceding theorem gives constant $C_0$.
+A maximal $\varepsilon/C_0$-separated subset of the admissible
+coordinate domain is a net with centers in that domain. Disjoint
+radius-$\varepsilon/(2C_0)$ balls and the ambient radius-$R_0$ bound
+give at most $(1+2C_0R_0/\varepsilon)^{D_r}$ centers. Summing over
+all $J_r$ charts proves the claim.
+\end{proof}
+
+\begin{theorem}[Intrinsic-dimension uniform generalization]
+\label{thm:chart-generalization}
+Under Eq.~\eqref{eq:rigid-statistical-model}, with probability at least
+$1-q$,
+\begin{equation}
+\sup_{X\in\mathcal K_{a,b}}|R(X)-R_S(X)|
+\leq2L_\ell\varepsilon+
+\sqrt{\frac{\log(2J_r/q)+D_r\log(1+2C_0R_0/\varepsilon)}{2n}} .
+\label{eq:rigid-intrinsic-generalization}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For a finite $\varepsilon$ net $\mathcal N$,
+\begin{align}
+\Pr\left\{\max_{Y\in\mathcal N}|R(Y)-R_S(Y)|>t\right\}
+&\leq2|\mathcal N|e^{-2nt^2},\\
+|R(X)-R_S(X)|
+&\leq |R(Y)-R_S(Y)|+
+|R(X)-R(Y)|+|R_S(X)-R_S(Y)|\\
+&\leq |R(Y)-R_S(Y)|+2L_\ell\varepsilon .
+\end{align}
+Insert Eq.~\eqref{eq:rigid-global-cover} and choose
+$t=\sqrt{\log(2|\mathcal N|/q)/(2n)}$.
+\end{proof}
+
+\begin{corollary}[A rank-bound cover without a lower singular-value margin]
+For $\mathcal C_{r,R}=\{X:\rnk X\leq r,\ \nn X\leq R\}$,
+\begin{align}
+N(\mathcal C_{r,R},\nn{\cdot},\varepsilon)
+&\leq(1+6\sqrt r\,R/\varepsilon)^{r(m+d+1)},\\
+\sup_{\mathcal C_{r,R}}|R-R_S|
+&\leq2L_\ell\varepsilon+
+\sqrt{\frac{r(m+d+1)\log(1+6\sqrt r\,R/\varepsilon)+
+\log(2/q)}{2n}}
+\end{align}
+with probability at least $1-q$.
+This bound has no $a^{-1}$ constant, but uses a larger exponent than $D_r$.
+\end{corollary}
+
+\input{sections/rigid_pacbayes}
+
+\subsection{Random reshuffling and full-batch variants}
+\begin{corollary}[Random reshuffling without conditional independence]
+The bound in Eq.~\eqref{eq:rigid-stability} also holds for a uniformly
+random permutation in each epoch, with deterministic step lengths and
+uniform state-map constants.
+\end{corollary}
+\begin{proof}
+The pathwise recursion is
+\begin{align}
+\Delta_{t+1}&\leq a_t\Delta_t+
+2C_U\eta_t\mathbf1_{\{I_t=j\}},\\
+\Delta_T&\leq
+2C_U\sum_{t<T}\eta_t\mathbf1_{\{I_t=j\}}
+\prod_{k>t}a_k .
+\end{align}
+Each permutation position has marginal probability
+$\Pr(I_t=j)=1/n$. Since the weights $\eta_t\prod_{k>t}a_k$ are
+deterministic, taking expectations yields the same bound.
+No conditional probability $\Pr(I_t=j\mid\mathcal F_t)=1/n$ is asserted.
+\end{proof}
+
+\begin{corollary}[Full-batch sample perturbation]
+Suppose a full-batch state update has the common-data Lipschitz constant
+in Eq.~\eqref{eq:rigid-state-regularity} and
+\begin{equation}
+d_*(U_{t,S}s,U_{t,S^{(j)}}s)\leq2C_U\eta_t/n .
+\end{equation}
+Then Eq.~\eqref{eq:rigid-stability} holds without sampling randomness.
+For an averaged gradient, a sufficient oracle condition is
+\begin{equation}
+\left\|\nabla R_S(x)-\nabla R_{S^{(j)}}(x)\right\|
+\leq\frac1n\|\nabla\ell(x;z_j)-\nabla\ell(x;z_j')\|
+\leq2G/n
+\end{equation}
+together with an update-map sensitivity bound to that oracle.
+\end{corollary}
+
+\subsection{Multilayer spectral propagation and margin risk}
+\begin{assumption}
+For $1\leq l\leq H$,
+\begin{align}
+W_l&=W_{0,l}+c_lX_l,&
+\rnk X_l&=r_l,&
+\on{X_l}&\leq b_l,\\
+h_l&=\phi_l(W_lh_{l-1}),&
+h_0&=x,&\|x\|_2&\leq R_x,\\
+\|\phi_l(u)-\phi_l(v)\|_2&\leq\rho_l\|u-v\|_2,&
+\phi_l(0)&=0,\\
+s_l&=\on{W_{0,l}}+|c_l|b_l,&
+A_l&=R_x|c_l|\left(\prod_{j=1}^H\rho_j\right)
+\prod_{j\ne l}s_j .
+\end{align}
+Biases and other trainable parameters are fixed or covered separately.
+\end{assumption}
+
+\begin{lemma}[Telescoping output sensitivity]
+\label{lem:network-sensitivity}
+For two networks in this class,
+\begin{equation}
+\|h_X(x)-h_Y(x)\|_2
+\leq\sum_{l=1}^H A_l\|X_l-Y_l\|_2.
+\label{eq:rigid-network-telescope}
+\end{equation}
+\end{lemma}
+\begin{proof}
+Let $h^{(l)}$ replace the first $l$ layers of one network by those of the other.
+Then
+\begin{align}
+h_X-h_Y&=\sum_{l=1}^H(h^{(l)}-h^{(l-1)}),\\
+\|h^{(l)}-h^{(l-1)}\|_2
+&\leq\left(\prod_{j>l}\rho_js_j\right)\rho_l|c_l|
+\|X_l-Y_l\|_2
+\left(R_x\prod_{j<l}\rho_js_j\right)\\
+&=A_l\|X_l-Y_l\|_2 .
+\end{align}
+\end{proof}
+
+\begin{theorem}[Network generalization with all rank coordinates counted]
+\label{thm:network-generalization}
+Let the layer-$l$ cover have
+\begin{equation}
+\log N_l(\varepsilon_l)
+\leq\log J_l+D_l\log(1+2C_lR_l/\varepsilon_l),\quad
+D_l=r_l(m_l+d_l-r_l).
+\end{equation}
+For an output-$L_{\rm out}$-Lipschitz loss in $[0,1]$,
+with probability at least $1-q$,
+\begin{align}
+\sup_X|R(X)-R_S(X)|
+&\leq2L_{\rm out}\sum_l A_l\varepsilon_l\notag\\
+&\quad+\sqrt{\frac{
+\log(2/q)+\sum_l\log J_l+
+\sum_lD_l\log(1+2C_lR_l/\varepsilon_l)}
+{2n}} .
+\label{eq:rigid-network-generalization}
+\end{align}
+\end{theorem}
+\begin{proof}
+\begin{align}
+|\mathcal N|&\leq\prod_lN_l(\varepsilon_l),&
+\log|\mathcal N|&\leq\sum_l\log N_l(\varepsilon_l),\\
+\|h_X-h_{\widehat X}\|_2&\leq\sum_lA_l\varepsilon_l .
+\end{align}
+Apply a finite-net Hoeffding union bound and pay the approximation
+cost in population and empirical risk.
+\end{proof}
+
+\begin{corollary}[Explicit dependence on non-adapter trainable weights]
+If other weights range over a $P$-dimensional Euclidean ball of radius
+$R_{\rm oth}$ and their output sensitivity is $L_{\rm oth}$, the preceding
+bound additionally contains
+\begin{align}
+2L_{\rm out}L_{\rm oth}\varepsilon_{\rm oth}
+\quad\text{and}\quad
+P\log(1+2R_{\rm oth}/\varepsilon_{\rm oth})
+\end{align}
+in the approximation term and the logarithm, respectively.
+Trainable embeddings, dense backbones, biases, and attention parameters
+are not omitted from $P$.
+\end{corollary}
+
+\begin{corollary}[Classification margin]
+Let
+\begin{align}
+m(h,z)&=h_y-\max_{k\ne y}h_k,&
+\ell_\gamma(h,z)&=\min\{1,\max\{0,1-m(h,z)/\gamma\}\}.
+\end{align}
+Then
+\begin{align}
+\mathbf1_{\{m(h,z)\leq0\}}&\leq\ell_\gamma(h,z),\\
+|\ell_\gamma(h,z)-\ell_\gamma(h',z)|
+&\leq\frac{\sqrt2}{\gamma}\|h-h'\|_2 .
+\end{align}
+Writing $U_n(\gamma)$ for Eq.~\eqref{eq:rigid-network-generalization}
+with $L_{\rm out}=\sqrt2/\gamma$,
+\begin{equation}
+\Pr_{z\sim\mathcal D}\{m(h_X,z)\leq0\}
+\leq\frac1n\sum_i\ell_\gamma(h_X,z_i)+U_n(\gamma).
+\end{equation}
+\end{corollary}
+
+\begin{proposition}[Fixed graph propagation]
+For graph-valued layers
+$H_l=\phi_l(P_lH_{l-1}W_l^\top)$, take
+$\|H_0\|_F\leq R_x$ and Frobenius output distance. With fixed $P_l$,
+the exact sensitivity coefficient is
+\begin{equation}
+A_l^{\rm graph}
+=R_x|c_l|\left(\prod_{j=1}^H\rho_j\|P_j\|_2\right)
+\prod_{j\ne l}s_j
+=A_l\prod_{j=1}^H\|P_j\|_2 .
+\end{equation}
+In particular, the propagation at the perturbed layer is included.
+For symmetric normalized adjacency with self-loops,
+\begin{align}
+P&=D^{-1/2}(A+I)D^{-1/2},&
+P&\sim D^{-1}(A+I),\\
+P&=P^\top,&\|P\|_2&\leq1 .
+\end{align}
+This operator bound does not make transductive nodes IID.
+Data-dependent attention needs separate Lipschitz constants.
+\end{proposition}
+
+\subsection{Validation selection and union classes}
+\begin{theorem}[Selection among trained candidates]
+\label{prop:selection}
+Let $h_1,\ldots,h_M$ be independent of an IID validation sample of size
+$n_v$, conditionally on the training data and training randomness.
+If $\widehat h=\arg\min_j\widehat R_v(h_j)$, then with probability
+at least $1-q$,
+\begin{equation}
+R(\widehat h)\leq\min_jR(h_j)
++2\sqrt{\frac{\log(2M/q)}{2n_v}} .
+\label{eq:rigid-selection}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For $\alpha=\sqrt{\log(2M/q)/(2n_v)}$,
+\begin{align}
+\Pr\{\max_j|R(h_j)-\widehat R_v(h_j)|>\alpha\}
+&\leq2Me^{-2n_v\alpha^2}=q,\\
+R(\widehat h)&\leq\widehat R_v(\widehat h)+\alpha
+\leq\widehat R_v(h_*)+\alpha\leq R(h_*)+2\alpha .
+\end{align}
+\end{proof}
+
+\begin{proposition}[Checkpoints, hyperparameters, and execution aliases]
+For $M_{\rm cfg}$ configurations and $K_j$ candidate checkpoints,
+\begin{align}
+M_{\rm eff}
+&\leq\sum_{j=1}^{M_{\rm cfg}}K_j,&
+\log M_{\rm eff}
+&\leq\log M_{\rm cfg}+\log(\max_jK_j),\\
+N\left(\bigcup_{j=1}^M\mathcal C_j,\varepsilon\right)
+&\leq\sum_{j=1}^MN(\mathcal C_j,\varepsilon)
+\leq M\max_jN(\mathcal C_j,\varepsilon).
+\end{align}
+Duplicate executable configurations do not create independent candidates.
+The validation theorem presupposes that the candidate family is fixed
+without adaptive use of that validation sample.
+\end{proposition}
+
+\subsection{End-to-end excess risk and the stationarity distinction}
+\begin{theorem}[Optimization plus uniform generalization]
+\label{thm:excess-risk}
+For a fixed class $\mathcal C$, suppose
+\begin{align}
+\sup_{X\in\mathcal C}|R(X)-R_S(X)|&\leq U_n,\\
+R_S(X_T)-\inf_{X\in\mathcal C}R_S(X)&\leq\epsilon_{\rm opt}.
+\end{align}
+Then
+\begin{equation}
+R(X_T)-\inf_{X\in\mathcal C}R(X)
+\leq\epsilon_{\rm opt}+2U_n .
+\end{equation}
+If instead expected uniform stability is $\epsilon_{\rm stab}$ and
+expected empirical suboptimality is at most $\epsilon_{\rm opt}$,
+\begin{equation}
+\E R(X_T)-\inf_{X\in\mathcal C}R(X)
+\leq\epsilon_{\rm opt}+\epsilon_{\rm stab}.
+\label{eq:rigid-excess-risk}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For any fixed $X\in\mathcal C$,
+\begin{align}
+R(X_T)-R(X)
+&=[R(X_T)-R_S(X_T)]+[R_S(X_T)-R_S(X)]
++[R_S(X)-R(X)]\\
+&\leq2U_n+\epsilon_{\rm opt}.
+\end{align}
+Take an infimizing sequence. In expectation, the first bracket is
+bounded by stability, the second by empirical suboptimality, and
+$\E[R_S(X)-R(X)]=0$.
+\end{proof}
+
+\begin{corollary}[PL population bound and low-rank approximation error]
+If the empirical PL minimum is the class minimum,
+\begin{align}
+\epsilon_{\rm opt}(T)
+&\leq(1-\mu_g\eta)^T\Delta_0
+\quad\text{in the deterministic case},\\
+\E\epsilon_{\rm opt}(T)
+&\leq(1-\mu_g\eta)^T\Delta_0+
+\frac{2B^2+L_R\eta\nu^2/2}{\mu_g}
+\quad\text{in the stochastic case}.
+\end{align}
+For an unrestricted comparison class $\mathcal H$,
+\begin{align}
+R(X_T)-\inf_{h\in\mathcal H}R(h)
+&=\left[R(X_T)-\inf_{X\in\mathcal C_r}R(X)\right]
++\underbrace{\inf_{X\in\mathcal C_r}R(X)
+-\inf_{h\in\mathcal H}R(h)}_{\epsilon_{\rm approx}(r)} .
+\end{align}
+\end{corollary}
+
+\begin{proposition}[Zero gradient alone does not bound excess risk]
+For $c>1$ on the positive rank-one stratum,
+\begin{align}
+f(x)&=((x-c)^2-1)^2,& x&\in[c-1,c+1],\\
+\qgrad_g f(c)&=0,&
+f(c)-\min_x f(x)&=1 .
+\end{align}
+Hence nonconvex stationarity cannot replace $\epsilon_{\rm opt}$ in
+Eq.~\eqref{eq:rigid-excess-risk} without an additional landscape inequality.
+\end{proposition}
+
+\begin{proposition}[Exact invariance of risk under balancing]
+For every invertible $Q$ and product-only predictor,
+\begin{align}
+R(BQ,Q^{-1}A)&=R(B,A),&
+R_S(BQ,Q^{-1}A)&=R_S(B,A),\\
+\|(BQ)(Q^{-1}A)\|_*&=\|BA\|_*,&
+{\rm Gap}(BQ,Q^{-1}A)&={\rm Gap}(B,A).
+\end{align}
+Thus orbit balancing alone does not shrink the represented predictor class.
+All IID theorems above require the declared sampling model; they are not
+automatically applied to correlated language tokens or nodes of a single graph.
+\end{proposition}

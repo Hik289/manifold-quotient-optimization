@@ -1,0 +1,20 @@
+\begin{table}[t]
+\centering
+\caption{Gauge energy in gradient ($\rho_{\rm grad}$) vs.\ update direction ($\rho_{\rm upd}$)
+  by optimizer. Gradient energy is at machine precision globally (Lemma~1). Update energy is
+  strictly positive for AdamW and SGD-M, confirming Theorem~1. QuotientOpt suppresses
+  $\rho_{\rm upd}$ to numerical zero (${\sim}10^{-12}$), while Balance-only retains
+  $\rho_{\rm upd}\approx 10^{-2}$.}
+\label{tab:rho-summary}
+\vspace{4pt}
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Optimizer} & $n$ & $\rho_{\rm grad}$ (all) & $\rho_{\rm upd}$ range & $\rho_{\rm upd}$ median \\
+\midrule
+AdamW        & 10 & $\leq 5.2{\times}10^{-14}$ & $[0.028,\; 0.079]$ & $4.3{\times}10^{-2}$ \\
+SGD-M        &  4 & $\leq 5.2{\times}10^{-14}$ & $[4.6{\times}10^{-3},\; 5.6{\times}10^{-3}]$ & $4.8{\times}10^{-3}$ \\
+Balance-only & 10 & $\leq 5.2{\times}10^{-14}$ & $[0.010,\; 0.042]$ & $3.5{\times}10^{-2}$ \\
+\rowcolor{oursbg}QuotientOpt  & 10 & $\leq 5.2{\times}10^{-14}$ & $[3.2{\times}10^{-13},\; 1.5{\times}10^{-10}]$ & $5.0{\times}10^{-12}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

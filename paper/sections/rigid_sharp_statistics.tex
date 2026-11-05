@@ -1,0 +1,177 @@
+\subsection{Whitened Newton decrement and a leading-constant sharp risk bound}
+\label{app:sharp-statistics}
+Write $F(\theta)=R(\psi(\theta))$, $F_n(\theta)=R_S(\psi(\theta))$
+in a fixed $D$-dimensional regular chart with $\nabla F(0)=0$.
+For a positive definite reference matrix $H$ define
+$\|\theta\|_H^2=\theta^\top H\theta$ and
+$d_n^2=\nabla F_n(0)^\top H^{-1}\nabla F_n(0)$.
+The reference $H$ is independent of the sample in the concentration
+statement, or is fixed after conditioning on a noise-independent design.
+
+\begin{theorem}[Whitened local risk certificate]
+\label{thm:sharp-newton-risk}
+Suppose on $\|\theta\|_H\leq r$ that
+\begin{align}
+(1-\delta_H)H&\preceq\nabla^2F_n(\theta),&
+\nabla^2F(\theta)&\preceq(1+\epsilon_H)H,
+\qquad 0\leq\delta_H<1 .
+\end{align}
+If $d_n<(1-\delta_H)r$, the constrained empirical minimum is unique
+and interior, and
+\begin{align}
+\|\widehat\theta_n\|_H&\leq\frac{d_n}{1-\delta_H},\\
+F(\widehat\theta_n)-F(0)
+&\leq\frac{1+\epsilon_H}{2(1-\delta_H)^2}d_n^2 .
+\label{eq:sharp-newton-risk}
+\end{align}
+For an empirical $\epsilon_T$-minimizer in the same ball,
+\begin{equation}
+F(\theta_T)-F(0)
+\leq\frac{1+\epsilon_H}{2}
+\left\{\frac{d_n}{1-\delta_H}
++\sqrt{\frac{2\epsilon_T}{1-\delta_H}}\right\}^{\!2}.
+\label{eq:sharp-optimization-statistics}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Use $z=H^{1/2}\theta$. The empirical Hessian is at least
+$(1-\delta_H)I$ and its center gradient has norm $d_n$.
+On $\|z\|=r$ its outward derivative is at least
+$(1-\delta_H)r^2-d_nr>0$. Thus the minimum is interior.
+Strong monotonicity gives
+$(1-\delta_H)\|\widehat z\|\leq d_n$.
+The population Hessian bound yields
+$F(\theta)-F(0)\leq(1+\epsilon_H)\|\theta\|_H^2/2$.
+Empirical strong convexity bounds
+$\|\theta_T-\widehat\theta_n\|_H^2
+\leq2\epsilon_T/(1-\delta_H)$.
+Apply the triangle inequality and keep the square unexpanded.
+For the quadratic pair
+\begin{align}
+F(\theta)-F(0)&=\tfrac12(1+\epsilon_H)\|\theta\|_H^2,\\
+F_n(\theta)-F_n(0)&=s^\top\theta+
+\tfrac12(1-\delta_H)\|\theta\|_H^2,
+\end{align}
+the minimizer is $-(1-\delta_H)^{-1}H^{-1}s$ and
+Eq.~\eqref{eq:sharp-newton-risk} is an equality.
+Thus both the coefficient $1/2$ and the relative-Hessian factor
+$(1-\delta_H)^{-2}$ are sharp for these stated sector conditions.
+\end{proof}
+
+\begin{lemma}[Laurent--Massart and Hsu--Kakade--Zhang score concentration]
+\label{lem:sharp-quadratic-tail}
+Suppose the independent centered whitened scores
+$w_i=H^{-1/2}\nabla\ell_0(z_i)$ satisfy
+\begin{equation}
+\E e^{u^\top w_i}\leq e^{u^\top\mathsf V u/2},
+\qquad u\in\R^D,\quad\mathsf V\succeq0 .
+\end{equation}
+Then, for every $u_0>0$, with probability at least $1-e^{-u_0}$,
+\begin{equation}
+d_n^2\leq\frac1n
+\left\{\operatorname{tr}\mathsf V
++2\sqrt{\operatorname{tr}(\mathsf V^2)u_0}
++2\|\mathsf V\|_2u_0\right\}.
+\label{eq:sharp-score-tail}
+\end{equation}
+\end{lemma}
+\begin{proof}
+This is the Gaussian quadratic-form bound of
+Laurent--Massart \cite{laurent2000adaptive} and its sub-Gaussian
+extension \cite{hsu2012tail}; the short proof also fixes the constants.
+Put $W=n^{-1/2}\sum_iw_i$ and let $g\sim N(0,I_D)$ be independent.
+For $0<t<(2\|\mathsf V\|_2)^{-1}$,
+\begin{align}
+\E e^{t\|W\|^2}
+&=\E_g\E_W e^{\sqrt{2t}g^\top W}
+\leq\E_g e^{t g^\top\mathsf Vg}
+=\det(I-2t\mathsf V)^{-1/2},\\
+\log\E e^{t(\|W\|^2-\operatorname{tr}\mathsf V)}
+&\leq\frac{t^2\operatorname{tr}(\mathsf V^2)}
+{1-2t\|\mathsf V\|_2}.
+\end{align}
+The scalar inequality used here is
+$-\log(1-x)-x\leq x^2/[2(1-x)]$, $0\leq x<1$.
+Chernoff optimization with
+\begin{equation}
+t=\frac{\sqrt{u_0}}
+{\sqrt{\operatorname{tr}(\mathsf V^2)}
++2\|\mathsf V\|_2\sqrt{u_0}}
+\end{equation}
+gives the tail threshold in Eq.~\eqref{eq:sharp-score-tail};
+$W=\sqrt n\,H^{-1/2}\nabla F_n(0)$.
+The zero-covariance case follows by continuity.
+\end{proof}
+
+\begin{corollary}[A condition-number-free fast rate]
+\label{cor:sharp-risk-tail}
+Suppose the Hessian event in Theorem~\ref{thm:sharp-newton-risk}
+fails with probability at most $q_H$ and its radius condition is
+satisfied by the score threshold. With probability at least
+$1-q_H-e^{-u_0}$,
+\begin{align}
+F(\widehat\theta_n)-F(0)
+&\leq\frac{1+\epsilon_H}{2n(1-\delta_H)^2}
+\left\{\operatorname{tr}\mathsf V
++2\sqrt{\operatorname{tr}(\mathsf V^2)u_0}
++2\|\mathsf V\|_2u_0\right\}.
+\label{eq:sharp-risk-tail}
+\end{align}
+In the isotropic whitened case $\mathsf V=\sigma^2I_D$ this becomes
+\begin{equation}
+\frac{(1+\epsilon_H)\sigma^2}
+{2n(1-\delta_H)^2}\{D+2\sqrt{Du_0}+2u_0\}.
+\label{eq:sharp-isotropic-tail}
+\end{equation}
+\end{corollary}
+\begin{proof}
+Intersect the score-tail event with the Hessian event and substitute
+Eq.~\eqref{eq:sharp-score-tail}. No independence of these two events
+is needed. Whitening retains the covariance--curvature interaction;
+there is no separate $\Lambda/\mu^2$ prefactor.
+\end{proof}
+
+\begin{proposition}[A Newton--Kantorovich localization certificate]
+\label{prop:sharp-kantorovich}
+Let $A=\nabla^2F_n(0)\succ0$ and $d=\|A^{-1/2}\nabla F_n(0)\|$.
+Suppose, on an $A$-ball containing the radius below,
+\begin{equation}
+\|A^{-1/2}\{\nabla^2F_n(\theta)-A\}A^{-1/2}\|_2
+\leq K\|\theta\|_A .
+\end{equation}
+If $2Kd<1$, define
+\begin{equation}
+r_-=\frac{1-\sqrt{1-2Kd}}{K}
+=\frac{2d}{1+\sqrt{1-2Kd}},
+\qquad d\leq r_-\leq2d .
+\label{eq:sharp-kantorovich}
+\end{equation}
+Then the local stationary point is unique in this ball and
+$\|\widehat\theta_n\|_A\leq r_-$.
+If $\nabla^2F(\theta)\preceq(1+\epsilon_A)A$ there,
+\begin{equation}
+F(\widehat\theta_n)-F(0)\leq\tfrac12(1+\epsilon_A)r_-^2 .
+\end{equation}
+For $K=0$, interpret $r_-=d$.
+\end{proposition}
+\begin{proof}
+This is the affine-invariant Newton--Kantorovich majorant argument
+\cite{deuflhard2004newton}, proved here through Banach's contraction
+principle. In whitened coordinates consider the frozen-Jacobian map
+\begin{equation}
+\mathcal N(\theta)=\theta-A^{-1}\nabla F_n(\theta).
+\end{equation}
+Taylor's integral remainder and the derivative premise give
+\begin{align}
+\|\mathcal N(\theta)\|_A
+&\leq d+\tfrac K2\|\theta\|_A^2,\\
+\|D\mathcal N(\theta)\|_{A\to A}
+&\leq K\|\theta\|_A .
+\end{align}
+The majorant equation $d+Kr_-^2/2=r_-$ makes the ball invariant,
+and $Kr_-=1-\sqrt{1-2Kd}<1$ makes it a contraction.
+Its fixed point solves $\nabla F_n=0$ and the Hessian is positive
+throughout the ball. The population-risk bound follows by integration.
+The argument is a localization certificate; it does not require
+changing QuotientOpt into a Newton iteration.
+\end{proof}

@@ -1,0 +1,13 @@
+\begin{table}[ht]
+\centering\small
+\caption{Secondary loss-based early stopping on the same 28 Cora runs. Select the lowest validation cross-entropy over epochs and learning rates; ties use smaller LR, then earlier epoch. This is distinct from the primary validation-accuracy criterion in Table~\ref{tab:fresh-cora}. Test loss is read at the validation-selected checkpoint and is not minimized during selection.}
+\label{tab:secondary-ce}
+\begin{tabular}{lrrrrr}
+\toprule Method & LR & Epoch & Val.\ CE & Test CE & Test acc.\ (\%)\\\midrule
+AdamW & $10^{-2}$ & 15 & 1.1728 & 1.0525 & 64.7\\
+SGD-M & $10^{-2}$ & 36 & 0.9079 & 0.8579 & 73.1\\
+Balance-only & $10^{-2}$ & 37 & 0.9261 & 0.8730 & 72.0\\
+\rowcolor{oursbg}QuotientOpt & $10^{-2}$ & 37 & 0.9261 & 0.8730 & 72.0\\
+\bottomrule
+\end{tabular}
+\end{table}

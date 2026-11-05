@@ -1,0 +1,305 @@
+\section{Metric Differentiation, Levi--Civita Connection, and Hessian Calculus}
+\label{app:rigid-calculus}
+\subsection{Projector and square-root differentials}
+\begin{definition}
+For $X=U\Sigma V^\top\in\mathcal K_{a,b}$,
+\begin{align}
+S_L(X)&=(XX^\top)^{1/2}=U\Sigma U^\top,&
+S_R(X)&=(X^\top X)^{1/2}=V\Sigma V^\top,\\
+K_X(Y)&=S_L(X)Y+YS_R(X),&
+A_X&=K_X^\dagger,\quad A_X|_{T_X}=K_X|_{T_X}^{-1}.
+\end{align}
+The square roots are restricted to the constant-rank stratum.
+\end{definition}
+
+\begin{lemma}[Differential of the tangent projector]
+For $Z\in T_X\mathcal M_r$, let
+\begin{equation}
+Z=[U,U_\perp]\begin{pmatrix}Z_{11}&Z_{12}\\Z_{21}&0\end{pmatrix}
+[V,V_\perp]^\top .
+\end{equation}
+Then
+\begin{align}
+DP_U[Z]&=U_\perp Z_{21}\Sigma^{-1}U^\top
++U\Sigma^{-1}Z_{21}^\top U_\perp^\top,\\
+DP_V[Z]&=V_\perp Z_{12}^\top\Sigma^{-1}V^\top
++V\Sigma^{-1}Z_{12}V_\perp^\top,\\
+DP_X[Z](Y)
+&=DP_U[Z]Y(I-P_V)+(I-P_U)YDP_V[Z],\\
+\nn{DP_X[Z](Y)}
+&\leq \frac4a\nn Z\nn Y .
+\label{eq:rigid-projector-derivative}
+\end{align}
+\end{lemma}
+\begin{proof}
+For a differentiable rank-$r$ path $X(t)$,
+\begin{align}
+P_UX&=X,&
+(I-P_U)\dot P_U X&=(I-P_U)\dot X,\\
+P_U\dot P_UP_U&=0,&
+(I-P_U)\dot P_U(I-P_U)&=0,\\
+(I-P_U)\dot P_UU&=U_\perp Z_{21}\Sigma^{-1},\\
+\dot P_U&=(I-P_U)\dot P_UP_U+
+P_U\dot P_U(I-P_U).
+\end{align}
+Apply the same identities to $X^\top$. Differentiate
+$P_XY=P_UY+YP_V-P_UYP_V$ and use
+\begin{align}
+\on{DP_U[Z]}&\leq2a^{-1}\nn{Z_{21}},&
+\on{DP_V[Z]}&\leq2a^{-1}\nn{Z_{12}},\\
+\nn{Z_{21}}+\nn{Z_{12}}&\leq\sqrt2\nn Z .
+\end{align}
+\end{proof}
+
+\begin{theorem}[Exact square-root and metric differentials]
+\label{thm:metric-derivative}
+Write $D_L=DS_L(X)[Z]$, $D_R=DS_R(X)[Z]$. In the $U,V$ block bases,
+\begin{align}
+D_L&\equiv\begin{pmatrix}T_L&Z_{21}^\top\\Z_{21}&0\end{pmatrix},&
+\Sigma T_L+T_L\Sigma&=Z_{11}\Sigma+\Sigma Z_{11}^\top,\\
+D_R&\equiv\begin{pmatrix}T_R&Z_{12}\\Z_{12}^\top&0\end{pmatrix},&
+\Sigma T_R+T_R\Sigma&=Z_{11}^\top\Sigma+\Sigma Z_{11},\\
+(T_L)_{ij}
+&=\frac{Z_{11,ij}\sigma_j+\sigma_i Z_{11,ji}}{\sigma_i+\sigma_j},\\
+(T_R)_{ij}
+&=\frac{Z_{11,ji}\sigma_j+\sigma_i Z_{11,ij}}{\sigma_i+\sigma_j},\\
+DK_X[Z](Y)&=D_LY+YD_R,\\
+\nn{DK_X[Z](Y)}&\leq \frac{4b}{a}\nn Z\nn Y .
+\label{eq:rigid-DK}
+\end{align}
+\end{theorem}
+\begin{proof}
+Differentiate $S_L^2=XX^\top$, $S_R^2=X^\top X$:
+\begin{align}
+S_LD_L+D_LS_L&=ZX^\top+XZ^\top,\\
+S_RD_R+D_RS_R&=Z^\top X+X^\top Z,\\
+ZX^\top+XZ^\top
+&\equiv\begin{pmatrix}
+Z_{11}\Sigma+\Sigma Z_{11}^\top&\Sigma Z_{21}^\top\\
+Z_{21}\Sigma&0
+\end{pmatrix}.
+\end{align}
+The constant-rank square-root path has zero normal--normal first derivative.
+Consequently
+\begin{align}
+\nn{T_L}&\leq\frac ba\nn{Z_{11}},&
+\nn{D_L}^2&=\nn{T_L}^2+2\nn{Z_{21}}^2
+\leq\frac{4b^2}{a^2}\nn Z^2,\\
+\nn{D_R}&\leq\frac{2b}{a}\nn Z,&
+\nn{D_LY+YD_R}&\leq(\nn{D_L}+\nn{D_R})\nn Y .
+\end{align}
+\end{proof}
+
+\begin{proposition}[Pseudoinverse derivative on the moving tangent bundle]
+For $P=P_X$, $K=K_X$, $A=K_X^\dagger$, and $\dot K=DK_X[Z]$,
+\begin{align}
+DA_X[Z]
+&=-A\dot KA+A^2\dot K(I-P)+(I-P)\dot KA^2,\\
+P\,DA_X[Z]\,P&=-A(P\dot KP)A .
+\label{eq:rigid-pseudoinverse-derivative}
+\end{align}
+For the embedded connection $\nabla^E_ZY=P_XDY[Z]$,
+\begin{align}
+(\nabla^E_ZK)(Y)&=P_XDK_X[Z](Y),\\
+(\nabla^E_ZA)(Y)&=-A_X(\nabla^E_ZK)(A_XY),\\
+\nn{(\nabla^E_ZA)(Y)}
+&\leq \frac{4b}{a^3}\nn Z\nn Y .
+\label{eq:rigid-bundle-derivative}
+\end{align}
+\end{proposition}
+\begin{proof}
+In the orthogonal decomposition $T_X\oplus T_X^\perp$,
+\begin{align}
+K&=\begin{pmatrix}K_T&0\\0&0\end{pmatrix},&
+A&=\begin{pmatrix}K_T^{-1}&0\\0&0\end{pmatrix},\\
+\dot A_{TT}&=-K_T^{-1}\dot K_{TT}K_T^{-1},&
+\dot A_{TN}&=K_T^{-2}\dot K_{TN},&
+\dot A_{NT}&=\dot K_{NT}K_T^{-2}.
+\end{align}
+These identities follow by differentiating $KA=AK=P$, $A=A^*$,
+$K=K^*$, and $A(I-P)=0$. For a tangent field $Y$,
+\begin{align}
+\nabla^E_Z(KY)-K\nabla^E_ZY
+&=P_XDK_X[Z](Y)+P_XK_XDY[Z]-K_XP_XDY[Z]\\
+&=P_XDK_X[Z](Y),\\
+\nabla^E_Z(AK)&=0,\\
+\nabla^E_ZA&=-A(\nabla^E_ZK)A .
+\end{align}
+Finally $\on{A|_{T_X}}\leq a^{-1}$ and
+Eq.~\eqref{eq:rigid-DK} imply the bound.
+\end{proof}
+
+\subsection{Levi--Civita connection and an explicit Hessian bound}
+\begin{definition}
+For tangent fields $Y,Z$, define
+\begin{align}
+B_X(Z,Y)&=(I-P_X)DY[Z]=DP_X[Z](Y),\\
+\mathfrak D_X(Z,Y)
+&=\nabla^g_ZY-\nabla^E_ZY,\\
+\ii{\mathfrak Q_X(Z,Y)}W
+&=\ii Z{(\nabla^E_WA)Y},\qquad W\in T_X\mathcal M_r .
+\end{align}
+\end{definition}
+
+\begin{theorem}[Closed connection tensor]
+\label{thm:levi-civita}
+\begin{align}
+2g_X(\mathfrak D_X(Z,Y),W)
+&=\ii Y{(\nabla^E_ZA)W}
++\ii Z{(\nabla^E_YA)W}
+-\ii Z{(\nabla^E_WA)Y},\\
+\mathfrak D_X(Z,Y)
+&=\tfrac12 K_X\bigl[
+(\nabla^E_ZA)Y+(\nabla^E_YA)Z-\mathfrak Q_X(Z,Y)\bigr],\\
+\nn{B_X(Z,Y)}&\leq\frac4a\nn Z\nn Y,\\
+\nn{\mathfrak D_X(Z,Y)}
+&\leq\frac{12b^2}{a^3}\nn Z\nn Y .
+\label{eq:rigid-connection-tensor}
+\end{align}
+\end{theorem}
+\begin{proof}
+For $\nabla^g=\nabla^E+\mathfrak D$, metric compatibility and zero torsion give
+\begin{align}
+Zg(Y,W)
+&=g(\nabla^E_ZY,W)+g(Y,\nabla^E_ZW)
++\ii Y{(\nabla^E_ZA)W},\\
+\mathfrak D(Z,Y)&=\mathfrak D(Y,Z),\\
+2g(\mathfrak D(Z,Y),W)
+&=(\nabla^E_Zg)(Y,W)+(\nabla^E_Yg)(Z,W)
+-(\nabla^E_Wg)(Z,Y).
+\end{align}
+Set $C_A=4b/a^3$. Then
+\begin{align}
+|\ii{\mathfrak Q(Z,Y)}W|
+&\leq C_A\nn Z\nn Y\nn W,\\
+\nn{\mathfrak D(Z,Y)}
+&\leq\tfrac12(2b)(3C_A)\nn Z\nn Y
+=\frac{12b^2}{a^3}\nn Z\nn Y .
+\end{align}
+\end{proof}
+
+\input{sections/rigid_sharp_hessian}
+
+\begin{theorem}[Hessian: coordinate formula and pullback bound]
+\label{thm:explicit-hessian}
+For $G=\nabla f(X)$,
+\begin{align}
+\qHess_g f(X)[Z]
+&=P_X\{DK_X[Z](G)+K_X(\nabla^2f(X)[Z])\}\notag\\
+&\quad+\mathfrak D_X(Z,K_XG),\\
+{\rm Hess}_g f(X)[Z,Y]
+&=\ii Z{\nabla^2f(X)[Y]}
++\ii G{B_X(Z,Y)-\mathfrak D_X(Z,Y)} .
+\label{eq:rigid-hessian-form}
+\end{align}
+If $\|\nabla^2f\|_{F\to F}\leq L_f$, then
+\begin{equation}
+\|\qHess_g f(X)\|_{g\to g}
+\leq 2bL_f+\|\nabla f(X)\|_2
+=:L_g .
+\label{eq:rigid-Hessian-bound}
+\end{equation}
+\end{theorem}
+\begin{proof}
+\begin{align}
+\qHess_g f[Z]
+&=\nabla^g_Z(K_XG)
+=\nabla^E_Z(K_XG)+\mathfrak D_X(Z,K_XG),\\
+{\rm Hess}_g f[Z,Y]
+&=Z(Df[Y])-Df[\nabla^g_ZY]\\
+&=\ii Z{\nabla^2f[Y]}+\ii G{DY[Z]-\nabla^g_ZY}\\
+&=\ii Z{\nabla^2f[Y]}+\ii G{B_X(Z,Y)-\mathfrak D_X(Z,Y)},\\
+|{\rm Hess}_g f[Z,Y]|
+&\leq(2bL_f+\|G\|_2)\gn Z\gn Y .
+\end{align}
+The final estimate uses Eq.~\eqref{eq:sharp-pullback} and its residual
+operator bound rather than separate norms of the connection tensors.
+\end{proof}
+
+\subsection{Higher derivatives without internal singular-value gaps}
+\begin{proposition}[Resolvent differentiation]
+Let $\Gamma$ enclose $[a^2,b^2]$, exclude $0$, and stay in the analytic
+domain of $z^{1/2}$. Put
+\begin{align}
+M&=XX^\top,&R(z)&=(zI-M)^{-1},&
+M_Z&=ZX^\top+XZ^\top .
+\end{align}
+A local smooth extension agreeing with $S_L$ on $\mathcal M_r$ satisfies
+\begin{align}
+S_L(X)&=\frac1{2\pi{\rm i}}\oint_\Gamma z^{1/2}R(z)\,dz,\\
+DS_L[Z]&=\frac1{2\pi{\rm i}}\oint_\Gamma
+z^{1/2}R(z)M_ZR(z)\,dz,\\
+D^2S_L[Z,Y]
+&=\frac1{2\pi{\rm i}}\oint_\Gamma z^{1/2}
+\bigl[R(ZY^\top+YZ^\top)R\notag\\
+&\hspace{38mm}+RM_ZRM_YR+RM_YRM_ZR\bigr]\,dz .
+\label{eq:rigid-resolvent}
+\end{align}
+These expressions require separation from the zero spectrum, not
+$\sigma_i\ne\sigma_j$ for positive singular values.
+\end{proposition}
+\begin{proof}
+\begin{align}
+D(zI-M)^{-1}[Z]&=R M_ZR,\\
+D^2(zI-M)^{-1}[Z,Y]
+&=R(ZY^\top+YZ^\top)R+RM_ZRM_YR+RM_YRM_ZR .
+\end{align}
+For $\delta_\Gamma={\rm dist}(\Gamma,{\rm spec}(M))>0$,
+\begin{align}
+\sup_{z\in\Gamma}\on{R(z)}&\leq\delta_\Gamma^{-1},&
+\on{M_Z}&\leq2b\nn Z,\\
+\nn{D^2S_L[Z,Y]}
+&\leq\frac{|\Gamma|\sup_\Gamma|z^{1/2}|}{2\pi}
+\left(2\delta_\Gamma^{-2}
++8b^2\delta_\Gamma^{-3}\right)\nn Z\nn Y.
+\end{align}
+Differentiation under the contour integral follows from uniform resolvent bounds.
+\end{proof}
+
+\begin{proposition}[Coordinate metric and curvature]
+For chart coordinates $\theta^i$ and $J_i=\partial_i\Psi$,
+\begin{align}
+g_{ij}&=\ii{J_i}{A_XJ_j},\\
+\partial_k g_{ij}
+&=\ii{\partial_kJ_i}{A_XJ_j}
++\ii{J_i}{DA_X[J_k]J_j}
++\ii{J_i}{A_X\partial_kJ_j},\\
+\Gamma^k_{ij}
+&=\tfrac12 g^{k\ell}
+(\partial_i g_{j\ell}+\partial_j g_{i\ell}-\partial_\ell g_{ij}),\\
+R^k{}_{\ell ij}
+&=\partial_i\Gamma^k_{j\ell}-\partial_j\Gamma^k_{i\ell}
++\Gamma^k_{im}\Gamma^m_{j\ell}
+-\Gamma^k_{jm}\Gamma^m_{i\ell},\\
+({\rm Hess}_g f)_{ij}
+&=\partial_{ij}(f\circ\Psi)-\Gamma^k_{ij}\partial_k(f\circ\Psi).
+\label{eq:rigid-coordinate-curvature}
+\end{align}
+Repeated indices are summed.
+\end{proposition}
+
+\subsection{Balanced gradient flow and discrete imbalance}
+\begin{proposition}
+For $\dot B=-GA^\top$, $\dot A=-B^\top G$,
+\begin{align}
+\frac d{dt}(B^\top B-AA^\top)
+&=-AG^\top B-B^\top GA^\top+B^\top GA^\top+AG^\top B=0,\\
+\dot X&=-BB^\top G-GA^\top A=-K_XG
+\quad\text{on }\mathcal S,\\
+\frac d{dt}f(X)&=-\nn{GA^\top}^2-\nn{B^\top G}^2
+=-\gn{\qgrad_g f}^2.
+\end{align}
+For a horizontal discrete step $p^+=p-\eta v$,
+\begin{align}
+(B^+)^\top B^+-A^+(A^+)^\top
+&=\eta^2(v_B^\top v_B-v_Av_A^\top),\\
+\nn{(B^+)^\top B^+-A^+(A^+)^\top}
+&\leq\eta^2\nn v^2,\\
+\nn{Q_{\rm bal}-I}+\nn{Q_{\rm bal}^{-1}-I}
+&\leq C_{\rm bal}\eta^2\nn v^2
+\end{align}
+for a smooth near-identity local balancing gauge. The last bound follows
+from the inverse Sylvester derivative and the implicit function theorem.
+\end{proposition}
+
+\input{sections/rigid_state}

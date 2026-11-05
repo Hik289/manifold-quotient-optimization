@@ -1,0 +1,417 @@
+\section{Regular Quotients, Balanced Lifts, and Exact Finite-Step Identities}
+\label{app:geometry}
+\subsection{Spaces, actions, and local coordinates}
+\begin{definition}
+\begin{align}
+1\leq r&\leq\min(m,d),\qquad 0<a\leq b<\infty,\\
+\mathcal P&=\R_*^{m\times r}\times\R_*^{r\times d},\\
+\pi(B,A)&=BA,\\
+\Phi_Q(B,A)&=(BQ,Q^{-1}A),\qquad Q\in{\rm GL}(r),\\
+\mathcal M_r&=\{X:\rnk X=r\},\qquad
+\mathcal Q=\mathcal P/{\rm GL}(r),\\
+\mathcal S&=\{(B,A)\in\mathcal P:B^\top B=AA^\top\},\\
+\mathcal K_{a,b}&=\{X\in\mathcal M_r:a\leq\sigma_r(X),\
+\sigma_1(X)\leq b\}.
+\label{eq:rigid-domain}
+\end{align}
+The two starred factor spaces have full column and row rank, respectively.
+\end{definition}
+
+\begin{theorem}[Principal quotient and product identification]
+\label{thm:quotient-space}
+\begin{align}
+\pi(p)=\pi(p')&\iff\exists!Q\in{\rm GL}(r):p'=\Phi_Q(p),\\
+\mathcal Q&\simeq\mathcal M_r,&
+\dim\mathcal Q&=r(m+d-r),\\
+D\pi_p[\xi]&=\xi_BA+B\xi_A,&
+\ker D\pi_p&=\{(B\Omega,-\Omega A):\Omega\in\R^{r\times r}\}.
+\label{eq:rigid-kernel}
+\end{align}
+The action is free and proper.
+\end{theorem}
+\begin{proof}
+\begin{align}
+BA=B'A'&\Longrightarrow\qrange B=\qrange B'
+\Longrightarrow B'=BQ,\quad Q=B^\dagger B'\in{\rm GL}(r),\\
+BA=BQA'&\Longrightarrow A=QA'\Longrightarrow A'=Q^{-1}A,\\
+BQ=B&\Longrightarrow Q=B^\dagger B=I_r.
+\end{align}
+For $p_k\to p\in\mathcal P$ and $\Phi_{Q_k}p_k\to p'\in\mathcal P$,
+\begin{align}
+Q_k&=B_k^\dagger B_k'\to B^\dagger B',\\
+Q_k^{-1}&=(B_k')^\dagger B_k\to(B')^\dagger B,&
+(B^\dagger B')((B')^\dagger B)&=I_r.
+\end{align}
+For $|I|=|J|=r$ and $\det X_{I,J}\ne0$,
+\begin{align}
+s_{I,J}(X)&=(X_{:,J},X_{I,J}^{-1}X_{I,:}),&
+\pi(s_{I,J}(X))&=X.
+\label{eq:pivot-section}
+\end{align}
+These maps give smooth local inverse quotient maps. Furthermore,
+\begin{align}
+D\pi_p[\xi]=0
+&\Longrightarrow(I-BB^\dagger)\xi_BA=0\\
+&\Longrightarrow\xi_B=B\Omega,\quad\Omega=B^\dagger\xi_B\\
+&\Longrightarrow B(\Omega A+\xi_A)=0
+\Longrightarrow\xi_A=-\Omega A,\\
+\dim\mathcal Q&=mr+rd-r^2.
+\end{align}
+\end{proof}
+
+\begin{proposition}[Explicit regular rank chart]
+\label{prop:schur-chart}
+Fix $X=U\Sigma V^\top$ and orthogonal completions $U_\perp,V_\perp$.
+For $C\in{\rm GL}(r)$,
+$D\in\R^{r\times(d-r)}$, $E\in\R^{(m-r)\times r}$,
+\begin{equation}
+\Psi(C,D,E)=[U,U_\perp]
+\begin{pmatrix}C&D\\E&EC^{-1}D\end{pmatrix}[V,V_\perp]^\top .
+\label{eq:schur-chart}
+\end{equation}
+This is a rank-$r$ chart near $(\Sigma,0,0)$ with
+$r^2+r(d-r)+(m-r)r=r(m+d-r)$ coordinates.
+\end{proposition}
+\begin{proof}
+\begin{align}
+\begin{pmatrix}C&D\\E&EC^{-1}D\end{pmatrix}
+&=\begin{pmatrix}I\\EC^{-1}\end{pmatrix}C
+\begin{pmatrix}I&C^{-1}D\end{pmatrix},\\
+\rnk\begin{pmatrix}C&D\\E&F\end{pmatrix}=r
+&\iff F-EC^{-1}D=0.
+\end{align}
+Writing $\Delta=(\Delta C,\Delta D,\Delta E)$ and $J=C^{-1}$,
+\begin{align}
+D(EC^{-1}D)[\Delta]&=\Delta EJD+EJ\Delta D-EJ\Delta CJD,\\
+D(C^{-1})[K]&=-JKJ,&
+D^2(C^{-1})[K,L]&=JKJLJ+JLJKJ .
+\end{align}
+At $(\Sigma,0,0)$,
+\begin{align}
+D\Psi[\Delta]&=[U,U_\perp]
+\begin{pmatrix}\Delta C&\Delta D\\\Delta E&0\end{pmatrix}
+[V,V_\perp]^\top,\\
+D^2\Psi[\Delta,\Gamma]&=
+U_\perp(\Delta E\Sigma^{-1}\Gamma D+
+\Gamma E\Sigma^{-1}\Delta D)V_\perp^\top .
+\label{eq:schur-second}
+\end{align}
+\end{proof}
+
+\subsection{Orbit optimality and residual symmetry}
+\begin{theorem}[Balanced representatives]
+\label{thm:balanced-optimal}
+For $X=U\Sigma V^\top\in\mathcal M_r$,
+\begin{align}
+\pi^{-1}(X)\cap\mathcal S
+&=\{(U\Sigma^{1/2}R,R^\top\Sigma^{1/2}V^\top):R\in{\rm O}(r)\},\\
+\min_{BA=X}\tfrac12(\nn B^2+\nn A^2)&=\|X\|_*,\\
+\min_{BA=X}\max(\on B^2,\on A^2)&=\on X,\\
+\min_{BA=X}\sqrt{\kappa(B)\kappa(A)}&=\sqrt{\kappa(X)},\\
+B^\top B=AA^\top&\Longrightarrow
+\kappa(B)=\kappa(A)=\sqrt{\kappa(X)}.
+\label{eq:rigid-balance-opt}
+\end{align}
+\end{theorem}
+\begin{proof}
+Set $B_0=U\Sigma^{1/2}$, $A_0=\Sigma^{1/2}V^\top$.
+For $B^\top B=AA^\top=H$ and a second balanced pair
+$(BQ,Q^{-1}A)$, put $P=QQ^\top$. Then
+\begin{align}
+Q^\top HQ&=Q^{-1}HQ^{-\top}\Longrightarrow PHP=H,\\
+(H^{1/2}PH^{1/2})^2&=H^2
+\Longrightarrow H^{1/2}PH^{1/2}=H
+\Longrightarrow P=I,\\
+\|X\|_*&\leq\nn B\nn A\leq\tfrac12(\nn B^2+\nn A^2),\\
+\on X&\leq\on B\on A\leq\max(\on B^2,\on A^2),\\
+\sigma_1(X)&\leq\sigma_1(B)\sigma_1(A),&
+\sigma_r(X)&\geq\sigma_r(B)\sigma_r(A),\\
+\kappa(X)&\leq\kappa(B)\kappa(A),&
+\sigma_i(B_0)&=\sigma_i(A_0)=\sqrt{\sigma_i(X)},\\
+\tfrac12(\nn{B_0}^2+\nn{A_0}^2)&=\sum_i\sigma_i(X).
+\end{align}
+\end{proof}
+
+\begin{lemma}[Balanced tangent equations]
+\label{lem:balanced-horizontal}
+\begin{align}
+C_p(\xi)&=B^\top\xi_B-\xi_AA^\top,&
+V_p(\Omega)&=(B\Omega,-\Omega A),\\
+T_p\mathcal S&=\{\xi:\qsym C_p(\xi)=0\},\\
+\mathcal V_p^O&=\{V_p(\Omega):\Omega^\top=-\Omega\},\\
+\mathcal H_p&=T_p\mathcal S\cap(\mathcal V_p^O)^\perp=\ker C_p.
+\label{eq:rigid-horizontal}
+\end{align}
+The induced Euclidean metric on $\mathcal S$ descends to
+$\mathcal S/{\rm O}(r)\simeq\mathcal M_r$.
+\end{lemma}
+\begin{proof}
+\begin{align}
+D(B^\top B-AA^\top)[\xi]&=C_p(\xi)+C_p(\xi)^\top,\\
+\ii{\xi}{V_p(\Omega)}&=\ii{C_p(\xi)}{\Omega},\\
+\xi\perp\mathcal V_p^O&\iff\qskew C_p(\xi)=0,\\
+\qsym C_p(\xi)=\qskew C_p(\xi)=0&\iff C_p(\xi)=0,\\
+D(B^\top B-AA^\top)[V_p(\Omega)]
+&=2(H\Omega+\Omega H),\quad\Omega^\top=\Omega,\\
+\lambda_{\min}(\Omega\mapsto H\Omega+\Omega H)
+&=2\lambda_{\min}(H)>0,\\
+\nn{\xi_BR}^2+\nn{R^\top\xi_A}^2
+&=\nn{\xi_B}^2+\nn{\xi_A}^2,\quad R^\top R=I.
+\end{align}
+\end{proof}
+
+\subsection{Minimum-energy lift and product-space metric}
+\begin{proposition}[Exact projector]
+\label{prop:minimum-lift}
+For arbitrary full-rank factors, define
+\begin{align}
+\mathscr L_p(\Omega)&=(B^\top B)\Omega+\Omega(AA^\top),\\
+\Omega_u&=\mathscr L_p^{-1}C_p(u),&
+\Pi_pu&=u-V_p\Omega_u .
+\end{align}
+Then
+\begin{align}
+\Pi_p^2&=\Pi_p=\Pi_p^*,&
+\qrange\Pi_p&=\ker C_p,&D\pi_p\Pi_p&=D\pi_p,\\
+{\rm lift}_p(Z)&=\mathop{\rm argmin}_{D\pi_p\xi=Z}
+\tfrac12(\nn{\xi_B}^2+\nn{\xi_A}^2).
+\label{eq:rigid-lift-min}
+\end{align}
+The quotient interpretation is at $p\in\mathcal S$.
+\end{proposition}
+\begin{proof}
+\begin{align}
+V_p^*&=C_p,\\
+C_pV_p&=\mathscr L_p=\mathscr L_p^*\succ0,\\
+\Pi_p&=I-V_p(V_p^*V_p)^{-1}V_p^*,\\
+\Pi_p^2&=I-2V_p\mathscr L_p^{-1}C_p\notag\\
+&\quad+V_p\mathscr L_p^{-1}(C_pV_p)\mathscr L_p^{-1}C_p
+=\Pi_p,\\
+D\pi_pV_p(\Omega)&=B\Omega A-B\Omega A=0,\\
+D\pi_p\xi=D\pi_p\xi^\star
+&\Longrightarrow\xi-\xi^\star\in\mathcal V_p,\\
+\xi^\star\in\mathcal H_p&\Longrightarrow
+\nn\xi^2=\nn{\xi^\star}^2+\nn{\xi-\xi^\star}^2.
+\end{align}
+\end{proof}
+
+\begin{theorem}[Metric and full tangent spectrum]
+\label{thm:metric-explicit}
+For $X=U\Sigma V^\top$, put
+\begin{align}
+P_X(Z)&=UU^\top Z+ZVV^\top-UU^\top ZVV^\top,\\
+T_X\mathcal M_r&=\{Z:(I-UU^\top)Z(I-VV^\top)=0\},\\
+K_X(G)&=U\Sigma U^\top G+GV\Sigma V^\top,&
+g_X(Z,Y)&=\ii Z{K_X^\dagger Y}.
+\label{eq:rigid-metric}
+\end{align}
+For $G=\nabla f(X)$,
+\begin{align}
+{\rm lift}_p(\qgrad_g f)&=(GA^\top,B^\top G),&
+\qgrad_g f(X)&=K_X(G),\\
+\gn{\qgrad_g f}^2&=\nn{GA^\top}^2+\nn{B^\top G}^2,\\
+{\rm spec}(K_X|_{T_X})
+&=\{\sigma_i+\sigma_j\}_{i,j\leq r}
+\cup\{\sigma_i\}_{i\leq r}^{\,d-r}
+\cup\{\sigma_j\}_{j\leq r}^{\,m-r}.
+\label{eq:rigid-spectrum}
+\end{align}
+For $X\in\mathcal K_{a,b}$,
+\begin{align}
+(2b)^{-1}\nn Z^2&\leq\gn Z^2\leq a^{-1}\nn Z^2,\\
+a\nn{P_XG}^2&\leq\gn{\qgrad_g f}^2\leq2b\nn{P_XG}^2.
+\label{eq:rigid-equivalence}
+\end{align}
+\end{theorem}
+\begin{proof}
+Let $L_p=D\pi_p$. Then
+\begin{align}
+\ii{L_p\xi}G&=\ii{\xi_B}{GA^\top}+\ii{\xi_A}{B^\top G},\\
+L_p^*G&=(GA^\top,B^\top G),\\
+L_pL_p^*G&=BB^\top G+GA^\top A=K_X(G),\\
+C_p(L_p^*G)&=0,\\
+{\rm lift}_pZ&=L_p^*K_X^\dagger Z,\\
+\ii{{\rm lift}_pZ}{{\rm lift}_pY}&=\ii Z{K_X^\dagger Y},\\
+g_X(K_XG,Z)&=\ii{P_XG}Z=Df(X)[Z].
+\end{align}
+In the orthogonal $U,V$ block bases,
+\begin{align}
+Z&\equiv\begin{pmatrix}Z_{11}&Z_{12}\\Z_{21}&0\end{pmatrix},\\
+K_XZ&\equiv\begin{pmatrix}
+\Sigma Z_{11}+Z_{11}\Sigma&\Sigma Z_{12}\\Z_{21}\Sigma&0
+\end{pmatrix},\\
+g_X(Z,Z)&=\sum_{i,j\leq r}\frac{|Z_{11,ij}|^2}{\sigma_i+\sigma_j}
++\sum_{i,j}\frac{|Z_{12,ij}|^2}{\sigma_i}
++\sum_{i,j}\frac{|Z_{21,ij}|^2}{\sigma_j}.
+\end{align}
+All denominators lie in $[a,2b]$; empty blocks are omitted.
+\end{proof}
+
+\begin{corollary}[Samplewise horizontality]
+\label{cor:raw-horizontal}
+\begin{align}
+f_z=f_z(BA)&\Longrightarrow
+\nabla(f_z\circ\pi)=(G_zA^\top,B^\top G_z),\\
+C_p(\nabla(f_z\circ\pi))&=0,&\rho_{\rm grad}&=0.
+\end{align}
+No expectation or minibatch averaging is required.
+\end{corollary}
+
+\subsection{Retraction, mixed terms, and coordinate transport}
+\begin{proposition}[Second-order balanced quotient retraction]
+\label{prop:second-order-retraction}
+For $p\in\mathcal S$, $\xi\in\mathcal H_p$, define
+\begin{align}
+R_X(\xi)&=(B+\xi_B)(A+\xi_A),\\
+\on{\xi_B}<\sigma_r(B),\quad\on{\xi_A}<\sigma_r(A)
+&\Longrightarrow R_X(\xi)\in\mathcal M_r .
+\end{align}
+Then
+\begin{align}
+R_X(0)&=X,&DR_X(0)[\xi]&=L_p\xi,\\
+R_X(-\eta\xi)&=X-\eta L_p\xi+\eta^2\xi_B\xi_A,&
+\nn{\xi_B\xi_A}&\leq\tfrac12\nn\xi^2,\\
+\nabla^g_{\dot\gamma}\dot\gamma(0)&=0,&
+\gamma(t)&=R_X(t\xi).
+\label{eq:rigid-retraction}
+\end{align}
+\end{proposition}
+\begin{proof}
+\begin{align}
+\sigma_r(B+\xi_B)&\geq\sigma_r(B)-\on{\xi_B}>0,\\
+\sigma_r(A+\xi_A)&\geq\sigma_r(A)-\on{\xi_A}>0,\\
+&(B+t\xi_B)^\top(B+t\xi_B)
+ -(A+t\xi_A)(A+t\xi_A)^\top\notag\\
+&\qquad=t^2(\xi_B^\top\xi_B-\xi_A\xi_A^\top).
+\end{align}
+The local balancing equation gives
+\begin{align}
+Q(0)&=I,&Q'(0)&=0,\\
+s(t)&=\Phi_{Q(t)}(B+t\xi_B,A+t\xi_A)\in\mathcal S,\\
+s'(0)&=\xi,&s''(0)&=V_p(Q''(0)),\\
+\left(\nabla^g_{\dot\gamma}\dot\gamma(0)\right)^\uparrow
+&=\Pi_p s''(0)=0.
+\end{align}
+\end{proof}
+
+\begin{proposition}[Exact horizontal--vertical discrepancy]
+\label{prop:correct-drift}
+For $u=h+V_p\Omega$, $h=\Pi_pu$,
+\begin{align}
+&(B-\eta u_B)(A-\eta u_A)-(B-\eta h_B)(A-\eta h_A)\notag\\
+&\qquad=\eta^2(-h_B\Omega A+B\Omega h_A-B\Omega^2A),\\
+\nn{\Delta X_{\rm unproj}-\Delta X_{\rm proj}}
+&\leq\eta^2\{\sqrt{2b}\nn h\nn\Omega+b\nn\Omega^2\}.
+\label{eq:rigid-mixed}
+\end{align}
+The inequality assumes $p\in\mathcal S$, $\sigma_1(X)\leq b$.
+\end{proposition}
+\begin{proof}
+\begin{align}
+L_pV_p\Omega&=0,\\
+(h_B+B\Omega)(h_A-\Omega A)-h_Bh_A
+&=-h_B\Omega A+B\Omega h_A-B\Omega^2A,\\
+\nn{h_B\Omega A}+\nn{B\Omega h_A}
+&\leq\sqrt b(\nn{h_B}+\nn{h_A})\nn\Omega\\
+&\leq\sqrt{2b}\nn h\nn\Omega,\\
+\nn{B\Omega^2A}&\leq b\nn{\Omega^2}\leq b\nn\Omega^2.
+\end{align}
+\end{proof}
+
+\begin{proposition}[Damped and inexact connection]
+\label{prop:connection-error}
+For $aI\preceq H\preceq bI$, let
+\begin{align}
+H\Omega_0+\Omega_0H&=C,\\
+(H+\varepsilon I)\widehat\Omega+
+\widehat\Omega(H+\varepsilon I)&=C+E,\quad\varepsilon\geq0,\\
+\widehat h&=u-V_p\widehat\Omega,\qquad h_0=\Pi_pu .
+\end{align}
+Then
+\begin{align}
+\nn{\widehat\Omega-\Omega_0}
+&\leq\frac{\varepsilon\nn C}{2a(a+\varepsilon)}
++\frac{\nn E}{2(a+\varepsilon)},\\
+\nn{\widehat h-h_0}
+&\leq\sqrt{2b}\left\{
+\frac{\varepsilon\nn C}{2a(a+\varepsilon)}
++\frac{\nn E}{2(a+\varepsilon)}\right\},\\
+C_p(\widehat h)&=2\varepsilon\widehat\Omega-E.
+\label{eq:rigid-damping}
+\end{align}
+\end{proposition}
+\begin{proof}
+With $H=S\qdiag(\lambda_i)S^\top$,
+\begin{align}
+(S^\top\Omega_0S)_{ij}
+&=\frac{(S^\top CS)_{ij}}{\lambda_i+\lambda_j},\\
+(S^\top\widehat\Omega S)_{ij}
+&=\frac{(S^\top(C+E)S)_{ij}}{\lambda_i+\lambda_j+2\varepsilon},\\
+\left|\frac1{\lambda_i+\lambda_j+2\varepsilon}
+-\frac1{\lambda_i+\lambda_j}\right|
+&\leq\frac{\varepsilon}{2a(a+\varepsilon)},\\
+\nn{V_pD}^2
+&=\qtr(D^\top HD)+\qtr(DHD^\top)\leq2b\nn D^2,\\
+C_p(\widehat h)&=C-H\widehat\Omega-\widehat\Omega H
+=2\varepsilon\widehat\Omega-E.
+\end{align}
+\end{proof}
+
+\begin{proposition}[Vector action and covector action]
+\label{prop:transport}
+For $p'=\Phi_Qp$,
+\begin{align}
+D\Phi_Q(\xi)&=(\xi_BQ,Q^{-1}\xi_A),\\
+L_{p'}D\Phi_Q\xi&=L_p\xi,\\
+\nn{D\Phi_Q\xi}&\leq\max(\on Q,\on{Q^{-1}})\nn\xi,\\
+\nabla_B(f\circ\pi)(p')&=\nabla_B(f\circ\pi)(p)Q^{-\top},\\
+\nabla_A(f\circ\pi)(p')&=Q^\top\nabla_A(f\circ\pi)(p).
+\label{eq:rigid-vector-covector}
+\end{align}
+For $Q\in{\rm O}(r)$,
+\begin{equation}
+\nn{D\Phi_Q\xi}=\nn\xi,\qquad
+\Pi_{p'}D\Phi_Q=D\Phi_Q\Pi_p .
+\end{equation}
+\end{proposition}
+\begin{proof}
+\begin{align}
+D\pi_{p'}D\Phi_Q\xi
+&=\xi_BQQ^{-1}A+BQQ^{-1}\xi_A=L_p\xi,\\
+G(A')^\top&=GA^\top Q^{-\top},&
+(B')^\top G&=Q^\top B^\top G,\\
+C_{p'}(D\Phi_Q\xi)&=Q^\top C_p(\xi)Q,\quad Q^\top Q=I,\\
+\Omega_{D\Phi_Q\xi}&=Q^\top\Omega_\xi Q .
+\end{align}
+\end{proof}
+
+\subsection{Critical points and Hessian inertia}
+\begin{theorem}[Critical equivalence and gauge nullity]
+\label{thm:landscape}
+\begin{align}
+D(f|_{\mathcal M_r})(X)=0
+&\iff\nabla(f\circ\pi)(p)=0
+\iff\qgrad_g f(X)=0,\\
+\operatorname{Inertia}(\qHess_g f(X))
+&=\operatorname{Inertia}(D^2(f\circ\Psi)(\theta)),\\
+\ker\nabla^2(f\circ\pi)(p)&=\mathcal V_p
+\end{align}
+at a nondegenerate quotient critical point.
+\end{theorem}
+\begin{proof}
+\begin{align}
+D(f\circ\pi)_p&=Df_X\circ L_p,&
+L_p:\mathcal H_p&\xrightarrow{\ \simeq\ }T_X\mathcal M_r,\\
+F(\theta,\omega)&=f(\Psi(\theta)),&
+D^2F&=\begin{pmatrix}D^2(f\circ\Psi)&0\\0&0_{r^2}\end{pmatrix},\\
+\operatorname{Inertia}(\nabla^2F)
+&=\operatorname{Inertia}(D^2(f\circ\Psi))+(0,0,r^2).
+\end{align}
+At criticality, coordinate changes act by congruence. For arbitrary $p$,
+\begin{align}
+D^2(f\circ\pi)_p[\xi,\zeta]
+&=\ii{L_p\xi}{\nabla^2f(X)[L_p\zeta]}\notag\\
+&\quad+\ii{\nabla f(X)}{\xi_B\zeta_A+\zeta_B\xi_A}.
+\label{eq:rigid-factor-hessian}
+\end{align}
+\end{proof}

@@ -1,0 +1,15 @@
+\begin{table}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.18}\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Archived full-observation reconstruction.} Final product disagreement, mean $\pm$ population SD over the 11 prescribed gauges, 1000 epochs, LR $10^{-2}$. These adaptive-implementation records are distinct from the analyzed first-moment algorithm. This table replaces the archived bar chart without changing the underlying observations.}
+\label{fig:gauge}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Historical method & Condition 100 $\downarrow$ & Condition 1000 $\downarrow$\\
+\midrule
+AdamW & $1.54\pm2.22$ & $1.44\pm2.2$\\
+Balance-only & $0.000946\pm0.000356$ & $0.00101\pm0.000203$\\
+\rowcolor{oursbg}QuotientOpt (adaptive archive) & $0.00138\pm0.000253$ & $0.00113\pm0.000185$\\
+\bottomrule
+\end{tabular}
+\end{table}

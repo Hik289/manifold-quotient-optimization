@@ -1,0 +1,24 @@
+\begin{table}[t]
+\centering
+\caption{Breadth scan at 2000 epochs (seed 42). GCN-SBM is tied on task accuracy; INR-SIREN is a task-metric counterexample where AdamW is better, but both satisfy the C2 gauge-robustness criterion. PINN-Burgers is shown as an honest coverage gap. Condition-number drift (C1) is task-dependent: AdamW does not reproduce the matrix-sensing $7$--$17\times$ drift on these tasks.}
+\label{tab:breadth}
+\vspace{3pt}
+\small
+\begin{tabular}{llccc}
+\toprule
+Task & Method & $\kappa_{\rm fac}/\sqrt{\kappa}$ & Gauge disag. & Task metric \\
+\midrule
+INR-SIREN & AdamW & 1.20 & 28.90 & PSNR 43.76 \\
+ & Balance & 1.00 & 1.32 & PSNR 28.39 \\
+\rowcolor{oursbg} & QuotientOpt & 1.00 & 1.08 & PSNR 36.63 \\
+\midrule
+GCN-SBM & AdamW & 1.28 & 51.79 & Acc. 1.00 \\
+ & Balance & 1.00 & 2.65 & Acc. 1.00 \\
+\rowcolor{oursbg} & QuotientOpt & 1.00 & 2.55 & Acc. 1.00 \\
+\midrule
+PINN-Burgers & AdamW & 1.15 & 48.70 & Loss $3.74{\times}10^{-3}$ \\
+ & Balance & 1.00 & 6.39 & Loss $1.03{\times}10^{-2}$ \\
+\rowcolor{oursbg} & QuotientOpt & 1.00 & 5.48 & Loss $2.09{\times}10^{-2}$ \\
+\bottomrule
+\end{tabular}
+\end{table}

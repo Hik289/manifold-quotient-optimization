@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.18}\setlength{\tabcolsep}{5pt}
+\caption{\textbf{All seven learning rates: Cora validation accuracy (\%).} Rank-4 input adapter, seed 42, 1000 epochs. Each entry is the maximum validation accuracy of its full run; the corresponding CE trajectories are retained in Figure~\ref{fig:all-lr-loss}.}
+\label{tab:cora-lr-accuracy}
+\begin{tabular}{@{}lrrrrrrr@{}}
+\toprule
+Method & $1e-05$ & $3e-05$ & $0.0001$ & $0.0003$ & $0.001$ & $0.003$ & $0.01$\\
+\midrule
+AdamW & 45.2 & 56.0 & 63.4 & 64.4 & 65.6 & 66.2 & 67.2\\
+SGD-M & 36.4 & 61.6 & 69.4 & 70.2 & 71.8 & 71.2 & 74.2\\
+Balance-only & 36.4 & 61.8 & 69.8 & 70.6 & 71.2 & 71.8 & 73.0\\
+\rowcolor{oursbg}\textbf{QuotientOpt} & 36.6 & 61.8 & 69.8 & 70.6 & 71.2 & 71.8 & 73.0\\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -1,0 +1,15 @@
+\par\medskip\noindent\begin{minipage}{\linewidth}
+
+\centering\small
+\captionof{table}{Original nine-learning-rate expansion results before the separate factor-step extension. Every task has all 36 prescribed attempts terminated. Selection uses validation loss; the test loss is reported at its selected checkpoint. These initial outcomes, including unfavorable comparisons, are retained separately from the wider joint search.}
+\label{tab:new-task-initial}
+\begin{tabular}{lrrrr}
+\toprule Task & AdamW & SGD-M & Balance & QO\\\midrule
+CiteSeer / GCN & 1.2660 & \textbf{\boldmath 1.2125} & 1.2128 & \cellcolor{oursbg}1.2127\\
+SDF / SIREN & $6.03\!\times\!10^{-5}$ & $2.42\!\times\!10^{-4}$ & $1.10\!\times\!10^{-5}$ & \cellcolor{oursgoodbg}\textbf{\boldmath $9.36\!\times\!10^{-6}$}\\
+Burgers / DeepONet & \textbf{\boldmath $8.66\!\times\!10^{-5}$} & 0.0030 & 0.0035 & \cellcolor{oursbg}0.0042\\
+Matrix completion & \textbf{\boldmath $1.06\!\times\!10^{-18}$} & $5.25\!\times\!10^{-8}$ & $3.90\!\times\!10^{-8}$ & \cellcolor{oursbg}$3.89\!\times\!10^{-8}$\\
+\bottomrule
+\end{tabular}
+
+\end{minipage}\par\medskip

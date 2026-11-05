@@ -1,0 +1,8 @@
+-r requirements.txt
+torchvision
+torch-geometric
+ogb
+timm
+datasets
+transformers
+Pillow

@@ -1,0 +1,38 @@
+\section{Stopped-Run Audit and Recovery Controls}
+\label{app:failure-recovery}
+\paragraph{Diagnostic stops versus objective failure.}
+The original six stops comprise three diagnostic Gram-eigensolve exceptions, two JSON serialization exceptions, and one nonfinite training objective. A diagnostic exception is not evidence that the optimizer itself diverged. We replayed all six configurations with the same seed-42 CPU initialization, single-thread execution, float32 training, original learning rate, momentum, and 1000-update horizon. Only measurements and an unused pre-update diagnostic were changed. All available overlapping model checkpoints and training-loss observations are bit-identical, and the original stop records are retained.
+The AdamW dense-$\kappa(Q)=10^4$ run now completes 1000 updates; its final loss is $0.80224$ and reconstruction error is $0.93624$. Thus AdamW completes all 12 prescribed gauges. After repairing logging, all five stopped SGD-M cases reach a genuinely nonfinite float32 training objective. The corrected fixed-step comparison has 43 complete runs and five objective failures; it does not attribute the AdamW diagnostic stop to optimization instability.
+\paragraph{Measurement repair.}
+For diagnostics only, let $B=U_B\Sigma_BV_B^\top$, $A=U_A\Sigma_AV_A^\top$, and $C=B^\top u_B-u_AA^\top$. The unregularized Sylvester measurement is evaluated in float64 by
+\begin{equation}
+\Omega=V_B\left[\frac{(V_B^\top C U_A)_{ij}}{s_i(B)^2+s_j(A)^2}\right]_{ij}U_A^\top,\qquad
+(h_B,h_A)=(u_B-B\Omega,\ u_A+\Omega A).
+\end{equation}
+This avoids forming the diagnostic Gram spectra in float32. Reconstruction errors are also measured using float64 products and norms. Unavailable diagnostics are recorded as unavailable; they do not interrupt a finite optimizer update. Neither the AdamW/SGD-M update nor its gradients or optimizer state use this diagnostic projection.
+\paragraph{A separate stabilization control.}
+For each of the five genuinely failed SGD-M cases, we additionally run a disclosed recovery algorithm for all 1000 updates. This is a changed protocol, labeled SGD-M with Armijo backtracking and descent resets, following the sufficient-decrease principle of \citet{armijo1966minimization}. Its results never replace the fixed-step baseline. The original factors, observations, float32 gradient computation, and momentum coefficient $\beta=0.9$ are retained. Writing $z=(B,A)$, the candidate direction and acceptance rule are
+\begin{align}
+\widetilde v_t&=0.9v_{t-1}+g_t,\qquad g_t=\nabla F(z_t),\\
+v_t&=\begin{cases}\widetilde v_t,&\langle g_t,\widetilde v_t\rangle>0,\\g_t,&\text{otherwise},\end{cases}\\
+\eta_t^{(0)}&=\min\{10^{-3},2\eta_{t-1}\},\quad \eta_0=10^{-3},\quad \eta_t^{(k)}=2^{-k}\eta_t^{(0)},\\
+F(z_t-\eta_t v_t)&\le F(z_t)-10^{-4}\eta_t\langle g_t,v_t\rangle
++10^{-7}\max\{1,|F(z_t)|\}.
+\end{align}
+The last term is the disclosed float32 acceptance tolerance. At most 60 trials are permitted per update. Every accepted step size, rejected trial count, reset, pre-update loss, post-update loss, and acceptance threshold is retained. All 5000 accepted updates satisfy the logged acceptance test and have finite losses. Completion indicates numerical stabilization under this changed protocol; the reconstruction errors below do not establish successful recovery of the planted matrix.
+\begin{table}[ht]
+\centering\small
+\caption{All five SGD-M failure recoveries. The fixed-step column is the update at which the original $\eta=10^{-3}$ replay first encounters a nonfinite objective. The other columns describe the separate 1000-update backtracking protocol. Final loss is evaluated after the last update; $e_T=\|X_T-X_*\|_F/\|X_*\|_F$.}
+\label{tab:failure-recovery}
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{llrrrrr}
+\toprule Gauge & Value & Fixed-step failure & Final loss & Min.\ $\eta_t$ & Max.\ $\eta_t$ & $e_T$\\\midrule
+scalar & $1.00\!\times\!10^{-3}$ & 5 & 0.8653 & $1.22\!\times\!10^{-7}$ & $3.91\!\times\!10^{-6}$ & 1.0059\\
+scalar & $1.00\!\times\!10^{-2}$ & 8 & 0.8653 & $1.49\!\times\!10^{-11}$ & $2.50\!\times\!10^{-4}$ & 1.0059\\
+scalar & $1.00\!\times\!10^{3}$ & 7 & 0.7944 & $7.81\!\times\!10^{-6}$ & $2.50\!\times\!10^{-4}$ & 0.9611\\
+dense & $1.00\!\times\!10^{3}$ & 9 & 0.7873 & $1.91\!\times\!10^{-9}$ & $5.00\!\times\!10^{-4}$ & 0.9356\\
+dense & $1.00\!\times\!10^{4}$ & 5 & 0.9679 & $3.64\!\times\!10^{-15}$ & $3.91\!\times\!10^{-6}$ & 0.9995\\
+\bottomrule
+\end{tabular}
+\end{table}
+The largest conditioning stresses require very small accepted steps, in some cases near numerical stagnation. These controls therefore separate three observations: diagnostic robustness, finite-step stability, and task recovery. They do not turn an unstable fixed-step baseline into a completed run of that same baseline.

@@ -1,0 +1,15 @@
+\par\medskip\noindent\begin{minipage}{\linewidth}
+
+\centering\small
+\captionof{table}{Validation-selected test losses in completed new-task blocks. All thirteen optimizer-setting attempts per method have finished before inclusion. Selection minimizes validation CE (graph) or validation MSE (other tasks), with ties by smaller LR then earlier epoch. Primary entries use full-horizon runs. Every trial, including failures and finite checkpoints from subsequently stopped trials, is retained in Appendix~\ref{app:new-task-expansion}. Lower is better.}
+\label{tab:new-task-scores}
+\begin{tabular}{lrrrr}
+\toprule Task & AdamW & SGD-M & Balance & QO\\\midrule
+CiteSeer / GCN & 1.3762 & 1.2508 & 1.2168 & \cellcolor{oursgoodbg}\textbf{\boldmath 1.2163}\\
+SDF / SIREN & $6.03\!\times\!10^{-5}$ & $2.42\!\times\!10^{-4}$ & $1.10\!\times\!10^{-5}$ & \cellcolor{oursgoodbg}\textbf{\boldmath $9.36\!\times\!10^{-6}$}\\
+Burgers / DeepONet & \textbf{\boldmath $8.66\!\times\!10^{-5}$} & 0.0030 & $5.85\!\times\!10^{-4}$ & \cellcolor{oursbg}0.0042\\
+Matrix completion & \textbf{\boldmath $1.06\!\times\!10^{-18}$} & $1.17\!\times\!10^{-8}$ & $4.14\!\times\!10^{-17}$ & \cellcolor{oursbg}$4.65\!\times\!10^{-17}$\\
+\bottomrule
+\end{tabular}
+
+\end{minipage}\par\medskip

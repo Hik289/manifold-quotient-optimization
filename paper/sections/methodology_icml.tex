@@ -1,0 +1,95 @@
+\section{QuotientOpt and Mathematical Guarantees}
+\label{sec:theory}
+Table~\ref{tab:method-update} specifies the update. Balance precedes
+differentiation, and persistent state is expressed in the same
+representative as the new gradient. The complete iteration and expanded
+guarantees are in Appendix~\ref{app:expanded-guarantees}.
+\input{figures/method_update_table}
+\input{figures/icml_task_results}
+
+\begin{theorem}[Balanced quotient geometry]
+Let $X=U\Sigma V^\top\in\mathcal K_{a,b}$ and define
+\begin{align}
+ K_X(G)&=U\Sigma U^\top G+GV\Sigma V^\top,\\
+ g_X(Z,Y)&=\ii Z{K_X^\dagger Y},\\
+ \qgrad_g f(X)&=K_X(\nabla f(X)).
+\end{align}
+Then $(2b)^{-1}\nn Z^2\leq\gn Z^2\leq a^{-1}\nn Z^2$.
+At a nondegenerate quotient critical point, the full factor Hessian has
+$r^2$ gauge zero directions. Moreover,
+\begin{equation}
+ \|\qHess_g f(X)\|_{g\to g}
+ \leq 2b\|\nabla^2f(X)\|_{F\to F}+\|\nabla f(X)\|_2.
+\end{equation}
+The residual coefficient one is attained.
+\end{theorem}
+Boumal's second-order retraction theorem
+\citep[Proposition 5.45]{boumal2023introduction} gives the pullback
+cancellation. Horizontal lifts, the connection, metric differential,
+and Levi--Civita calculations are developed in
+Appendices~\ref{app:geometry}--\ref{app:rigid-calculus}.
+For $u=h+(\bar B\Omega,-\Omega\bar A)$, the finite-step identity is
+\begin{align}
+ X_{\rm unproj}^+-X_{\rm proj}^+
+ =\eta^2\bigl(&-h_B\Omega\bar A+\bar B\Omega h_A\nonumber\\
+             &-\bar B\Omega^2\bar A\bigr).
+\end{align}
+
+\begin{theorem}[Local momentum and deep-chain spectra]
+At a regular quotient minimum with Hessian spectrum
+$[\mu,\Lambda]$, the reduced position--memory modes satisfy
+\begin{equation}
+ z^2-\{1+\beta-\eta(1-\beta)\lambda\}z+\beta=0.
+\end{equation}
+The exact stability interval and optimal interval-wide parameters are
+\begin{align}
+ 0<\eta(1-\beta)\Lambda&<2(1+\beta),\\
+ q_\star&=\frac{\sqrt\Lambda-\sqrt\mu}{\sqrt\Lambda+\sqrt\mu},\\
+ \beta_\star=q_\star^2,\qquad
+ \eta_\star&=(\mu\Lambda)^{-1/2}.
+\end{align}
+For the balanced depth-$L$ chain, the joint vertical normal operator has
+\begin{align}
+ \lambda_{abk}
+ &=\sigma_a^{2/L}+\sigma_b^{2/L}\nonumber\\
+ &\quad-2(\sigma_a\sigma_b)^{1/L}\cos(k\pi/L).
+\end{align}
+\end{theorem}
+Schur modal analysis supplies the rate, and a discrete Lyapunov
+equation certifies the nonlinear basin. An Eckart--Young decomposition
+gives the reconstruction spectrum
+$\{\sigma_i+\sigma_j,\sigma_i\pm\tau_k,\sigma_i\}$.
+Product and normal-solve spectra, stochastic bounds, averaged
+iterates, and numerical-error formulas are derived in
+Appendices~\ref{app:rigid-chain}--\ref{app:local-dynamics}
+and Appendix~\ref{app:convergence}.
+
+\begin{theorem}[Whitened local risk]
+Under the relative-Hessian, score-tail, and localization conditions in
+Appendix~\ref{app:sharp-statistics}, define
+\begin{align}
+ \mathcal T_u(\mathsf V)
+ &=\operatorname{tr}\mathsf V
+   +2\sqrt{\operatorname{tr}(\mathsf V^2)u}\nonumber\\
+ &\quad+2\|\mathsf V\|_2u .
+\end{align}
+With probability at least $1-q_H-e^{-u}$,
+\begin{equation}
+ R(\widehat X_n)-R(X_\star)
+ \leq\frac{1+\epsilon_H}{2n(1-\delta_H)^2}\mathcal T_u(\mathsf V).
+\end{equation}
+For an identifiable homoscedastic sensing model under the stated
+expectation conditions,
+\begin{equation}
+ n\,\E[R(\widehat X_n)-R(X_\star)]
+ \longrightarrow \frac{\sigma_\varepsilon^2}{2}r(m+d-r).
+\end{equation}
+\end{theorem}
+Hessian whitening precedes the Laurent--Massart and
+Hsu--Kakade--Zhang quadratic-form bounds
+\citep{laurent2000adaptive,hsu2012tail}.
+The quadratic-model coefficient $1/2$ is exact; the asymptotic constant
+agrees with the identifiable Cram\'er--Rao bound.
+Stability, capacity, intrinsic-chart, network, margin, local-risk,
+and influence-function derivations are given in
+Appendices~\ref{app:generalization}--\ref{app:local-statistics}.

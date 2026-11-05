@@ -1,0 +1,187 @@
+\section{Expanded Algorithm and Guarantee Statements}
+\label{app:expanded-guarantees}
+
+
+\begin{definition}[Iteration and ablation]
+For $p_t=(B_t,A_t)$, $\beta\in[0,1)$, $\eta_t>0$, let
+\begin{align}
+(\bar B_t,\bar A_t)&={\rm Bal}(B_t,A_t)
+=(B_tQ_t,Q_t^{-1}A_t),\\
+H_t&=\bar B_t^\top\bar B_t=\bar A_t\bar A_t^\top,\\
+\widetilde M_{B,t-1}&=M_{B,t-1}Q_t,\\
+\widetilde M_{A,t-1}&=Q_t^{-1}M_{A,t-1},\\
+g_{B,t}&=\nabla f_{I_t}(X_t)\bar A_t^\top,\\
+g_{A,t}&=\bar B_t^\top\nabla f_{I_t}(X_t),\\
+U_{B,t}&=\beta\widetilde M_{B,t-1}+(1-\beta)g_{B,t},\\
+U_{A,t}&=\beta\widetilde M_{A,t-1}+(1-\beta)g_{A,t},\\
+C_t&=\bar B_t^\top U_{B,t}-U_{A,t}\bar A_t^\top,\\
+H_{\varepsilon,t}&=H_t+\varepsilon I,\\
+H_{\varepsilon,t}\Omega_t+\Omega_tH_{\varepsilon,t}&=C_t,\\
+M_{B,t}&=U_{B,t}-\bar B_t\Omega_t,\\
+M_{A,t}&=U_{A,t}+\Omega_t\bar A_t,\\
+B_{t+1}&=\bar B_t-\eta_tM_{B,t},\\
+A_{t+1}&=\bar A_t-\eta_tM_{A,t}.
+\label{eq:main-iteration}
+\end{align}
+The balance-only ablation sets $(M_{B,t},M_{A,t})=(U_{B,t},U_{A,t})$.
+The analyzed first-moment iteration is distinct from an elementwise
+second-moment adaptive heuristic.
+\end{definition}
+
+The proof uses the second-order pullback-Hessian theorem
+\citep[Proposition 5.45]{boumal2023introduction} to combine the connection
+terms exactly. Schur modal analysis and a discrete Lyapunov certificate
+then control the actual momentum state. For statistics, whitening
+precedes the Laurent--Massart quadratic-form bound, and the resulting
+leading constant is compared with Fisher information.
+
+\begin{theorem}[Quotient metric, stationarity, and finite-step decomposition]
+For $X=U\Sigma V^\top\in\mathcal K_{a,b}$,
+\begin{align}
+K_X(G)&=U\Sigma U^\top G+GV\Sigma V^\top,&
+g_X(Z,Y)&=\ii Z{K_X^\dagger Y},\\
+\qgrad_g f(X)&=K_X(\nabla f(X)),&
+(2b)^{-1}\nn Z^2&\leq\gn Z^2\leq a^{-1}\nn Z^2,\\
+\bar B^\top g_B-g_A\bar A^\top&=0 .
+\end{align}
+For $u=h+(\bar B\Omega,-\Omega\bar A)$,
+\begin{equation}
+X_{\rm unproj}^+-X_{\rm proj}^+
+=\eta^2(-h_B\Omega\bar A+\bar B\Omega h_A-\bar B\Omega^2\bar A).
+\label{eq:main-cross}
+\end{equation}
+For a unit horizontal lift $\xi$ and $G=\nabla f(X)$,
+\begin{align}
+{\rm Hess}_g f[L_p\xi,L_p\xi]
+&=\ii{L_p\xi}{\nabla^2 f[L_p\xi]}+2\ii G{\xi_B\xi_A},\\
+\|\qHess_g f(X)\|_{g\to g}
+&\leq 2b\|\nabla^2 f(X)\|_{F\to F}+\|G\|_2 .
+\end{align}
+The residual coefficient one is attained
+(Appendix~\ref{app:sharp-pullback}).
+At a nondegenerate quotient critical point the full factor Hessian has
+exactly $r^2$ gauge zero directions. Complete derivations are in
+Appendices~\ref{app:geometry}--\ref{app:rigid-calculus}.
+\end{theorem}
+
+\begin{theorem}[Stochastic and momentum convergence]
+Under the regularity, pullback, oracle, and stepsize assumptions in
+Appendix~\ref{app:convergence}, a biased quotient-gradient update satisfies
+\begin{equation}
+\frac{\sum_{t<T}\eta_t\E\gn{g_t}^2}{S_T}
+\leq\frac{2\Delta_0+
+4\sum_{t<T}\eta_t\E\gn{b_t}^2+
+L_R\sum_{t<T}\eta_t^2\nu_t^2}{S_T},
+\quad S_T=\sum_{t<T}\eta_t .
+\label{eq:main-convergence}
+\end{equation}
+For transported normalized momentum satisfying
+Eq.~\eqref{eq:rigid-momentum-step},
+\begin{equation}
+\frac1T\sum_{t<T}\E\gn{g_t}^2
+\leq\frac{2\Delta_0}{\eta T}
++\frac{2q_0}{(1-\beta)T}+2(1-\beta)\nu^2 .
+\end{equation}
+For noiseless RIP sensing in an invariant geodesically convex basin
+with $k_-(X)\geq a$ and
+$\|X-X_*\|_2+\delta\|X-X_*\|_F\leq\omega<a(1-\delta)$,
+\begin{align}
+\mu_{\rm RIP}&=a(1-\delta)-\omega,&
+f(X_T)&\leq(1-\eta\mu_{\rm RIP})^Tf(X_0).
+\end{align}
+The noisy, high-probability, numerical-error, and admissible-basin
+statements are proved separately in Appendix~\ref{app:convergence}.
+\end{theorem}
+
+\begin{theorem}[Joint deep-chain spectrum]
+For the canonical balanced depth-$L$ chain, its joint vertical normal
+operator has eigenvalues
+\begin{align}
+\lambda_{abk}
+&=\sigma_a^{2/L}+\sigma_b^{2/L}
+-2(\sigma_a\sigma_b)^{1/L}\cos(k\pi/L),\\
+\kappa(\mathcal V_W^*\mathcal V_W)
+&=\kappa(X)^{2/L}\cot^2(\pi/(2L)).
+\end{align}
+Its product preconditioner has core eigenvalues
+\begin{equation}
+\chi_{ab}^{(L)}
+=\sum_{i=1}^L\sigma_a^{2(L-i)/L}\sigma_b^{2(i-1)/L}.
+\end{equation}
+The normal solve and product-optimization spectra are different objects.
+Appendix~\ref{app:rigid-chain} gives diagonalization, damping error,
+complexity, and aligned-mode hitting-time proofs.
+\end{theorem}
+
+
+\begin{theorem}[Sharp local momentum factor]
+At a regular quotient minimum with Hessian spectrum in $[\mu,\Lambda]$,
+the reduced position--memory Jacobian has characteristic polynomials
+\begin{equation}
+z^2-\{1+\beta-\eta(1-\beta)\lambda\}z+\beta,\quad
+\lambda\in\operatorname{spec}(\qHess_g f).
+\end{equation}
+Its exact stability condition and optimal interval-wide factor are
+\begin{align}
+0<\eta(1-\beta)\Lambda&<2(1+\beta),\\
+q_\star&=\frac{\sqrt\Lambda-\sqrt\mu}{\sqrt\Lambda+\sqrt\mu},&
+\beta_\star&=q_\star^2,&\eta_\star&=(\mu\Lambda)^{-1/2}.
+\end{align}
+A discrete Lyapunov equation gives the invariant nonlinear contraction
+ball in Eq.~\eqref{eq:local-certified-radius}.
+For Frobenius reconstruction at the best rank-$r$ approximation to $Y$,
+with a strict retained/omitted singular-value gap and a nonempty
+off-core tangent block,
+\begin{equation}
+\mu=\sigma_r(Y)-\sigma_{r+1}(Y),\qquad
+\Lambda=2\sigma_1(Y).
+\end{equation}
+These extrema follow from the complete spectrum
+$\{\sigma_i+\sigma_j,\sigma_i\pm\tau_k,\sigma_i\}$ in
+Appendix~\ref{app:local-dynamics}.
+\end{theorem}
+
+\begin{theorem}[Statistical guarantees under declared sampling assumptions]
+For adjacent IID datasets and the actual state-map regularity in
+Eq.~\eqref{eq:rigid-state-regularity},
+\begin{equation}
+\epsilon_{\rm stab}\leq
+\frac{2C_\ell C_U}{n}\sum_{t<T}\eta_t
+\prod_{k>t}(1+L_U\eta_k).
+\label{eq:main-generalization}
+\end{equation}
+For a bounded product class and empirical suboptimality
+$\epsilon_{\rm opt}$,
+\begin{align}
+R(X_T)-\inf_{\mathcal C}R
+&\leq\epsilon_{\rm opt}+2U_n,\\
+\E R(X_T)-\inf_{\mathcal C}R
+&\leq\epsilon_{\rm opt}+\epsilon_{\rm stab}.
+\end{align}
+Here $U_n$ may be the nuclear-norm, intrinsic-chart, network, or margin
+bound in Appendix~\ref{app:generalization}. A squared-gradient guarantee
+alone does not supply $\epsilon_{\rm opt}$.
+\end{theorem}
+
+\begin{theorem}[Whitened local risk and its efficiency constant]
+Under the relative-Hessian, score-tail, and localization conditions of
+Appendix~\ref{app:sharp-statistics}, with probability at least
+$1-q_H-e^{-u}$,
+\begin{equation}
+R(\widehat X_n)-R(X_\star)
+\leq\frac{1+\epsilon_H}{2n(1-\delta_H)^2}
+\{\operatorname{tr}\mathsf V+
+2\sqrt{\operatorname{tr}(\mathsf V^2)u}+2\|\mathsf V\|_2u\}.
+\end{equation}
+For a correctly specified identifiable sensing model with homoscedastic noise variance
+$\sigma_\varepsilon^2$, the local influence and averaging results give,
+under their stated expectation conditions,
+\begin{equation}
+n\,\E[R(\widehat X_n)-R(X_\star)]
+\longrightarrow\frac{\sigma_\varepsilon^2}{2}r(m+d-r).
+\end{equation}
+The same constant is the Cram\'er--Rao lower bound for locally unbiased
+estimators under quadratic tangent loss. The finite-sample coefficient
+$1/2$ is an equality for a quadratic chart model with exact reference
+Hessian (Appendix~\ref{app:local-statistics}).
+\end{theorem}

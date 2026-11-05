@@ -1,0 +1,23 @@
+\section{Adjusted Fixed-Step Recovery Study}
+\label{app:failure-retry}
+The original 208-attempt four-task search contains 22 numerical stops.
+For each stopped configuration, the follow-up retains the same task,
+model, rank, data, initialization, momentum coefficient, damping,
+balance interval, non-factor learning rate, and 2000-epoch horizon.
+The factor learning rate is lowered using completed runs in the same
+task/method regime, with a separate protocol and run identifier.
+The parent failure record and its finite validation checkpoint remain
+in the original search. Every adjusted run begins from the identical
+parent initial model, verified against its saved epoch-zero checkpoint.
+
+The preflight evaluates three training epochs for each of nine distinct
+task/method/step-scale groups. All 22 formal trajectories subsequently
+contain exactly 2000 recorded epochs. The model within each run and the
+reported retry configuration within a task/method group are chosen by
+minimum validation MSE. Test measurements do not enter either choice.
+No test measurements are present in the per-epoch trajectories.
+Table~\ref{tab:retry-all} records every adjusted learning rate and
+validation-selected outcome. The separate five genuinely failed
+rank-one sensing SGD-M configurations have complete 1000-step Armijo
+recovery controls in Appendix~\ref{app:failure-recovery}.
+\input{figures/failure_retry_all}

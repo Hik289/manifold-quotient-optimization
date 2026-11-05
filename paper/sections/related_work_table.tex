@@ -1,0 +1,61 @@
+\begin{table*}[t]
+\centering
+\caption{\textbf{Mechanism-level comparison.}
+Keywords summarize the cited construction. \cmark: explicitly included;
+\xmark: not part of that construction. Geometry includes embedded
+fixed-rank and quotient formulations. Retr.\ means a regular rank-$r$
+retraction, not merely a rank upper bound. State means explicit
+transport of a persistent tangent state. Diag.\ means raw-gradient
+versus update-direction vertical-energy diagnostics. Gen.\ means a
+stated statistical generalization bound.
+Symbols do not rank task performance.}
+\label{tab:related-work}
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3.0pt}
+\renewcommand{\arraystretch}{1.22}
+\begin{tabularx}{\linewidth}{@{}p{.22\linewidth}Xccccc@{}}
+\toprule
+\textbf{Method} & \textbf{Keywords}
+& \shortstack{\textbf{Geo-}\\\textbf{metry}}
+& \textbf{Retr.} & \textbf{State}
+& \textbf{Diag.} & \textbf{Gen.}\\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Low-rank adaptation and initialization}}\\[-2pt]
+LoRA \cite{hu2022lora}
+& Factor update & \xmark & \xmark & \xmark & \xmark & \xmark\\
+LoRA+ \cite{hayou2024loraplus}
+& Factor LR ratio & \xmark & \xmark & \xmark & \xmark & \xmark\\
+AdaLoRA \cite{zhang2023adalora}
+& Adaptive rank budget & \xmark & \xmark & \xmark & \xmark & \xmark\\
+PiSSA \cite{meng2024pissa}
+& Principal-SVD initialization & \xmark & \xmark & \xmark & \xmark & \xmark\\
+\midrule
+\multicolumn{7}{@{}l}{\textit{Fixed-rank geometry and intrinsic optimization}}\\[-2pt]
+Fixed-rank geometry \cite{mishra2014fixedrank}
+& Quotient metric / lift & \cmark & \cmark & \cmark$^{a}$ & \xmark & \xmark\\
+Riemannion \cite{bogachev2025riemannlora}
+& Embedded tangent / spectral step & \cmark & \cmark & \cmark & \xmark & \xmark\\
+Intrinsic Muon \cite{li2026intrinsicmuon}
+& Quotient metric / intrinsic LMO & \cmark & \cmark & \xmark$^{b}$ & \xmark & \xmark\\
+\midrule
+\rowcolor{oursbg}
+\textbf{QuotientOpt (ours)}
+& \textbf{Balance / Sylvester / horizontal memory}
+& \cmark & \cmark & \cmark & \cmark & \cmark$^{c}$\\
+\bottomrule
+\end{tabularx}
+\vspace{3pt}
+\begin{minipage}{\linewidth}\scriptsize
+$^{a}$Geometric tangent/direction transport, including conjugate-gradient
+directions; not a claim that every algorithm in the cited framework uses
+EMA momentum.
+$^{b}$The reported iMuon momentum implementation uses factor buffers
+(its Appendix K); the intrinsic direction's quotient symmetry is a separate
+property. This mark does not deny its geometric or convergence results.
+$^{c}$Conditional stability and capacity bounds; neither an unconditional
+test-accuracy guarantee nor a claim that balancing shrinks the predictor class.
+LoRA+'s feature-learning scaling theory is distinct from the Gen.\ criterion.
+\end{minipage}
+\endgroup
+\end{table*}

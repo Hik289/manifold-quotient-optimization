@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering
+\caption{Component ablation ($\kappa(X)=1000$, matrix sensing, $r=16$, 1000 epochs).
+  \texttt{A1} (balance-only) matches Full QuotientOpt, confirming horizontal projection is redundant.
+  \texttt{A2} (projection-only, no balance) fails to lock $\kappa$ and degrades accuracy $33\times$
+  (\texttt{bal\_err} explodes to $6.80$). \texttt{A11} (factor weight decay) catastrophically
+  corrupts the orbit representative ($\kappa_{\rm fac}/\sqrt{\kappa}=11838$).}
+\label{tab:ablation}
+\vspace{4pt}
+\begin{tabular}{llcccr}
+\toprule
+\textbf{Config.} & \textbf{Description} & $\rho_{\rm upd}$ & $\kappa_{\rm fac}/\sqrt{\kappa}$ & bal.\ err. & Rel.\ err. \\
+\midrule
+\rowcolor{oursbg}\texttt{Full} & Full QuotientOpt (bal.+hp+mom) \hfill\textit{reference} & $1.73\times 10^{-11}$ & $1.0000$ & $3.79\times 10^{-7}$ & $0.0007$ \\
+\texttt{A1} & Balance-only (no hp/mom) \hfill\textbf{=Full} & $1.05\times 10^{-2}$ & $1.0000$ & $2.10\times 10^{-7}$ & $0.0006$ \\
+\midrule
+\texttt{A2} & Projection-only (no balance) \hfill\textbf{\boldmath $\kappa$ unlocked} & $4.38\times 10^{-4}$ & $0.9545$ & $6.80$ & $0.0197$ \\
+\texttt{A3} & No momentum (GD) \hfill conv.\ failure & $6.39\times 10^{-11}$ & $0.7382$ & $4.43\times 10^{-7}$ & $0.2829$ \\
+\texttt{A4} & No momentum transport \hfill $\approx$Full & $6.08\times 10^{-10}$ & $1.0000$ & $3.01\times 10^{-7}$ & $0.0004$ \\
+\texttt{A5} & No momentum reprojection \hfill $\approx$Full & $1.06\times 10^{-2}$ & $1.0000$ & $4.18\times 10^{-7}$ & $0.0005$ \\
+\texttt{A6} & Balance every 5 steps \hfill $\approx$Full & $2.34\times 10^{-9}$ & $1.0000$ & $1.95\times 10^{-5}$ & $0.0012$ \\
+\texttt{A7} & Balance every 25 steps \hfill $\approx$Full & $1.47\times 10^{-8}$ & $1.0123$ & $9.43\times 10^{-6}$ & $0.0009$ \\
+\midrule
+\texttt{A11} & Factor weight decay \hfill\textbf{catastrophic} & $2.51\times 10^{-7}$ & $11838$ & $3.70\times 10^{-7}$ & $0.0265$ \\
+\texttt{A12} & Fixed balanced init (no online bal.) & $1\times 10^{-9}$ & $1.0002$ & $2.46\times 10^{-7}$ & $0.0077$ \\
+\bottomrule
+\end{tabular}
+\end{table}

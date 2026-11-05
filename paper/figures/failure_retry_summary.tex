@@ -1,0 +1,17 @@
+\begin{table*}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.18}\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Adjusted fixed-step follow-up after numerical stops.} Every one of the 22 retried configurations reaches 2000 epochs from the bitwise-identical parent initial model. Only the factor learning rate changes. Within each task/method row, the retry setting and checkpoint minimize validation MSE. Original test MSE is the best of the preceding equal 13-setting search, also selected by validation MSE. Relative reduction is $100(1-\mathrm{retry}/\mathrm{original})\%$; a negative value means higher test MSE after retry. The retry counts are a separate tuning budget. Bold indicates a lower test MSE within the same method. All 22 outcomes are in Table~\ref{tab:retry-all}.}
+\label{tab:retry-summary}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Task / method & Completed & Retry LR & Original test MSE $\downarrow$ & Retry test MSE $\downarrow$ & Relative reduction\\
+\midrule
+\rowcolor{oursbg}\textbf{Burgers / DeepONet / QuotientOpt} & 7/7 & 0.00255 & 0.0042 & \cellcolor{oursgoodbg}\textbf{\boldmath 0.0025} & +41.5\%\\
+SDF / SIREN / SGD-M & 6/6 & 0.0085 & $2.42\!\times\!10^{-4}$ & \textbf{\boldmath $1.09\!\times\!10^{-4}$} & +55.0\%\\
+SDF / SIREN / Balance-only & 3/3 & 0.85 & $1.10\!\times\!10^{-5}$ & $1.35\!\times\!10^{-4}$ & -1125.4\%\\
+\rowcolor{oursbg}\textbf{SDF / SIREN / QuotientOpt} & 3/3 & 0.55 & $9.36\!\times\!10^{-6}$ & $1.40\!\times\!10^{-4}$ & -1391.8\%\\
+Matrix completion / SGD-M & 3/3 & 0.255 & $1.17\!\times\!10^{-8}$ & $2.48\!\times\!10^{-8}$ & -111.6\%\\
+\bottomrule
+\end{tabular}
+\end{table*}

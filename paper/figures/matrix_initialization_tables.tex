@@ -1,0 +1,29 @@
+\par\medskip\noindent\begin{minipage}{\linewidth}
+
+\centering\small
+\captionof{table}{Matrix-completion initialization confirmation with frozen step sizes selected by the parent validation target. Data and masks stay fixed; model initializations are 42, 43, 44. The target is $10^{-4}$ of the common initial validation MSE of each paired initialization. Every initialization is retained; an unreached target is censored at 2000 epochs. Mean $\pm$ initialization SD is shown only if all three runs reach the target.}
+\label{tab:matrix-initialization}
+\begin{tabular}{lrrrr}
+\toprule Method & LR & Complete/3 & Reached/3 & Epochs mean $\pm$ SD\\\midrule
+AdamW & 0.03 & 3/3 & 3/3 & $118.7\pm16.9$\\
+SGD-M & 0.3 & 3/3 & 2/3 & \textemdash\\
+Balance-only & 10 & 3/3 & 2/3 & \textemdash\\
+\rowcolor{oursbg}QuotientOpt & 10 & 3/3 & 2/3 & \textemdash\\
+\bottomrule
+\end{tabular}
+
+\end{minipage}\par\medskip
+\par\medskip\noindent\begin{minipage}{\linewidth}
+
+\centering\small
+\captionof{table}{Every matrix-completion initialization: first epoch reaching the target. A dash denotes an unreached target, not an omitted trial. All full-horizon and failure records are retained.}
+\label{tab:matrix-initialization-all}
+\begin{tabular}{rrrrr}
+\toprule Init. & AdamW & SGD-M & Balance & QO\\\midrule
+42 & 138 & \textemdash & 117 & 107\\
+43 & 107 & 1234 & \textemdash & \textemdash\\
+44 & 111 & 1851 & 105 & 171\\
+\bottomrule
+\end{tabular}
+
+\end{minipage}\par\medskip

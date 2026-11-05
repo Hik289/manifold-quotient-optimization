@@ -1,0 +1,43 @@
+\section{Conditional Initialization Confirmations}
+\label{app:initialization-confirmation}
+We additionally freeze the validation-selected learning rates from
+the original Cora seven-learning-rate loss-based analysis
+(Table~\ref{tab:secondary-ce}) and the complete SDF nine-learning-rate
+analysis (Table~\ref{tab:new-task-initial}). Each method then runs
+three model initializations, 42, 43, and 44, without learning-rate
+retuning across initializations. Cora uses 1000 epochs and SDF uses
+2000. This adds 24 full-horizon attempts across all four methods.
+
+Data generation, split masks, and shuffle RNG remain at seed 42.
+Only the model initialization changes. A paired initialization has
+identical initial model states across the four methods; the three
+initializations have distinct model states. A protocol audit checks
+these properties against saved initial checkpoints, data tensors,
+split indices, and RNG states. Initialization 42 is rerun on CPU so
+all three confirmation runs use the same execution setting.
+This audit fixes data, initial models, and RNG states; it does not
+assert bitwise-identical floating-point optimization trajectories.
+
+Within each run the earliest minimum-validation-loss checkpoint is
+selected, with test metrics excluded. Every individual result and
+failure is retained. Mean and sample SD are reported only when all
+three full-horizon runs for that method complete. The SD describes
+conditional initialization variability on one fixed data split;
+these checks do not constitute independent-data replications or
+a population-risk confidence interval.
+
+\input{figures/initialization_confirmation_tables}
+
+\paragraph{Matrix-completion target confirmation.}
+An additional 12 runs use initializations 42, 43, and 44 with the
+same planted matrix and disjoint masks. Each method's step size is
+frozen from its earliest parent validation hit at the relative-MSE
+target $10^{-4}$; SGD-M, which never reaches it in the parent search,
+uses its minimum-validation-loss completed configuration.
+The initial model changes while data generation and mask RNG remain
+fixed. The common initial validation MSE is recorded separately for
+each paired initialization. No step size is retuned across these
+checks. Every failure and unreached target is retained; initialization
+means are reported only for three observed target hits.
+\input{figures/matrix_initialization_tables}
+\FloatBarrier

@@ -1,0 +1,503 @@
+\section{Localized Fast Rates, Influence Functions, and Gauge-Singular Fisher Information}
+\label{app:local-statistics}
+\input{sections/rigid_sharp_statistics}
+
+\subsection{An explicit finite-sample event construction}
+\begin{assumption}
+\label{ass:local-statistical-chart}
+Let $\psi:\Theta\to\mathcal M_r$ be a fixed regular rank chart,
+$\Theta=\{\theta\in\R^D:\|\theta\|_2\leq R_0\}$,
+$D=r(m+d-r)$, and set
+\begin{align}
+\ell_\theta(z)&=\ell(\psi(\theta);z),&
+F(\theta)&=\E\ell_\theta(z),&
+F_n(\theta)&=\frac1n\sum_{i=1}^n\ell_\theta(z_i),\\
+\nabla F(0)&=0,&
+2\mu I&\preceq\nabla^2F(\theta)\preceq\Lambda I,\quad\theta\in\Theta .
+\end{align}
+The observations $z_i$ are IID. Per-example coordinate Hessians satisfy
+\begin{align}
+\|\nabla^2\ell_\theta(z)\|_2&\leq B,&
+\|\nabla^2\ell_\theta(z)-\nabla^2\ell_{\theta'}(z)\|_2
+&\leq M\|\theta-\theta'\|_2 .
+\end{align}
+The centered score $s(z)=\nabla\ell_0(z)$ has directional
+sub-Gaussian constant $\nu$:
+\begin{equation}
+\E e^{u^\top s(z)}\leq e^{\nu^2\|u\|^2/2},
+\qquad u\in\R^D .
+\label{eq:local-score-model}
+\end{equation}
+The model uses its stated derivative and moment conditions; a
+bounded-loss assumption is not needed in this section.
+\end{assumption}
+
+\begin{lemma}[A uniform empirical Hessian event with explicit constants]
+\label{lem:local-Hessian-concentration}
+For $0<q<1$, the sample-size condition
+\begin{equation}
+n\geq\frac{32B^2}{\mu^2}
+\left[D\log9+
+D\log\left(1+\frac{8MR_0}{\mu}\right)+\log\frac4q\right]
+\label{eq:local-Hessian-sample}
+\end{equation}
+implies, with probability at least $1-q/2$,
+\begin{equation}
+\sup_{\theta\in\Theta}
+\|\nabla^2F_n(\theta)-\nabla^2F(\theta)\|_2\leq\mu,
+\qquad \nabla^2F_n(\theta)\succeq\mu I .
+\end{equation}
+\end{lemma}
+\begin{proof}
+For a symmetric matrix $A$ and a $1/4$ net $\mathcal V$ of the unit
+sphere,
+\begin{align}
+\|A\|_2&\leq
+\max_{v\in\mathcal V}|v^\top Av|+\tfrac12\|A\|_2,\\
+\|A\|_2&\leq2\max_{v\in\mathcal V}|v^\top Av|,&
+|\mathcal V|&\leq9^D .
+\end{align}
+Take a $\delta_\theta=\mu/(4M)$ net of $\Theta$ of cardinality
+at most $(1+8MR_0/\mu)^D$, with centers in $\Theta$.
+For $M=0$, a single coordinate center suffices.
+For fixed $\theta,v$, the IID variables
+$v^\top\nabla^2\ell_\theta(z_i)v$ lie in $[-B,B]$, so
+\begin{equation}
+\Pr\left\{\left|v^\top
+(\nabla^2F_n(\theta)-\nabla^2F(\theta))v\right|>\mu/4\right\}
+\leq2e^{-n\mu^2/(32B^2)} .
+\end{equation}
+A union bound gives operator error at most $\mu/2$ at all net
+centers. Off the net, the empirical and population Hessians each
+have Lipschitz constant $M$, adding at most
+$2M\delta_\theta=\mu/2$. The sample-size condition bounds the union
+probability by $q/2$.
+\end{proof}
+
+\begin{lemma}[Score concentration in the intrinsic dimension]
+With probability at least $1-q/2$,
+\begin{equation}
+\|\bar s_n\|_2
+=\left\|\frac1n\sum_i s(z_i)\right\|_2
+\leq t_n
+:=\nu\sqrt{\frac{8(D\log5+\log(2/q))}{n}} .
+\label{eq:local-score-concentration}
+\end{equation}
+\end{lemma}
+\begin{proof}
+A $1/2$ sphere net $\mathcal V$ has at most $5^D$ elements and
+$\|a\|\leq2\max_{v\in\mathcal V}v^\top a$.
+By the sub-Gaussian premise and exponential Markov inequality,
+\begin{align}
+\Pr\{v^\top\bar s_n>u\}&\leq e^{-nu^2/(2\nu^2)},\\
+\Pr\{\|\bar s_n\|>t\}&\leq5^De^{-nt^2/(8\nu^2)} .
+\end{align}
+Set $t=t_n$.
+\end{proof}
+
+\begin{theorem}[A localized $1/n$ excess-risk bound]
+\label{thm:local-fast-rate}
+Suppose Eq.~\eqref{eq:local-Hessian-sample} holds and
+$t_n\leq\mu R_0/2$. With probability at least $1-q$, the minimum
+$\widehat\theta_n=\arg\min_{\theta\in\Theta}F_n(\theta)$ is unique,
+interior, and satisfies
+\begin{align}
+\nabla F_n(\widehat\theta_n)&=0,&
+\|\widehat\theta_n\|_2&\leq t_n/\mu,\\
+F(\widehat\theta_n)-F(0)
+&\leq\frac{\Lambda t_n^2}{2\mu^2}
+=\frac{4\Lambda\nu^2}{\mu^2 n}
+\{D\log5+\log(2/q)\}.
+\label{eq:local-fast-rate}
+\end{align}
+More generally, every $\theta_T\in\Theta$ with
+$F_n(\theta_T)-F_n(\widehat\theta_n)\leq\epsilon_T$ obeys
+\begin{equation}
+F(\theta_T)-F(0)
+\leq\frac{\Lambda}{2}
+\left(\frac{t_n}{\mu}+\sqrt{\frac{2\epsilon_T}{\mu}}\right)^2 .
+\label{eq:local-optimization-statistics}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Work on the intersection of the two preceding events.
+For $\|\theta\|=R_0$,
+\begin{align}
+\theta^\top\nabla F_n(\theta)
+&=\theta^\top\bar s_n+
+\int_0^1\theta^\top\nabla^2F_n(t\theta)\theta\,dt\\
+&\geq-R_0t_n+\mu R_0^2>0 .
+\end{align}
+Thus a boundary point is improved by moving inward.
+Compactness gives an interior minimizer, and strong convexity gives
+uniqueness. Strong monotonicity implies
+\begin{align}
+\mu\|\widehat\theta_n\|^2
+&\leq\langle\nabla F_n(\widehat\theta_n)-\nabla F_n(0),
+\widehat\theta_n\rangle\\
+&=-\langle\bar s_n,\widehat\theta_n\rangle
+\leq t_n\|\widehat\theta_n\| .
+\end{align}
+Population smoothness and $\nabla F(0)=0$ give
+$F(\theta)-F(0)\leq\Lambda\|\theta\|^2/2$.
+Finally,
+\begin{align}
+\tfrac\mu2\|\theta_T-\widehat\theta_n\|^2
+&\leq F_n(\theta_T)-F_n(\widehat\theta_n)\leq\epsilon_T,\\
+\|\theta_T\|&\leq
+\|\widehat\theta_n\|+\|\theta_T-\widehat\theta_n\| .
+\end{align}
+Combining the inequalities proves both claims.
+\end{proof}
+
+\begin{corollary}[Closing the deterministic optimization--statistics chain]
+If the empirical quotient iteration is in the certified basin of
+Theorem~\ref{thm:local-nonlinear-basin} around its empirical minimum,
+one may insert
+\begin{equation}
+\epsilon_T\leq C_{\rm init}q_{\mathsf P}^{2T}
+\end{equation}
+into Eq.~\eqref{eq:local-optimization-statistics}.
+In particular, $\epsilon_T\leq t_n^2/(2\mu)$ is sufficient for
+\begin{equation}
+F(\theta_T)-F(0)\leq 2\Lambda t_n^2/\mu^2 .
+\end{equation}
+For $C_{\rm init}>t_n^2/(2\mu)$ this holds whenever
+\begin{equation}
+T\geq
+\frac{\log(2\mu C_{\rm init}/t_n^2)}
+{2\log(1/q_{\mathsf P})}.
+\label{eq:local-statistical-stopping}
+\end{equation}
+\end{corollary}
+\begin{proof}
+The optimization theorem gives an empirical suboptimality bound.
+Then $\sqrt{2\epsilon_T/\mu}\leq t_n/\mu$ in
+Eq.~\eqref{eq:local-optimization-statistics}. Solving the geometric
+inequality gives the required iteration count.
+The sample size $n$ counts independent observations. Repeated
+optimization epochs on those observations affect $\epsilon_T$,
+not $n$.
+\end{proof}
+
+\begin{proposition}[Obtaining the coordinate curvature premise]
+Let a normal chart at $X_\star$ have
+$\mathsf H=\nabla^2F(0)\succeq h_\star I$, and suppose
+$\nabla^2F$ is $K_F$-Lipschitz there. If
+$R_0\leq h_\star/(2K_F)$, then
+\begin{equation}
+\nabla^2F(\theta)\succeq h_\star I/2=2\mu I,
+\qquad \mu=h_\star/4 .
+\end{equation}
+At an exact RIP sensing solution one may take
+$h_\star\geq a(1-\delta)$.
+\end{proposition}
+\begin{proof}
+Weyl's inequality gives
+$\lambda_{\min}(\nabla^2F(\theta))
+\geq h_\star-K_F\|\theta\|$.
+At the chart center, coordinate and quotient Hessians agree in the
+orthonormal normal frame. The RIP Hessian result at $E=0$ supplies
+the last bound. A bound on the actual coordinate Hessian variation
+is still needed to choose $R_0$.
+\end{proof}
+
+\subsection{Influence functions and the exact leading generalization constant}
+The local estimating-equation expansion is the standard influence-function
+argument for regular M-estimators \cite{vandervaart1998asymptotic}; the
+quantitative remainder below makes its dependence on the rank chart explicit.
+\begin{theorem}[A quantitative influence expansion]
+\label{thm:local-influence}
+Write
+\begin{align}
+\mathsf H&=\nabla^2F(0)\succ0,&
+\mathsf H_n&=\nabla^2F_n(0),&
+\mathsf C&=\E[s(z)s(z)^\top].
+\end{align}
+On an event where the empirical Hessian is at least $\mu I$,
+its Lipschitz constant is at most $M$, and the local minimum is
+interior,
+\begin{align}
+\widehat\theta_n&=-\mathsf H^{-1}\bar s_n+\Delta_n,\\
+\|\Delta_n\|
+&\leq\|\mathsf H^{-1}\|_2
+\left\{\frac{\|\mathsf H_n-\mathsf H\|_2\|\bar s_n\|}{\mu}
++\frac{M\|\bar s_n\|^2}{2\mu^2}\right\}.
+\label{eq:local-influence}
+\end{align}
+If the event has probability tending to one,
+$\mathsf H_n-\mathsf H=o_p(1)$, and the score has finite covariance,
+\begin{align}
+\sqrt n\,\widehat\theta_n
+&\xrightarrow{\ d\ }N(0,\mathsf H^{-1}\mathsf C\mathsf H^{-1}),\\
+n\{F(\widehat\theta_n)-F(0)\}
+&\xrightarrow{\ d\ }
+\tfrac12 Z^\top\mathsf H^{-1}Z,\qquad Z\sim N(0,\mathsf C).
+\label{eq:local-influence-clt}
+\end{align}
+\end{theorem}
+\begin{proof}
+The stationarity equation and a Taylor remainder give
+\begin{align}
+0&=\bar s_n+\mathsf H_n\widehat\theta_n+\rho_n,&
+\|\rho_n\|&\leq\tfrac M2\|\widehat\theta_n\|^2,\\
+\widehat\theta_n+\mathsf H^{-1}\bar s_n
+&=\mathsf H^{-1}
+\{(\mathsf H-\mathsf H_n)\widehat\theta_n-\rho_n\}.
+\end{align}
+Insert $\|\widehat\theta_n\|\leq\|\bar s_n\|/\mu$.
+The IID score central limit theorem gives
+$\sqrt n\,\bar s_n\Rightarrow N(0,\mathsf C)$, and the displayed
+error is $o_p(n^{-1/2})$.
+The population Taylor expansion then proves the quadratic limit.
+\end{proof}
+
+\begin{theorem}[Leading expected risk, training optimism, and generalization]
+\label{thm:local-optimism}
+Under Assumption~\ref{ass:local-statistical-chart}, consider the
+localized empirical minimum equal to $0$ when the uniform Hessian
+and interior-score event fails. Assume $\E|\ell_0(z)|<\infty$.
+For fixed chart and dimension, as $n\to\infty$,
+\begin{align}
+\E[F(\widehat\theta_n)-F(0)]
+&=\frac{\operatorname{tr}(\mathsf C\mathsf H^{-1})}{2n}
++O(n^{-3/2}),\\
+\E[F_n(\widehat\theta_n)-F_n(0)]
+&=-\frac{\operatorname{tr}(\mathsf C\mathsf H^{-1})}{2n}
++O(n^{-3/2}),\\
+\E[F(\widehat\theta_n)-F_n(\widehat\theta_n)]
+&=\frac{\operatorname{tr}(\mathsf C\mathsf H^{-1})}{n}
++O(n^{-3/2}).
+\label{eq:local-optimism}
+\end{align}
+\end{theorem}
+\begin{proof}
+The two concentration arguments imply a failure probability
+$O(e^{-cn})$ for a fixed sufficiently small score threshold and
+the fixed chart. Independence and sub-Gaussian scores yield
+\begin{align}
+\E[\bar s_n\bar s_n^\top]&=\mathsf C/n,&
+\E\|\bar s_n\|^4&=O(n^{-2}),&
+\E\|\mathsf H_n-\mathsf H\|_2^2&=O(n^{-1}).
+\end{align}
+The last bound follows by bounding operator norm by Frobenius norm
+and summing the entrywise variances of the empirical Hessian.
+On the successful event, the influence expansion gives
+\begin{align}
+F(\widehat\theta_n)-F(0)
+&=\tfrac12\bar s_n^\top\mathsf H^{-1}\bar s_n+\mathcal E_n,\\
+F_n(\widehat\theta_n)-F_n(0)
+&=-\tfrac12\bar s_n^\top\mathsf H^{-1}\bar s_n+\widetilde{\mathcal E}_n,\\
+|\mathcal E_n|+|\widetilde{\mathcal E}_n|
+&\leq C\{\|\mathsf H_n-\mathsf H\|_2\|\bar s_n\|^2+
+\|\bar s_n\|^3\}.
+\end{align}
+Hessian norms are bounded, and the influence bound justifies
+absorbing higher-order terms into this inequality on the
+successful event. Cauchy--Schwarz gives expectation $O(n^{-3/2})$.
+Off that event the localized differences are zero; the omitted
+quadratic score expectation is at most
+\begin{equation}
+C(\E\|\bar s_n\|^4)^{1/2}
+\Pr(\text{failure})^{1/2}=O(n^{-1}e^{-cn/2}).
+\end{equation}
+Taking the trace proves the first two statements. For the third,
+use the exact decomposition
+\begin{align}
+F(\widehat\theta_n)-F_n(\widehat\theta_n)
+&=[F(\widehat\theta_n)-F(0)]
+-[F_n(\widehat\theta_n)-F_n(0)]\\
+&\quad+F(0)-F_n(0),
+\end{align}
+whose last term has mean zero.
+\end{proof}
+
+\subsection{Isotropic sensing and a sharp intrinsic dimension constant}
+\begin{definition}
+Let
+\begin{align}
+y&=\langle Z,X_\star\rangle+\varepsilon,&
+\E[\varepsilon\mid Z]&=0,&
+\E[\varepsilon^2\mid Z]&=\sigma_\varepsilon^2,\\
+\ell(X;(Z,y))&=\tfrac12(\langle Z,X\rangle-y)^2,&
+\E[\operatorname{vec}Z(\operatorname{vec}Z)^\top]&=I_{md}.
+\label{eq:local-isotropic-model}
+\end{align}
+All required local derivatives and moments are assumed integrable.
+Bounded-feature conditions for the finite-sample Hessian theorem
+and finite-moment conditions for asymptotic influence results are
+separate premises.
+\end{definition}
+
+\begin{theorem}[The intrinsic efficiency constant]
+\label{thm:local-isotropic-efficiency}
+For $J=D\psi(0)$, represented as an $md\times D$ matrix,
+\begin{align}
+F(\theta)-F(0)
+&=\tfrac12\|\psi(\theta)-X_\star\|_F^2,\\
+s(z)&=-\varepsilon J^\top\operatorname{vec}Z,&
+\mathsf H&=J^\top J,&
+\mathsf C&=\sigma_\varepsilon^2\mathsf H,\\
+\operatorname{tr}(\mathsf C\mathsf H^{-1})
+&=\sigma_\varepsilon^2D
+=\sigma_\varepsilon^2r(m+d-r).
+\label{eq:local-intrinsic-efficiency}
+\end{align}
+Whenever the expectation premises of Theorem~\ref{thm:local-optimism}
+or Theorem~\ref{thm:noise-nonlinear-average} apply, their leading
+excess-risk constant is therefore $\sigma_\varepsilon^2D/2$.
+\end{theorem}
+\begin{proof}
+The conditional mean-zero noise removes the population cross term:
+\begin{align}
+\E[\ell(X;z)-\ell(X_\star;z)]
+&=\tfrac12\E\langle Z,X-X_\star\rangle^2
+=\tfrac12\|X-X_\star\|_F^2 .
+\end{align}
+At the exact solution the population residual gradient vanishes,
+so the coordinate Hessian is $J^\top J$. The conditional noise
+variance gives
+\begin{align}
+\E[s(z)s(z)^\top]
+&=\E[\varepsilon^2J^\top\operatorname{vec}Z
+(\operatorname{vec}Z)^\top J]\\
+&=\sigma_\varepsilon^2J^\top J .
+\end{align}
+The chart is regular, so $J$ has rank $D$ and $\mathsf H$ is
+invertible. The trace identity follows.
+\end{proof}
+
+\begin{proposition}[Rank-one Gaussian measurements are isotropic]
+For independent $a\sim N(0,I_m)$ and $b\sim N(0,I_d)$ with
+$Z=ab^\top$,
+\begin{equation}
+\E[Z_{ij}Z_{k\ell}]
+=\E[a_ia_k]\E[b_jb_\ell]
+=\delta_{ik}\delta_{j\ell}.
+\end{equation}
+Thus Eq.~\eqref{eq:local-isotropic-model} applies to these
+measurements under the stated noise and local moment premises.
+It does not require independent entries in $Z$.
+\end{proposition}
+
+\subsection{Fisher degeneracy along gauge fibers}
+\begin{theorem}[Full factor Fisher information and its identifiable image]
+\label{thm:local-fisher-gauge}
+Assume $\varepsilon\mid Z\sim N(0,\sigma_\varepsilon^2)$ and
+isotropic features. At a regular factor pair $p_\star=(B_\star,A_\star)$,
+let $L_\star=D\pi_{p_\star}$ with the Euclidean factor inner product.
+The per-observation Fisher information is
+\begin{align}
+\mathsf I_{\rm fac}
+&=\sigma_\varepsilon^{-2}L_\star^*L_\star,&
+\ker\mathsf I_{\rm fac}&=\mathcal V_{p_\star},&
+\operatorname{rank}\mathsf I_{\rm fac}&=D,\\
+L_\star\mathsf I_{\rm fac}^\dagger L_\star^*
+&=\sigma_\varepsilon^2P_{X_\star}.
+\label{eq:local-fisher-gauge}
+\end{align}
+Hence the identifiable product-space covariance has trace
+$\sigma_\varepsilon^2D$, independent of the $r^2$ factor gauge
+coordinates.
+\end{theorem}
+\begin{proof}
+The conditional log-likelihood score in a factor direction $\xi$ is
+\begin{align}
+D\log p(y\mid Z,p_\star)[\xi]
+&=\sigma_\varepsilon^{-2}\varepsilon\langle Z,L_\star\xi\rangle .
+\end{align}
+Taking the expected product of two directional scores gives
+$\sigma_\varepsilon^{-2}\langle L_\star\xi,L_\star\zeta\rangle$.
+The kernel and rank follow from Theorem~\ref{thm:quotient-space}.
+For an SVD $L_\star=\mathsf U\mathsf S\mathsf V^\top$ on its
+nonzero singular subspaces,
+\begin{align}
+L_\star(L_\star^*L_\star)^\dagger L_\star^*
+&=\mathsf U\mathsf S(\mathsf S^2)^{-1}\mathsf S\mathsf U^\top\\
+&=\mathsf U\mathsf U^\top=P_{X_\star}.
+\end{align}
+The factor $\sigma_\varepsilon^2$ proves the last identity.
+\end{proof}
+
+
+\begin{corollary}[Design-adaptive efficiency by Fisher whitening]
+\label{cor:sharp-general-design}
+Replace isotropy by a feature covariance
+$\mathsf M=\E[\operatorname{vec}Z(\operatorname{vec}Z)^\top]$
+that is positive definite on $T_{X_\star}\mathcal M_r$.
+For the same correctly specified homoscedastic model,
+\begin{align}
+\mathsf H&=J^\top\mathsf M J,&
+\mathsf C&=\sigma_\varepsilon^2J^\top\mathsf M J
+=\sigma_\varepsilon^2\mathsf H,\\
+\operatorname{tr}(\mathsf C\mathsf H^{-1})
+&=\sigma_\varepsilon^2D,\\
+\mathsf I_{\rm fac}
+&=\sigma_\varepsilon^{-2}L_\star^*\mathsf M L_\star,\\
+L_\star\mathsf I_{\rm fac}^\dagger L_\star^*
+&=\sigma_\varepsilon^2
+(P_{X_\star}\mathsf M P_{X_\star})^\dagger,\\
+\operatorname{tr}\{\mathsf M
+L_\star\mathsf I_{\rm fac}^\dagger L_\star^*\}
+&=\sigma_\varepsilon^2D .
+\label{eq:sharp-design-cancellation}
+\end{align}
+Consequently the leading prediction-risk constant
+$\sigma_\varepsilon^2D/2$ holds for every such identifiable design
+under the stated asymptotic expectation premises.
+\end{corollary}
+\begin{proof}
+The conditional variance identity gives
+$\mathsf C=\sigma_\varepsilon^2\mathsf H$ directly.
+For $L_\star=\mathsf U\mathsf S\mathsf V^\top$ on the nonzero
+singular subspaces, let
+$\mathsf M_T=\mathsf U^\top\mathsf M\mathsf U\succ0$. Then
+\begin{align}
+(L_\star^*\mathsf M L_\star)^\dagger
+&=\mathsf V\mathsf S^{-1}\mathsf M_T^{-1}
+\mathsf S^{-1}\mathsf V^\top,\\
+L_\star(L_\star^*\mathsf M L_\star)^\dagger L_\star^*
+&=\mathsf U\mathsf M_T^{-1}\mathsf U^\top
+=(P_{X_\star}\mathsf M P_{X_\star})^\dagger .
+\end{align}
+Taking the $\mathsf M$-weighted trace yields $D$.
+This cancellation concerns prediction risk. Product Frobenius error
+instead has leading trace
+$\sigma_\varepsilon^2\operatorname{tr}(\mathsf M_T^{-1})$,
+which retains the design conditioning.
+\end{proof}
+
+\begin{proposition}[A Cram\'er--Rao bound for locally unbiased chart estimators]
+In the preceding Gaussian model, the Cram\'er--Rao information inequality
+\cite{vandervaart1998asymptotic} gives the following result. At a fixed chart parameter let
+$\widehat\theta$ be unbiased in a neighborhood and satisfy the usual
+differentiation-under-integral conditions. Then
+\begin{align}
+\operatorname{Cov}(\widehat\theta)
+&\succeq\frac{\sigma_\varepsilon^2}{n}\mathsf H^{-1},\\
+\E\left[\tfrac12(\widehat\theta-\theta)^\top
+\mathsf H(\widehat\theta-\theta)\right]
+&\geq\frac{\sigma_\varepsilon^2D}{2n}.
+\label{eq:local-cramer-rao}
+\end{align}
+\end{proposition}
+\begin{proof}
+Let $S_n$ be the likelihood score for $n$ independent observations.
+At the fixed parameter,
+\begin{align}
+\E S_n&=0,&
+\E[S_nS_n^\top]&=n\mathsf I,&
+\mathsf I&=\sigma_\varepsilon^{-2}\mathsf H .
+\end{align}
+Differentiating $\E_\theta\widehat\theta=\theta$ gives
+$\E[(\widehat\theta-\theta)S_n^\top]=I_D$.
+For $A=(n\mathsf I)^{-1}$,
+\begin{align}
+0&\preceq
+\E[(\widehat\theta-\theta-AS_n)
+(\widehat\theta-\theta-AS_n)^\top]\\
+&=\operatorname{Cov}(\widehat\theta)-(n\mathsf I)^{-1}.
+\end{align}
+Take the $\mathsf H/2$-weighted trace. This lower bound concerns
+the stated locally unbiased class and quadratic tangent loss.
+\end{proof}

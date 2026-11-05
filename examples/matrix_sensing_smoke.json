@@ -1,0 +1,16 @@
+{
+  "family": "matrix",
+  "dataset": "sensing",
+  "model": "factorization",
+  "size": 32,
+  "rank": 4,
+  "condition": 10,
+  "epochs": 20,
+  "method": "quotientopt",
+  "lr": 0.001,
+  "beta": 0.9,
+  "eps": 0.000001,
+  "balance_interval": 1,
+  "seed": 42,
+  "protocol": "smoke_example"
+}

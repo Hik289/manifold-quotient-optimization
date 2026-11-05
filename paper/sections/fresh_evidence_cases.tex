@@ -1,0 +1,32 @@
+\section{All Fresh Controlled Comparison Cases}
+\label{app:fresh-evidence-cases}
+These are complete configuration blocks from the existing proposal:
+28 Cora learning-rate runs and 48 sensing gauge attempts.
+The Cora block has 28 complete 1000-epoch runs. The gauge block has
+43 complete 1000-update runs and five confirmed nonfinite-objective
+failures after the diagnostic replay audit in
+Appendix~\ref{app:failure-recovery}. The recovered AdamW run retains
+its original diagnostic-stop records and exact optimizer-prefix checks.
+Configurations, result records, full epoch trajectories, source hashes,
+paired product trajectories, and selection rules are retained.
+The task-comparison table uses only validation information to choose
+the reported learning rates and checkpoints. This is one seed and
+one fixed momentum coefficient, so no confidence-interval or
+fully tuned cross-family superiority claim is made.
+Shared-machine wall times are retained but are not used as a
+speed benchmark.
+\input{figures/fresh_evidence_tables}
+\input{figures/cora_lr_accuracy_table}
+\input{figures/fresh_evidence_all_cases}
+\input{figures/secondary_ce_table}
+\begin{figure}[ht]
+\centering
+\includegraphics[width=.99\linewidth]{figures/cora_all_lr_loss.pdf}
+\caption{Every learning rate in the complete Cora/GCN input-adapter
+block: rank 4, seed 42, $\beta=0.9$. All four methods and all 1000
+raw epoch observations are retained, with common axes, no smoothing,
+and no omitted learning rates. This figure supplies the full learning-rate
+context for the accuracy-selected core loss curves in
+Figure~\ref{fig:core-loss}.}
+\label{fig:all-lr-loss}
+\end{figure}

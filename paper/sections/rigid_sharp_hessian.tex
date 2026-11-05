@@ -1,0 +1,74 @@
+\subsection{The pullback cancellation and a sharp Hessian bound}
+\label{app:sharp-pullback}
+\begin{theorem}[Second-order pullback identity]
+\label{thm:sharp-pullback}
+Let $p=(B,A)$ be balanced, $L_p=D\pi_p$, and let $\xi,\zeta$
+be the minimum-energy horizontal lifts of $Z,Y$.
+For $G=\nabla f(X)$,
+\begin{equation}
+{\rm Hess}_g f(X)[Z,Y]
+=\ii{L_p\xi}{\nabla^2f(X)[L_p\zeta]}
++\ii G{\xi_B\zeta_A+\zeta_B\xi_A}.
+\label{eq:sharp-pullback}
+\end{equation}
+If $k_-,k_+$ are the smallest and largest tangent eigenvalues of
+$K_X$, and
+$\ell I\preceq\nabla^2f(X)\preceq L_fI$ with $\ell\geq0$, then
+\begin{equation}
+(\ell k_- -\|G\|_2)I
+\preceq\qHess_g f(X)
+\preceq(L_fk_+ +\|G\|_2)I .
+\label{eq:sharp-Hessian-sector}
+\end{equation}
+More generally,
+\begin{equation}
+\|\qHess_g f(X)\|_{g\to g}
+\leq k_+\|\nabla^2 f(X)\|_{F\to F}+\|G\|_2
+\leq2bL_f+\|G\|_2 .
+\label{eq:sharp-Hessian-bound}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Proposition~\ref{prop:second-order-retraction} provides a second-order
+retraction. The pullback-Hessian theorem
+\citep[Propositions 5.44--5.45]{boumal2023introduction} therefore gives
+\begin{align}
+{\rm Hess}_g f[Z,Z]
+&=\left.\frac{d^2}{dt^2}
+f((B+t\xi_B)(A+t\xi_A))\right|_{t=0}\\
+&=\ii{L_p\xi}{\nabla^2f[L_p\xi]}
++2\ii G{\xi_B\xi_A}.
+\end{align}
+Polarization proves the bilinear identity. Spectral--nuclear
+duality and the arithmetic--geometric mean inequality give
+\begin{align}
+|2\ii G{\xi_B\xi_A}|
+&\leq2\|G\|_2\|\xi_B\xi_A\|_*\\
+&\leq2\|G\|_2\|\xi_B\|_F\|\xi_A\|_F
+\leq\|G\|_2\|\xi\|^2,\\
+k_-\|\xi\|^2
+&\leq\|L_p\xi\|_F^2\leq k_+\|\xi\|^2,&
+\|\xi\|^2&=\|Z\|_g^2 .
+\end{align}
+Apply Rayleigh--Ritz and Weyl's eigenvalue perturbation inequality
+\citep[Chapter III]{bhatia1997matrix}.
+The connection and second-fundamental-form terms in the product
+coordinate formula are combined before taking norms. Their
+cancellation removes the inverse-rank-margin factors from this
+Hessian bound.
+\end{proof}
+
+\begin{proposition}[Sharpness of the residual coefficient]
+The coefficient one multiplying $\|G\|_2$ in
+Eq.~\eqref{eq:sharp-Hessian-bound} cannot be uniformly decreased.
+\end{proposition}
+\begin{proof}
+Take $r=1$, $m=d=2$, $B=A^\top=\sqrt\sigma\,e_1$, and
+$G=\tau e_2e_2^\top$. The unit horizontal lift
+\begin{equation}
+\xi_B=e_2/\sqrt2,\qquad \xi_A=\pm e_2^\top/\sqrt2
+\end{equation}
+satisfies $2\ii G{\xi_B\xi_A}=\pm\tau=\pm\|G\|_2$.
+For a linear ambient objective, its full quotient Hessian therefore
+attains both endpoints of the residual bound.
+\end{proof}

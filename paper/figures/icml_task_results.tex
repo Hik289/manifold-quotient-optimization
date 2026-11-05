@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.18}\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Held-out loss and validation-target iteration counts.} Cora and SDF: mean $\pm$ sample SD over model initializations 42/43/44, fixed data/shuffle seed 42 and frozen parent-selected learning rates. CiteSeer and matrix: seed 42, equal 13-setting budgets. Test loss uses a validation-selected checkpoint. Matrix entries give the first validation hit of $10^{-4}$ relative initial MSE; the three-initialization records are in Table~\ref{tab:matrix-initialization}. Bold marks the smallest reported mean or seed-42 count in each column.}
+\label{tab:main-results}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Method & Cora CE $\downarrow$ & CiteSeer CE $\downarrow$ & SDF MSE ($10^{-5}$) $\downarrow$ & Matrix epoch $\downarrow$\\
+\midrule
+AdamW & 1.1376 $\pm$ 0.0793 & 1.3762 & 6.21 $\pm$ 0.17 & 138\\
+SGD-M & \textbf{\boldmath 0.8741 $\pm$ 0.0562} & 1.2508 & 26.19 $\pm$ 6.24 & $>2000$\\
+Balance-only & 0.8807 $\pm$ 0.0551 & 1.2168 & 1.18 $\pm$ 0.07 & 117\\
+\rowcolor{oursbg}\textbf{QuotientOpt} & 0.8807 $\pm$ 0.0552 & \cellcolor{oursgoodbg}\textbf{\boldmath 1.2163} & \cellcolor{oursgoodbg}\textbf{\boldmath 1.10 $\pm$ 0.26} & \cellcolor{oursgoodbg}\textbf{\boldmath 107}\\
+\bottomrule
+\end{tabular}
+\end{table*}

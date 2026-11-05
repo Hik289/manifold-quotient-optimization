@@ -1,0 +1,790 @@
+\section{Nonasymptotic Convergence and Explicit Local Landscape Constants}
+\label{app:convergence}
+\subsection{Retraction smoothness from ambient derivatives}
+\begin{assumption}
+\label{ass:rigid-regular}
+\begin{align}
+X_t&\in\mathcal K_{a,b},&
+f(X)&\geq f_*>-\infty,\\
+\nn{\nabla f(X)}&\leq G_f,&
+\|\nabla^2f(X)\|_{F\to F}&\leq L_f .
+\end{align}
+The derivative bounds hold along the used ambient product segments.
+Each horizontal step has lift norm at most $\rho$ and preserves rank $r$.
+\end{assumption}
+
+\begin{lemma}[Explicit pullback smoothness]
+\label{lem:ambient-smoothness}
+For
+\begin{equation}
+L_R=G_f+L_f(\sqrt{2b}+\rho/2)^2,
+\end{equation}
+\begin{equation}
+f(R_X(\xi))\leq f(X)+g_X(\qgrad_g f,\xi)
++\frac{L_R}{2}\gn\xi^2.
+\label{eq:rigid-pullback-descent}
+\end{equation}
+\end{lemma}
+\begin{proof}
+For the horizontal lift, set $Z=L_p\xi$, $Q=\xi_B\xi_A$:
+\begin{align}
+R_X(\xi)-X&=Z+Q,\\
+\nn Z&\leq\sqrt{2b}\gn\xi,\\
+\nn Q&\leq\tfrac12\gn\xi^2,\\
+f(X+Z+Q)
+&\leq f(X)+\ii{\nabla f}Z+\ii{\nabla f}Q
++\tfrac{L_f}{2}\nn{Z+Q}^2\\
+&\leq f(X)+g_X(\qgrad_g f,\xi)
++\tfrac12L_R\gn\xi^2.
+\end{align}
+\end{proof}
+
+\subsection{Deterministic stationarity and the PL regime}
+\begin{theorem}[Finite-time stationarity]
+\label{thm:deterministic}
+Let $g_t=\qgrad_g f(X_t)$ and $X_{t+1}=R_{X_t}(-\eta_tg_t)$.
+For $0<\eta_t\leq1/L_R$,
+\begin{align}
+f(X_{t+1})&\leq f(X_t)-\tfrac{\eta_t}{2}\gn{g_t}^2,\\
+\sum_{t<T}\eta_t\gn{g_t}^2&\leq2\Delta_0,\qquad
+\Delta_0=f(X_0)-f_*,\\
+\min_{t<T}\gn{g_t}^2
+&\leq\frac{2\Delta_0}{\sum_{t<T}\eta_t},\\
+\min_{t<T}\|P_{X_t}\nabla f(X_t)\|_F^2
+&\leq\frac{2\Delta_0}{a\sum_{t<T}\eta_t}.
+\end{align}
+\end{theorem}
+\begin{proof}
+\begin{align}
+f(X_{t+1})-f(X_t)
+&\leq-\eta_t(1-L_R\eta_t/2)\gn{g_t}^2
+\leq-\tfrac12\eta_t\gn{g_t}^2 .
+\end{align}
+Telescope and apply Eq.~\eqref{eq:rigid-equivalence}.
+\end{proof}
+
+\begin{assumption}[Quotient PL]
+\label{ass:rigid-pl}
+On an invariant optimization region,
+\begin{equation}
+\tfrac12\gn{\qgrad_g f(X)}^2
+\geq\mu_g(f(X)-f_*),\qquad\mu_g>0 .
+\end{equation}
+\end{assumption}
+
+\begin{theorem}[Last-iterate contraction]
+\label{thm:pl}
+For $0<\eta\leq1/L_R$ and $0<\mu_g\eta\leq1$,
+\begin{align}
+f(X_T)-f_*&\leq(1-\mu_g\eta)^T\Delta_0,\\
+\dot X=-K_X\nabla f(X)
+&\Longrightarrow\frac{d}{dt}(f(X)-f_*)
+\leq-2\mu_g(f(X)-f_*),\\
+f(X(t))-f_*&\leq e^{-2\mu_gt}\Delta_0 .
+\end{align}
+If $\frac12\|P_X\nabla f\|_F^2\geq\mu_E(f-f_*)$,
+one may take $\mu_g=a\mu_E$.
+\end{theorem}
+\begin{proof}
+\begin{align}
+\Delta_{t+1}
+&\leq\Delta_t-\tfrac\eta2\gn{g_t}^2
+\leq(1-\eta\mu_g)\Delta_t,\\
+\tfrac12\gn{g_t}^2
+&\geq\tfrac a2\|P_X\nabla f\|_F^2
+\geq a\mu_E(f-f_*).
+\end{align}
+\end{proof}
+
+\subsection{Biased stochastic gradients and error floors}
+\begin{assumption}
+With $\mathcal F_t$ denoting the pre-sampling filtration,
+\begin{align}
+\widehat g_t&=g_t+b_t+\zeta_t,&
+\E[\zeta_t\mid\mathcal F_t]&=0,\\
+\E[\gn{\zeta_t}^2\mid\mathcal F_t]&\leq\nu_t^2,&
+b_t&\in T_{X_t}\mathcal M_r\text{ is }\mathcal F_t\text{-measurable}.
+\end{align}
+All iterates and sampled retraction steps satisfy
+Assumption~\ref{ass:rigid-regular} almost surely.
+\end{assumption}
+
+\begin{theorem}[Biased stochastic stationarity]
+\label{thm:stochastic}
+For $X_{t+1}=R_{X_t}(-\eta_t\widehat g_t)$,
+$0<\eta_t\leq(4L_R)^{-1}$, and $S_T=\sum_{t<T}\eta_t$,
+\begin{align}
+\E_t f(X_{t+1})
+&\leq f(X_t)-\tfrac{\eta_t}{2}\gn{g_t}^2
++2\eta_t\gn{b_t}^2+\tfrac{L_R\eta_t^2}{2}\nu_t^2,\\
+\frac{\sum_{t<T}\eta_t\E\gn{g_t}^2}{S_T}
+&\leq\frac{2\Delta_0}{S_T}
++\frac{4\sum_{t<T}\eta_t\E\gn{b_t}^2}{S_T}
++\frac{L_R\sum_{t<T}\eta_t^2\nu_t^2}{S_T}.
+\label{eq:rigid-stochastic}
+\end{align}
+For $\Pr(J=t)=\eta_t/S_T$, the left side equals $\E\gn{g_J}^2$.
+\end{theorem}
+\begin{proof}
+\begin{align}
+\E_t f(X_{t+1})
+&\leq f(X_t)-\eta_t\gn{g_t}^2-\eta_tg(g_t,b_t)\notag\\
+&\quad+\tfrac{L_R\eta_t^2}{2}
+\{\gn{g_t+b_t}^2+\nu_t^2\},\\
+|g(g_t,b_t)|&\leq\tfrac14\gn{g_t}^2+\gn{b_t}^2,&
+\gn{g_t+b_t}^2&\leq2\gn{g_t}^2+2\gn{b_t}^2,\\
+-\tfrac34+L_R\eta_t&\leq-\tfrac12,&
+1+L_R\eta_t&\leq\tfrac54\leq2 .
+\end{align}
+Take total expectations, sum, and use $\E f(X_T)\geq f_*$.
+\end{proof}
+
+\begin{corollary}[Explicit schedules]
+For $\nu_t\leq\nu$ and $b_t=0$,
+\begin{align}
+\eta=cT^{-1/2}
+&\Longrightarrow
+\frac1T\sum_{t<T}\E\gn{g_t}^2
+\leq\frac{2\Delta_0/c+L_Rc\nu^2}{\sqrt T},\\
+c_*&=\sqrt{\frac{2\Delta_0}{L_R\nu^2}}
+\quad(\nu>0),\\
+T&\geq16L_R^2c^2\Longrightarrow\eta\leq(4L_R)^{-1}.
+\end{align}
+For $\eta_t=c(t+1)^{-\alpha}$, $1/2<\alpha<1$,
+\begin{align}
+S_T&\geq\frac{c}{1-\alpha}\bigl((T+1)^{1-\alpha}-1\bigr),\\
+\sum_{t<T}\eta_t^2&\leq c^2\left(1+\frac1{2\alpha-1}\right),\\
+\frac{\sum_t\eta_t\E\gn{g_t}^2}{S_T}
+&=O(T^{-(1-\alpha)}).
+\end{align}
+A bounded bias adds $4\sup_t\E\gn{b_t}^2$ to the stationarity bound.
+\end{corollary}
+
+\begin{corollary}[Stochastic PL neighborhood]
+\label{cor:stochastic-pl}
+For constant $\eta$, $\gn{b_t}\leq B$, and $\nu_t\leq\nu$,
+\begin{align}
+\E\Delta_{t+1}
+&\leq(1-\mu_g\eta)\E\Delta_t
++2\eta B^2+\tfrac12L_R\eta^2\nu^2,\\
+\E\Delta_T
+&\leq(1-\mu_g\eta)^T\Delta_0+
+\frac{2B^2+L_R\eta\nu^2/2}{\mu_g}.
+\end{align}
+\end{corollary}
+
+\subsection{Transported momentum: full tracking and absorption}
+\begin{assumption}[Momentum regularity]
+For $0\leq\beta<1$,
+\begin{align}
+v_t&=\beta\mathcal T_{t-1,t}v_{t-1}
++(1-\beta)(g_t+\zeta_t),\quad v_{-1}=0,\\
+X_{t+1}&=R_{X_t}(-\eta v_t),\\
+\|\mathcal T_{t-1,t}w\|_g&\leq(1+c_T\eta)\|w\|_g,\\
+\|\mathcal T_{t-1,t}g_{t-1}-g_t\|_g
+&\leq L_Tc_R\eta\|v_{t-1}\|_g,\\
+\E_t\gn{\zeta_t}^2&\leq\nu^2 .
+\label{eq:rigid-momentum-model}
+\end{align}
+The transport is determined before sampling $\zeta_t$.
+\end{assumption}
+
+\begin{lemma}[Tracking recursion]
+For $e_t=v_t-g_t$, $q_t=\E\gn{e_t}^2$, $V_t=\E\gn{v_t}^2$,
+\begin{align}
+q_t&\leq\beta(1+c_T\eta)^2q_{t-1}
++\frac{\beta^2L_T^2c_R^2\eta^2}{1-\beta}V_{t-1}
++(1-\beta)^2\nu^2,\\
+q_0&\leq\beta^2\gn{g_0}^2+(1-\beta)^2\nu^2 .
+\label{eq:rigid-momentum-track}
+\end{align}
+\end{lemma}
+\begin{proof}
+Let $d_t=\mathcal T g_{t-1}-g_t$. Then
+\begin{align}
+e_t&=\beta\mathcal T e_{t-1}+\beta d_t+(1-\beta)\zeta_t,\\
+\|\beta\mathcal T e_{t-1}+\beta d_t\|_g^2
+&\leq\beta\|\mathcal T e_{t-1}\|_g^2
++\frac{\beta^2}{1-\beta}\|d_t\|_g^2 .
+\end{align}
+The noise cross term has conditional expectation zero.
+\end{proof}
+
+\begin{theorem}[Momentum with non-isometric transport]
+\label{thm:momentum}
+Assume
+\begin{align}
+\beta(1+c_T\eta)^2&\leq(1+\beta)/2,&
+\eta&\leq\min\left\{\frac1{2L_R},
+\frac{1-\beta}{2\sqrt2\,\beta L_Tc_R}\right\}.
+\label{eq:rigid-momentum-step}
+\end{align}
+Restrictions involving $\beta$ are omitted if $\beta=0$. Then
+\begin{equation}
+\frac1T\sum_{t<T}\E\gn{g_t}^2
+\leq\frac{2\Delta_0}{\eta T}
++\frac{2q_0}{(1-\beta)T}+2(1-\beta)\nu^2 .
+\label{eq:rigid-momentum-rate}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For $\rho=(1+\beta)/2$,
+\begin{align}
+(1-\rho)\sum_{t<T}q_t
+&\leq q_0+
+\frac{\beta^2L_T^2c_R^2\eta^2}{1-\beta}\sum_{t<T}V_t
++T(1-\beta)^2\nu^2,\\
+\sum_{t<T}q_t
+&\leq\frac{2q_0}{1-\beta}
++\frac{2\beta^2L_T^2c_R^2\eta^2}{(1-\beta)^2}
+\sum_{t<T}V_t+2T(1-\beta)\nu^2.
+\end{align}
+The polarization identity yields
+\begin{align}
+2g(g_t,v_t)&=\gn{g_t}^2+\gn{v_t}^2-\gn{e_t}^2,\\
+\E f(X_{t+1})
+&\leq\E f(X_t)-\tfrac\eta2\E\gn{g_t}^2
+-\tfrac\eta4 V_t+\tfrac\eta2q_t .
+\end{align}
+The coefficient
+$2\beta^2L_T^2c_R^2\eta^2/(1-\beta)^2\leq1/4$ gives
+\begin{align}
+\tfrac\eta2\sum_{t<T}\E\gn{g_t}^2
++\tfrac\eta8\sum_{t<T}V_t
+&\leq\Delta_0+\frac{\eta q_0}{1-\beta}
++\eta T(1-\beta)\nu^2 .
+\end{align}
+Drop the nonnegative velocity sum and divide by $\eta T/2$.
+\end{proof}
+
+\begin{corollary}[Isometric transport and vanishing-noise schedules]
+If $c_T=0$, the sharper conditions
+$\eta\leq\min\{(2L_R)^{-1},(1-\beta)/(2\beta L_Tc_R)\}$ imply
+\begin{equation}
+\frac1T\sum_{t<T}\E\gn{g_t}^2
+\leq\frac{2\Delta_0}{\eta T}
++\frac{q_0}{(1-\beta)T}+(1-\beta)\nu^2 .
+\end{equation}
+For $1-\beta=T^{-1/2}$ and $\eta=cT^{-1/2}$,
+Eq.~\eqref{eq:rigid-momentum-rate} is $O(T^{-1/2})$ whenever its
+uniform regularity and stepsize conditions hold. For $\nu=0$ and
+fixed admissible $\beta,\eta$, it is $O(T^{-1})$.
+\end{corollary}
+
+\subsection{Uniform velocity bounds for the implemented local transport}
+\begin{proposition}[A closed invariant velocity ball]
+Assume $\|\widehat g_t\|_g\leq G$ almost surely, and that smooth
+balance--project transport obeys
+\begin{equation}
+\|\mathcal T w\|_g\leq(1+C_{\rm bal}\eta^2M^2)\|w\|_g
+\quad\text{whenever }\|v_{t-1}\|_g\leq M.
+\end{equation}
+If
+\begin{equation}
+M=2G,\qquad
+\beta C_{\rm bal}\eta^2M^2\leq(1-\beta)/2,
+\end{equation}
+then $\|v_t\|_g\leq M$ for all $t$.
+\end{proposition}
+\begin{proof}
+For $\|v_{t-1}\|_g\leq M$,
+\begin{align}
+\|v_t\|_g
+&\leq\beta(1+C_{\rm bal}\eta^2M^2)M+(1-\beta)G\\
+&\leq\beta M+\tfrac12(1-\beta)M
++\tfrac12(1-\beta)M=M .
+\end{align}
+The induction starts at $v_{-1}=0$.
+\end{proof}
+
+\begin{proposition}[Geometry-to-oracle error budget]
+Let $E_{{\rm syl},t}$ be the right side of the direction-error bound
+in Eq.~\eqref{eq:rigid-damping}; let $E_{{\rm coord},t}$ and
+$E_{{\rm state},t}$ bound horizontal coordinate and state errors.
+If the remaining vertical component has coefficient $\Omega_t$
+and horizontal part $h_t$, define
+\begin{align}
+Q_t&=\sqrt{2b}\nn{h_t}\nn{\Omega_t}+b\nn{\Omega_t}^2,\\
+B_t&=E_{{\rm syl},t}+E_{{\rm coord},t}
++E_{{\rm state},t}+C_{\rm chart}\eta_tQ_t .
+\end{align}
+A local inverse of the retraction converts a product defect
+$\eta_t^2Q_t$ into a tangent-direction defect bounded by
+$C_{\rm chart}\eta_tQ_t$. An explicit admissible constant and
+the required inverse-domain condition are given below.
+For a bias bound $\|b_t\|_g\leq B_t$, Eq.~\eqref{eq:rigid-stochastic}
+has the explicit numerical floor
+\begin{equation}
+\frac{4\sum_t\eta_tB_t^2}{\sum_t\eta_t}.
+\end{equation}
+\end{proposition}
+
+\begin{lemma}[Quantitative inverse of the factor retraction]
+\label{lem:rigid-inverse-retraction}
+Identify $T_X\mathcal M_r$ with its minimum-energy factor lift at a
+balanced $p$. For $0<\rho<\sqrt a$ and $\|\xi\|,\|\zeta\|\leq\rho$,
+\begin{align}
+\|R_X(\xi)-R_X(\zeta)\|_F
+&\geq(\sqrt a-\rho)\|\xi-\zeta\|,\\
+\|R_X^{-1}(Y)-R_X^{-1}(Y')\|
+&\leq\frac{\|Y-Y'\|_F}{\sqrt a-\rho},
+\quad Y,Y'\in R_X(B_\rho).
+\label{eq:rigid-inverse-retraction}
+\end{align}
+Consequently $C_{\rm chart}=(\sqrt a-\rho)^{-1}$ is sufficient
+when both perturbed products belong to this same inverse domain.
+For $\rho\leq\sqrt a/2$, $C_{\rm chart}\leq2/\sqrt a$.
+\end{lemma}
+\begin{proof}
+Put $\delta=\xi-\zeta$ and $\bar\xi=(\xi+\zeta)/2$. Then
+\begin{align}
+R_X(\xi)-R_X(\zeta)
+&=L_p\delta+\bar\xi_B\delta_A+\delta_B\bar\xi_A,\\
+\|L_p\delta\|_F^2&\geq a\|\delta\|^2,\\
+\|\bar\xi_B\delta_A+\delta_B\bar\xi_A\|_F
+&\leq\sqrt{\|\bar\xi_B\|_F^2+\|\bar\xi_A\|_F^2}
+\sqrt{\|\delta_A\|_F^2+\|\delta_B\|_F^2}
+\leq\rho\|\delta\|.
+\end{align}
+The reverse triangle inequality gives the first claim and injectivity.
+Since $\rho<\sqrt a$, both factors remain full rank. The derivative
+has smallest singular value at least $\sqrt a-\rho>0$, so its inverse
+exists locally; injectivity joins these inverses on $R_X(B_\rho)$.
+The first claim gives the stated finite-difference inverse bound.
+For $Y=R_X(-\eta h)$ and $Y'=Y+\Delta$ in that image,
+\begin{equation}
+\left\|-\eta^{-1}R_X^{-1}(Y')-h\right\|
+\leq\frac{\|\Delta\|_F}{\eta(\sqrt a-\rho)}.
+\end{equation}
+\end{proof}
+
+\subsection{Predictable preconditioning and general angle conditions}
+\begin{theorem}[Predictable positive tangent operator]
+Let $H_t=H_t^*$ be $\mathcal F_t$-measurable with
+$\alpha I\preceq H_t\preceq\gamma I$, $\alpha>0$, and update
+$X_{t+1}=R_{X_t}(-\eta H_t(g_t+\zeta_t))$.
+For $\eta\leq\alpha/(L_R\gamma^2)$,
+\begin{equation}
+\frac1T\sum_{t<T}\E\gn{g_t}^2
+\leq\frac{2\Delta_0}{\alpha\eta T}
++\frac{L_R\eta\gamma^2\nu^2}{\alpha}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+\begin{align}
+\E_tg(g_t,H_t(g_t+\zeta_t))
+&=g(g_t,H_tg_t)\geq\alpha\gn{g_t}^2,\\
+\E_t\|H_t(g_t+\zeta_t)\|_g^2
+&\leq\gamma^2(\gn{g_t}^2+\nu^2),\\
+\E_t f(X_{t+1})
+&\leq f(X_t)-\tfrac12\alpha\eta\gn{g_t}^2
++\tfrac12L_R\eta^2\gamma^2\nu^2.
+\end{align}
+\end{proof}
+
+\begin{proposition}[Direction-angle certificate]
+For an arbitrary horizontal direction $d_t$, assume
+\begin{align}
+g(g_t,d_t)&\geq c_d\gn{g_t}^2-\epsilon_t,&
+\gn{d_t}^2&\leq C_d\gn{g_t}^2+v_t,\qquad c_d>0 .
+\end{align}
+If $\eta_t\leq c_d/(L_RC_d)$, then
+\begin{align}
+f(X_{t+1})-f(X_t)
+&\leq-\tfrac12c_d\eta_t\gn{g_t}^2
++\eta_t\epsilon_t+\tfrac12L_R\eta_t^2v_t,\\
+\frac{\sum_t\eta_t\gn{g_t}^2}{S_T}
+&\leq\frac{2\Delta_0+2\sum_t\eta_t\epsilon_t
++L_R\sum_t\eta_t^2v_t}{c_dS_T}.
+\end{align}
+\end{proposition}
+A current-sample-dependent Adam denominator does not satisfy the
+predictability premise merely by being positive.
+
+\subsection{Rank geometry plus RIP yields an explicit local PL constant}
+\begin{assumption}[Restricted isometry]
+For a linear map $\mathcal A:\R^{m\times d}\to\R^n$,
+\begin{equation}
+(1-\delta)\nn Z^2\leq\|\mathcal A Z\|_2^2
+\leq(1+\delta)\nn Z^2,\quad\rnk Z\leq4r,\quad0\leq\delta<\sqrt{35}/6 .
+\label{eq:rigid-RIP}
+\end{equation}
+Let $\rnk X_*=\rnk X=r$, $E=X-X_*$, and
+$f(X)=\frac12\|\mathcal A E\|_2^2$.
+\end{assumption}
+
+\begin{lemma}[Normal component is quadratic in the product error]
+For $\sigma_r(X)\geq a$ and $\nn E<a$,
+\begin{equation}
+\|(I-P_X)E\|_F
+\leq\frac{\nn E^2}{2(a-\nn E)} .
+\label{eq:rigid-normal-error}
+\end{equation}
+If $\nn E\leq a/4$, then
+\begin{equation}
+\|P_XE\|_F\geq c_0\nn E,\qquad c_0=\sqrt{35}/6 .
+\end{equation}
+\end{lemma}
+\begin{proof}
+In the $X$ singular bases,
+\begin{align}
+X_*&\equiv
+\begin{pmatrix}\Sigma-E_{11}&-E_{12}\\-E_{21}&-E_{22}\end{pmatrix},\\
+\rnk X_*=r&\Longrightarrow
+E_{22}=-E_{21}(\Sigma-E_{11})^{-1}E_{12},\\
+\nn{E_{22}}
+&\leq\frac{\nn{E_{21}}\nn{E_{12}}}{a-\on{E_{11}}}
+\leq\frac{\nn E^2}{2(a-\nn E)},\\
+\frac{\nn{E_{22}}}{\nn E}
+&\leq\frac{\nn E}{2(a-\nn E)}\leq\frac16,\\
+\nn{P_XE}^2&=\nn E^2-\nn{E_{22}}^2
+\geq\tfrac{35}{36}\nn E^2 .
+\end{align}
+\end{proof}
+
+\begin{theorem}[Explicit RIP-to-PL transfer]
+\label{thm:rigid-rip-pl}
+Under Eq.~\eqref{eq:rigid-RIP}, $\sigma_r(X)\geq a$, and $\nn E\leq a/4$,
+\begin{align}
+\|P_X\nabla f(X)\|_F&\geq(c_0-\delta)\nn E,\\
+\tfrac12\|\qgrad_g f(X)\|_g^2
+&\geq\mu_{\rm RIP} f(X),&
+\mu_{\rm RIP}&=\frac{a(c_0-\delta)^2}{1+\delta}.
+\label{eq:rigid-rip-pl}
+\end{align}
+\end{theorem}
+\begin{proof}
+RIP polarization for $\rnk Z,\rnk Y\leq2r$ gives
+\begin{equation}
+|\langle\mathcal AZ,\mathcal AY\rangle-\ii ZY|
+\leq\delta\nn Z\nn Y .
+\end{equation}
+Choose $Z=P_XE$, $\rnk Z\leq2r$. Then
+\begin{align}
+\ii{\nabla f(X)}Z
+&=\langle\mathcal AE,\mathcal AZ\rangle\\
+&\geq\nn Z^2-\delta\nn E\nn Z,\\
+\|P_X\nabla f(X)\|_F
+&\geq\nn Z-\delta\nn E\geq(c_0-\delta)\nn E,\\
+\gn{\qgrad_g f}^2&\geq a(c_0-\delta)^2\nn E^2,\\
+f(X)&\leq\tfrac12(1+\delta)\nn E^2 .
+\end{align}
+\end{proof}
+
+
+
+\begin{theorem}[A sharp pullback RIP Hessian enclosure]
+\label{thm:rigid-rip-hessian}
+Under Eq.~\eqref{eq:rigid-RIP}, let $E=X-X_*$, let
+$k_\pm(X)$ be the extreme tangent eigenvalues of $K_X$, and put
+\begin{equation}
+\omega_E=\|E\|_2+\delta\|E\|_F .
+\end{equation}
+Then
+\begin{equation}
+\{(1-\delta)k_-(X)-\omega_E\}I
+\preceq\qHess_g f(X)
+\preceq\{(1+\delta)k_+(X)+\omega_E\}I .
+\label{eq:rigid-rip-hessian}
+\end{equation}
+On $\mathcal K_{a,b}$, the sufficient radius
+\begin{equation}
+\|E\|_F\leq\frac{a(1-\delta)}{2(1+\delta)}
+\end{equation}
+gives $\qHess_g f(X)\succeq a(1-\delta)I/2$.
+\end{theorem}
+\begin{proof}
+For a unit rank-one matrix $uv^\top$, restricted polarization gives
+\begin{align}
+|\langle\mathcal AE,\mathcal A(uv^\top)\rangle
+-\langle E,uv^\top\rangle|
+&\leq\delta\|E\|_F,\\
+\|\mathcal A^*\mathcal AE-E\|_2&\leq\delta\|E\|_F,\\
+\|G\|_2=\|\mathcal A^*\mathcal AE\|_2&\leq\omega_E .
+\end{align}
+The needed combined rank is at most $2r+1\leq3r$.
+For a unit horizontal lift $\xi$, $\operatorname{rank}(L_p\xi)\leq2r$,
+so RIP and Eq.~\eqref{eq:sharp-pullback} give
+\begin{align}
+(1-\delta)\|L_p\xi\|_F^2-\omega_E
+&\leq{\rm Hess}_g f[L_p\xi,L_p\xi]\\
+&\leq(1+\delta)\|L_p\xi\|_F^2+\omega_E .
+\end{align}
+Use $k_-\leq\|L_p\xi\|_F^2\leq k_+$ and
+$\omega_E\leq(1+\delta)\|E\|_F$.
+For $\delta=0$, scalar reconstruction has Hessian $2x+(x-x_*)$;
+positive and negative errors attain the respective enclosure endpoints.
+\end{proof}
+
+\begin{corollary}[A matching local geodesic PL constant]
+Let $\mathcal U$ be a geodesically convex neighborhood containing
+$X_*$, with $k_-(X)\geq a$ and
+$\omega_E\leq\omega<a(1-\delta)$ throughout $\mathcal U$.
+Then
+\begin{equation}
+\tfrac12\|\qgrad_g f(X)\|_g^2
+\geq\{a(1-\delta)-\omega\}\{f(X)-f(X_*)\},
+\qquad X\in\mathcal U .
+\end{equation}
+\end{corollary}
+\begin{proof}
+Write $\mu=a(1-\delta)-\omega$.
+Integrate the Hessian lower bound along a minimizing geodesic to $X_*$:
+\begin{align}
+f(X_*)&\geq f(X)+g_X(\qgrad_g f(X),\operatorname{Log}_XX_*)
++\tfrac\mu2d_g(X,X_*)^2,\\
+f(X)-f(X_*)&\leq\|\qgrad_g f(X)\|_g d_g(X,X_*)
+-\tfrac\mu2d_g(X,X_*)^2
+\leq\frac{\|\qgrad_g f(X)\|_g^2}{2\mu}.
+\end{align}
+This local Hessian-based constant approaches $a(1-\delta)$ as the
+neighborhood shrinks. The earlier chord-based PL result does not
+require this additional geodesic-convexity premise.
+\end{proof}
+
+\begin{corollary}[A sufficient invariant local basin]
+Let $s_*=\sigma_r(X_*)$, $a=s_*/2$, and
+\begin{equation}
+\nn{X_0-X_*}\leq\frac{s_*}{8}
+\sqrt{\frac{1-\delta}{1+\delta}} .
+\end{equation}
+For rank-preserving steps satisfying pullback descent,
+\begin{align}
+f(X_t)&\leq f(X_0),\\
+\nn{X_t-X_*}^2
+&\leq\frac{2f(X_t)}{1-\delta}
+\leq\frac{1+\delta}{1-\delta}\nn{X_0-X_*}^2
+\leq s_*^2/64,\\
+\sigma_r(X_t)&\geq s_*-\nn{X_t-X_*}\geq7s_*/8\geq a,\\
+\nn{X_t-X_*}&\leq s_*/8=a/4,\\
+f(X_T)&\leq(1-\eta\mu_{\rm RIP})^T f(X_0).
+\end{align}
+The step-radius conditions must hold on this sublevel set.
+\end{corollary}
+
+\begin{corollary}[Noise and approximate stationarity]
+For $y=\mathcal AX_*+\xi$ and
+\begin{equation}
+\nu_{\mathcal A}=\sup_{\rnk Z\leq2r,\ \nn Z=1}
+|\langle\xi,\mathcal AZ\rangle|,
+\end{equation}
+inside the same regular basin,
+\begin{align}
+\|P_X\nabla f(X)\|_F
+&\geq(c_0-\delta)\nn{X-X_*}-\nu_{\mathcal A},\\
+\gn{\qgrad_g f(X)}\leq\epsilon
+&\Longrightarrow
+\nn{X-X_*}
+\leq\frac{\nu_{\mathcal A}+\epsilon/\sqrt a}{c_0-\delta}.
+\label{eq:rigid-noisy-reconstruction}
+\end{align}
+\end{corollary}
+
+\subsection{Dense-Gaussian sample size: an explicit sufficient condition}
+\begin{lemma}[Rank-$k$ Frobenius net]
+For $\mathcal T_k=\{Z:\rnk Z\leq k,\ \nn Z=1\}$,
+\begin{equation}
+N(\mathcal T_k,\nn{\cdot},\varepsilon)
+\leq(1+6\sqrt{k}/\varepsilon)^{k(m+d+1)} .
+\label{eq:rigid-rank-net}
+\end{equation}
+\end{lemma}
+\begin{proof}
+Write $Z=U\qdiag(s)V^\top$, $\|s\|_2=1$.
+Take $\varepsilon/3$ nets of $U,V,s$ in balls of radii
+$\sqrt{k},\sqrt{k},1$. Their product cardinality is bounded by
+\begin{equation}
+(1+6\sqrt{k}/\varepsilon)^{mk}
+(1+6\sqrt{k}/\varepsilon)^{dk}
+(1+6/\varepsilon)^k .
+\end{equation}
+With net centers constrained to the corresponding Stiefel/sphere sets,
+\begin{align}
+\|U{\rm diag}(s)V^\top-\widehat U{\rm diag}(\widehat s)\widehat V^\top\|_F
+&\leq\|U-\widehat U\|_F+\|s-\widehat s\|_2+\|V-\widehat V\|_F\\
+&\leq\varepsilon .
+\end{align}
+\end{proof}
+
+\begin{theorem}[Dense Gaussian RIP with stated constants]
+Let $(\mathcal AZ)_i=n^{-1/2}\langle G_i,Z\rangle$ with independent
+standard Gaussian matrix entries in $G_i$. Set
+$k=\min(4r,m,d)$, $0<\delta\leq1/2$, and $0<q<1$.
+A sufficient condition for Eq.~\eqref{eq:rigid-RIP} with probability
+at least $1-q$ is
+\begin{equation}
+n\geq\frac{32}{\delta^2}
+\left[
+k(m+d+1)\log\!\left(1+\frac{96\sqrt{2k}}{\delta}\right)
++\log\frac2q
+\right].
+\label{eq:rigid-gaussian-sample-size}
+\end{equation}
+\end{theorem}
+\begin{proof}
+For fixed $\nn Z=1$,
+\begin{equation}
+\Pr\{|\|\mathcal AZ\|_2^2-1|>u\}
+\leq2e^{-nu^2/8},\qquad0<u<1 .
+\end{equation}
+Use $u=\delta/2$, $\varepsilon=\delta/(16\sqrt2)$ in
+Eq.~\eqref{eq:rigid-rank-net} and a union bound.
+Let $Q_k=\sup_{\mathcal T_k}\|\mathcal AZ\|_2$.
+Splitting a rank-$2k$ SVD into two blocks gives
+$Q_{\min(2k,m,d)}\leq\sqrt2 Q_k$. Hence
+\begin{align}
+Q_k&\leq\sqrt{1+\delta/2}+\sqrt2\,\varepsilon Q_k,\\
+Q_k&\leq\frac{\sqrt{1+\delta/2}}{1-\delta/16}\leq\sqrt{1+\delta},\\
+\inf_{\mathcal T_k}\|\mathcal AZ\|_2
+&\geq\sqrt{1-\delta/2}
+-\frac{\delta}{16}\sqrt{1+\delta}\geq\sqrt{1-\delta}.
+\end{align}
+The two last scalar inequalities hold for $0<\delta\leq1/2$.
+\end{proof}
+The experiments use rank-one Gaussian measurements, not independent
+Gaussian entries in each measurement matrix; this sufficient condition
+is not asserted for that different design.
+
+\subsection{A high-probability stationarity inequality}
+\begin{theorem}[Bounded martingale noise]
+Let $b_t=0$, $\gn{g_t}\leq G$, $\gn{\widehat g_t}\leq H$, and
+$\gn{\zeta_t}\leq V$ almost surely. For deterministic steps and
+$S_T=\sum_t\eta_t$, with probability at least $1-q$,
+\begin{equation}
+\frac{\sum_{t<T}\eta_t\gn{g_t}^2}{S_T}
+\leq\frac{\Delta_0}{S_T}
++\frac{L_RH^2\sum_t\eta_t^2}{2S_T}
++\frac{GV\sqrt{2\log(1/q)\sum_t\eta_t^2}}{S_T}.
+\label{eq:rigid-high-prob}
+\end{equation}
+\end{theorem}
+\begin{proof}
+\begin{align}
+f(X_{t+1})-f(X_t)
+&\leq-\eta_t\gn{g_t}^2
+-\eta_tg(g_t,\zeta_t)+\tfrac12L_R\eta_t^2H^2,\\
+M_T&=-\sum_{t<T}\eta_tg(g_t,\zeta_t),\\
+\E_t[M_{t+1}-M_t]&=0,\\
+|M_{t+1}-M_t|&\leq\eta_tGV,\\
+\end{align}
+\begin{equation}
+\Pr\left\{M_T>GV\sqrt{2\log(1/q)\sum_t\eta_t^2}\right\}\leq q .
+\end{equation}
+Telescope the first inequality and apply the displayed martingale bound.
+\end{proof}
+
+\subsection{Trajectory perturbations and an explicit contraction counterexample}
+\begin{theorem}[Discrete perturbation resolvent]
+Let $d_0=0$ and
+\begin{equation}
+d_{t+1}\leq(1+L_U\eta_t)d_t+\eta_te_t+\eta_t^2q_t .
+\end{equation}
+Then
+\begin{equation}
+d_T\leq\sum_{t<T}(\eta_te_t+\eta_t^2q_t)
+\prod_{k>t}(1+L_U\eta_k).
+\end{equation}
+If the actual common state map contracts by $1-\mu_U\eta$,
+$0\leq1-\mu_U\eta<1$, $e_t\leq e$, $q_t\leq q$, then
+\begin{equation}
+d_T\leq(1-\mu_U\eta)^T d_0+
+\frac{e+\eta q}{\mu_U}\{1-(1-\mu_U\eta)^T\}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Repeated substitution gives the weighted sum. In the contractive case use
+$\sum_{j=0}^{T-1}(1-\mu_U\eta)^j
+=[1-(1-\mu_U\eta)^T]/(\mu_U\eta)$.
+\end{proof}
+
+\begin{proposition}[Ambient strong convexity is insufficient]
+For $f(x)=\frac12(x-c)^2$, $x,c>0$, balanced scalar factors
+$B=A=\sqrt x$ give
+\begin{align}
+\nabla^2f(x)&=1,&
+U_\eta(x)&=x[1-\eta(x-c)]^2,\\
+U_\eta'(x)&=[1-\eta(x-c)][1-\eta(3x-c)],&
+\lim_{x\downarrow0}U_\eta'(x)&=(1+\eta c)^2>1 .
+\end{align}
+Thus ambient strong convexity does not imply product-map contraction.
+\end{proposition}
+
+
+\begin{theorem}[Exact scalar geodesics, Hessian, and a contractive local map]
+\label{thm:rigid-scalar-contraction}
+For $m=d=r=1$ and $x>0$,
+\begin{align}
+K_x&=2x,&g_x(z,y)&=\frac{zy}{2x},&
+q&=\sqrt{2x},\\
+ds_g^2&=\frac{dx^2}{2x}=dq^2,&
+d_g(x,y)&=\sqrt2\,|\sqrt x-\sqrt y|,\\
+\gamma_{x,y}(t)
+&=\tfrac12[(1-t)\sqrt{2x}+t\sqrt{2y}]^2,&
+\Gamma^x_{xx}&=-\frac1{2x},\\
+\qgrad_g f(x)&=2xf'(x),&
+\qHess_g f(x)[z]&=(2xf''(x)+f'(x))z .
+\label{eq:rigid-scalar-geometry}
+\end{align}
+For $f(x)=\tfrac12(x-c)^2$, $c>0$,
+\begin{align}
+\lambda(\qHess_g f(x))&=3x-c,&
+\tfrac12\|\qgrad_g f(x)\|_g^2&=2xf(x).
+\end{align}
+Thus the quotient Hessian is negative for $0<x<c/3$ despite
+$f''=1$.
+On $\mathcal I_c=[3c/4,5c/4]$, the exact balanced factor update
+\begin{align}
+U_\eta(x)&=x[1-\eta(x-c)]^2,&0<\eta&\leq1/(4c)
+\end{align}
+preserves $\mathcal I_c$ and satisfies
+\begin{align}
+|U_\eta(x)-U_\eta(y)|
+&\leq(1-c\eta)|x-y|,\\
+d_g(U_\eta(x),U_\eta(y))
+&\leq(1-5c\eta/4)d_g(x,y).
+\label{eq:rigid-scalar-contraction}
+\end{align}
+\end{theorem}
+\begin{proof}
+The change of coordinates $q=\sqrt{2x}$ gives
+\begin{align}
+\frac{dq}{dx}&=(2x)^{-1/2},&
+\frac{d^2f(q^2/2)}{dq^2}
+&=2xf''(x)+f'(x).
+\end{align}
+For $x\in\mathcal I_c$ and $\tau=c\eta\leq1/4$,
+\begin{align}
+U_\eta'(x)
+&=[1-\eta(x-c)][1-\eta(3x-c)],\\
+0&<(1-\tau/4)(1-11\tau/4)
+\leq U_\eta'(x)\\
+&\leq(1+\tau/4)(1-5\tau/4)
+=1-\tau-5\tau^2/16\leq1-\tau .
+\end{align}
+Since $U_\eta(c)=c$, the mean-value theorem implies that each point
+moves toward $c$ and remains in $\mathcal I_c$.
+The induced update in the isometric coordinate is
+\begin{align}
+\widetilde U_\eta(q)
+&=q[1-\eta(q^2/2-c)],\\
+\widetilde U_\eta'(q)
+&=1-\eta(3x-c)
+\in[1-11\tau/4,1-5\tau/4]\subset(0,1).
+\end{align}
+Apply the mean-value theorem in the $q$ interval to obtain the second
+contraction bound. Both constants concern the actual scalar update,
+with no optimizer state suppressed.
+\end{proof}
+
+\begin{proposition}[Coordinatewise adaptive scaling is not rotation-covariant]
+Let $g=(1,2)^\top$ and
+$R=2^{-1/2}\begin{pmatrix}1&-1\\1&1\end{pmatrix}$. Then
+\begin{align}
+R^\top g&=2^{-1/2}(3,1)^\top,&
+{\rm sign}(R^\top g)&=(1,1)^\top,\\
+R^\top{\rm sign}(g)&=(\sqrt2,0)^\top
+\ne {\rm sign}(R^\top g).
+\end{align}
+Even residual orthogonal gauge consistency of coordinatewise normalized
+directions requires an additional argument.
+\end{proposition}

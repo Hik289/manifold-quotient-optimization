@@ -1,0 +1,12 @@
+\section{Archived Evidence and Implementation Audit}
+\label{app:archive-evidence}
+\paragraph{What the archive supports.}
+The archived single-interface objective is $\tfrac12\|BA-X_*\|_F^2$, full-observation matrix reconstruction. It was labeled matrix sensing in the original manuscript, but no nontrivial measurement operator is applied in that code. Under the archived adaptive implementation, AdamW's final relative errors at target conditions 100/1000 are $6.49\times10^{-3}$/$3.87\times10^{-3}$; balance-only gives $1.44\times10^{-3}$/$3.42\times10^{-3}$ and the adaptive QuotientOpt heuristic gives $1.45\times10^{-3}$/$8.39\times10^{-4}$. These are case-study observations, not runs of the newly analyzed momentum method. Raw-gradient vertical energy at machine precision agrees with the algebraic identity, while nonzero update energy supports measuring the actual direction.
+
+\input{figures/archived_gauge_table}
+
+Archived gauge tests report mean final product disagreements about $1.54/1.44$ for AdamW and about $10^{-3}$ for balance-based adaptive implementations across the two conditions. These motivate rerunning the proper problem families. They do not prove an update-map contraction condition. Likewise, the reported L4 pairwise-heuristic gain of $6.7\times$ in max-over-gauges disagreement is a result about the old implementation, which reverses at L16. It does not identify an inherent depth threshold for the joint quotient method.
+
+\paragraph{Breadth results requiring replacement.}
+The archived INR-SIREN, GCN-SBM, and PINN-Burgers loops compute gradients before a balance change and then return those gradients as if computed at the new section. A Euclidean gradient is a covector represented using the local Euclidean metric; simply reusing it after a nonorthogonal factor change is incorrect. The adaptive second-moment state also lacks a consistent quotient transformation. The archived breadth table remains in the source archive, but we do not count its claimed cross-family gauge wins as verified evidence for the corrected algorithm. In the SIREN code, $B,A$ occur only through their product before the sine; balance therefore preserves the forward function exactly. The earlier factor-scale expressivity explanation is withdrawn.
+

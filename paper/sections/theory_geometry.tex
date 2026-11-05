@@ -1,0 +1,617 @@
+\section{Quotient Geometry, Exact Dynamics, and Perturbation Analysis}
+\label{app:geometry}
+
+This appendix develops the geometry used by the convergence and generalization
+results. We follow the organization of a complete manifold analysis: specify the
+space and metric, identify the gradient and Hessian, prove the properties of the
+implemented retraction, quantify numerical errors, and only then analyze the
+iteration. The construction uses standard quotient-manifold principles
+\cite{absil2008optimization,boumal2023introduction,mishra2014fixedrank}; the
+specialization to balanced two-factor updates and the qualifications about
+adaptive state are essential here. All statements concern the regular rank-$r$
+stratum. Rank-deficient initialization and rank-changing trajectories require
+a separate analysis and are not covered by referring to this stratum by
+continuity.
+
+\subsection{Notation and the regular domain}
+For matrices, $\langle C,D\rangle=\operatorname{tr}(C^\top D)$ and
+$\|C\|=\|C\|_F$. The spectral norm is $\|C\|_2$; $\sigma_r(X)$ denotes
+the smallest represented singular value of a rank-$r$ matrix. A factor pair
+$p=(B,A)$ has norm $\|p\|^2=\|B\|^2+\|A\|^2$. Let
+\begin{align}
+ \mathcal P&=\mathbb R_*^{m\times r}\times\mathbb R_*^{r\times d},&
+ \pi(B,A)&=BA,\\
+ \mathcal M_r&=\{X\in\mathbb R^{m\times d}:\operatorname{rank}X=r\},&
+ \mathcal S&=\{(B,A)\in\mathcal P:B^\top B=AA^\top\}.
+\end{align}
+The subscript $*$ means full column or row rank as appropriate. On a spectral
+band, we write
+\begin{equation}
+ \mathcal K_{a,b}=\{X\in\mathcal M_r:a\leq\sigma_r(X)\leq
+ \sigma_1(X)\leq b\},\qquad 0<a\leq b<\infty.
+ \label{eq:spectral-band}
+\end{equation}
+We assume iterates remain in the indicated domain when a theorem uses this
+band. Balancing preserves the singular values of $X$ and therefore does not
+enforce the lower bound $a$ or the upper bound $b$. Constants that depend on
+$a^{-1}$ cannot be declared uniform at a rank boundary.
+
+\begin{theorem}[The quotient and its dimension]
+\label{thm:quotient-space}
+The action $(B,A)\mapsto(BQ,Q^{-1}A)$ of $\mathrm{GL}(r)$ is free and
+proper on $\mathcal P$. Its fibers are exactly the fibers of $\pi$.
+Consequently $\mathcal P/\mathrm{GL}(r)$ is diffeomorphic to $\mathcal M_r$
+and has dimension $r(m+d-r)$. Moreover,
+\begin{equation}
+ D\pi_p[\xi]=\xi_BA+B\xi_A,\qquad
+ \ker D\pi_p=\mathcal V_p
+ =\{(B\Omega,-\Omega A):\Omega\in\mathbb R^{r\times r}\}.
+ \label{eq:kernel-exact}
+\end{equation}
+\end{theorem}
+\begin{proof}
+If $BQ=B$, the left inverse of $B$ gives $Q=I$, proving freeness.
+Suppose $BA=B'A'$ with all factors full rank. Equality of column spaces gives
+$B'=BQ$ for a unique invertible $Q$, and applying the left inverse of $B$
+gives $A'=Q^{-1}A$. This proves the fiber statement. To check properness,
+consider convergent sequences $p_k\to p$ and $\Phi_{Q_k}(p_k)\to p'$ with
+$p,p'\in\mathcal P$. The identity $Q_k=B_k^\dagger B'_k$ implies
+$Q_k\to B^\dagger B'$. The corresponding identity for $Q_k^{-1}$ shows
+that the limit is invertible. Thus the group parameter has a convergent
+subsequence in $\mathrm{GL}(r)$, the sequential properness criterion in
+these finite-dimensional spaces.
+
+Local smooth sections can also be constructed explicitly. Choose row and
+column index sets $I,J$ with $X_{I,J}$ invertible and put
+$B=X_{:,J}$, $A=X_{I,J}^{-1}X_{I,:}$. The rank condition implies $BA=X$.
+These formulas are smooth in the open chart where the selected minor is
+invertible. They identify the smooth quotient with $\mathcal M_r$, not merely
+with a local approximation of that manifold. Differentiating the product gives
+the first identity in Eq.~\eqref{eq:kernel-exact}. If $D\pi_p[\xi]=0$,
+then $(I-BB^\dagger)\xi_BA=0$. Right invertibility of $A$ implies
+$\xi_B=B\Omega$, and left invertibility of $B$ gives $\xi_A=-\Omega A$.
+The kernel has dimension $r^2$, so rank--nullity gives the asserted dimension.
+\end{proof}
+
+\subsection{Balanced representatives and an actual quotient metric}
+The Euclidean metric on $\mathcal P$ is not invariant under a general
+$\mathrm{GL}(r)$ transformation. An arbitrary Euclidean orthogonal
+complement to the $\mathrm{GL}(r)$ orbit is therefore not automatically
+a principal connection with the claimed equivariance. We avoid that problem
+by defining the Riemannian metric on $\mathcal S/\mathrm O(r)$.
+
+\begin{theorem}[Balancing, residual symmetry, and optimal factor size]
+\label{thm:balanced-optimal}
+If $X=U\Sigma V^\top$ has rank $r$, every balanced factorization of $X$
+has the form
+\begin{equation}
+ B=U\Sigma^{1/2}R,\qquad A=R^\top\Sigma^{1/2}V^\top,
+ \qquad R\in\mathrm O(r).
+ \label{eq:balanced-orbit}
+\end{equation}
+Repeated singular values do not change this residual orthogonal orbit.
+For all factorizations $BA=X$,
+\begin{align}
+ \inf_{BA=X}\tfrac12(\|B\|^2+\|A\|^2)&=\|X\|_*,\label{eq:nuclear-opt}\\
+ \inf_{BA=X}\max\{\|B\|_2^2,\|A\|_2^2\}&=\|X\|_2,\label{eq:operator-opt}\\
+ \inf_{BA=X}\sqrt{\kappa(B)\kappa(A)}&=\sqrt{\kappa(X)}.
+ \label{eq:condition-opt}
+\end{align}
+Balanced factors attain all three infima. At a balanced pair,
+$\|B\|_2=\|A\|_2=\sqrt{\sigma_1(X)}$ and
+$\sigma_r(B)=\sigma_r(A)=\sqrt{\sigma_r(X)}$.
+\end{theorem}
+\begin{proof}
+The factors in Eq.~\eqref{eq:balanced-orbit} are balanced and have product
+$X$. To prove uniqueness up to $\mathrm O(r)$, let a second balanced pair
+be $(BQ,Q^{-1}A)$ and put $H=B^\top B=AA^\top\succ0$.
+Its balance equation is $Q^\top H Q=Q^{-1}HQ^{-\top}$.
+For $P=QQ^\top\succ0$, multiplication on the left by $Q$ and on the right
+by $Q^\top$ yields $PHP=H$. Hence
+$(H^{1/2}PH^{1/2})^2=H^2$. Uniqueness of the positive definite square root
+gives $P=I$, so $Q$ is orthogonal. No simple-spectrum assumption is used.
+
+The dual characterization of the nuclear norm and Cauchy--Schwarz give
+$\|BA\|_*\leq\|B\|\|A\|\leq(\|B\|^2+\|A\|^2)/2$.
+The balanced SVD factors attain equality. Similarly,
+$\|X\|_2\leq\|B\|_2\|A\|_2\leq\max\{\|B\|_2^2,\|A\|_2^2\}$,
+and balanced factors attain $\sigma_1(X)$. Finally, QR decompositions
+reduce $BA$ to an invertible $r\times r$ product, giving
+$\kappa(X)\leq\kappa(B)\kappa(A)$. Equation~\eqref{eq:balanced-orbit}
+attains equality in this condition-number inequality. Taking square roots
+proves Eq.~\eqref{eq:condition-opt}.
+\end{proof}
+
+These are orbit-optimality statements at a fixed product. They do not imply
+that the represented product becomes better conditioned, that the loss is
+smaller after balancing, or that every unbalanced factorization is strictly
+worse under every possible conditioning statistic.
+
+\begin{lemma}[Balanced tangent and horizontal spaces]
+\label{lem:balanced-horizontal}
+At $p=(B,A)\in\mathcal S$, define
+$C_p(\xi)=B^\top\xi_B-\xi_AA^\top$. Then
+\begin{align}
+ T_p\mathcal S&=\{\xi:\operatorname{sym}C_p(\xi)=0\},\\
+ \mathcal V^{O}_p&=\{(B\Omega,-\Omega A):\Omega^\top=-\Omega\},\\
+ \mathcal H_p&=T_p\mathcal S\cap(\mathcal V^O_p)^\perp
+             =\{\xi:C_p(\xi)=0\}.
+ \label{eq:true-horizontal}
+\end{align}
+The Euclidean metric restricted to $\mathcal S$ descends to a smooth
+Riemannian metric on $\mathcal S/\mathrm O(r)\simeq\mathcal M_r$.
+\end{lemma}
+\begin{proof}
+Differentiating $B^\top B-AA^\top=0$ gives
+$C_p(\xi)+C_p(\xi)^\top=0$. Orthogonality to every residual vertical
+vector with skew-symmetric $\Omega$ requires
+$\operatorname{skew}C_p(\xi)=0$. The two conditions together give
+$C_p(\xi)=0$. The derivative of the balance constraint is onto the space
+of symmetric matrices: applying a symmetric vertical coefficient leads to
+the invertible Sylvester operator $H\Omega+\Omega H$. Thus $\mathcal S$
+is a smooth submanifold. The residual action is free, isometric, and proper
+because $\mathrm O(r)$ is compact. The standard Riemannian quotient
+construction therefore applies.
+\end{proof}
+
+\begin{proposition}[Sylvester projection and minimum-norm lift]
+\label{prop:minimum-lift}
+For any factor direction $u$, let $\Omega$ solve
+\begin{equation}
+ (B^\top B)\Omega+\Omega(AA^\top)=B^\top u_B-u_AA^\top.
+ \label{eq:exact-sylvester}
+\end{equation}
+Then $\Pi_pu=(u_B-B\Omega,u_A+\Omega A)$ is the Euclidean orthogonal
+projection onto $\ker C_p$. It preserves the product differential:
+$D\pi_p[\Pi_pu]=D\pi_p[u]$. At a balanced pair this is the horizontal
+lift of that product tangent with the smallest factor norm. For any tangent
+$Z\in T_X\mathcal M_r$,
+\begin{equation}
+ \|\operatorname{lift}_p Z\|^2
+ =\min_{D\pi_p[\xi]=Z}(\|\xi_B\|^2+\|\xi_A\|^2).
+ \label{eq:minimum-lift}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Let $V_p\Omega=(B\Omega,-\Omega A)$. Its adjoint is $C_p$, so
+$C_pV_p\Omega=(B^\top B)\Omega+\Omega(AA^\top)$.
+All eigenvalues of this Sylvester operator are positive sums of Gram
+eigenvalues, proving invertibility. Therefore
+$\Pi_p=I-V_p(C_pV_p)^{-1}C_p$ is the orthogonal projector onto
+$\ker C_p=(\operatorname{im}V_p)^\perp$. Theorem~\ref{thm:quotient-space}
+identifies $\operatorname{im}V_p$ with $\ker D\pi_p$, which proves
+product-differential preservation. All lifts of $Z$ differ by a vector in
+this kernel. Pythagoras then proves Eq.~\eqref{eq:minimum-lift} and
+uniqueness of the minimizer. Lemma~\ref{lem:balanced-horizontal} identifies
+that minimizer with a tangent to $\mathcal S$ at balanced pairs.
+\end{proof}
+
+At an unbalanced pair, Eq.~\eqref{eq:exact-sylvester} still defines a
+Euclidean projection, but it is not the same as using the averaged Gram
+matrix on both sides of the equation. Nor is this unbalanced Euclidean
+projection a $\mathrm{GL}(r)$-equivariant quotient connection. These
+distinctions matter when balancing is performed only every $k>1$ steps.
+
+\subsection{An explicit product-space metric and preconditioner}
+Let $X=U\Sigma V^\top$ and let $P_U=UU^\top$, $P_V=VV^\top$.
+The tangent space consists of matrices whose bottom-right normal block
+vanishes:
+\begin{equation}
+ T_X\mathcal M_r=\{Z:(I-P_U)Z(I-P_V)=0\}.
+\end{equation}
+Define the self-adjoint ambient operator
+\begin{equation}
+ \mathcal K_X(G)=U\Sigma U^\top G+GV\Sigma V^\top.
+ \label{eq:product-preconditioner}
+\end{equation}
+It vanishes on normal blocks and is positive definite on the tangent space.
+
+\begin{theorem}[Metric, gradient, and spectral equivalence]
+\label{thm:metric-explicit}
+The balanced quotient metric has the product-space formula
+\begin{equation}
+ g_X(Z,Y)=\langle Z,\mathcal K_X^{\dagger}Y\rangle,
+ \qquad Z,Y\in T_X\mathcal M_r.
+ \label{eq:explicit-metric}
+\end{equation}
+If $G=\nabla f(X)$, then
+\begin{align}
+ \operatorname{lift}_p\operatorname{grad}_g f(X)&=(GA^\top,B^\top G),\\
+ \operatorname{grad}_g f(X)&=\mathcal K_X(G),\label{eq:true-gradient}\\
+ \|\operatorname{grad}_g f(X)\|_g^2&=\|GA^\top\|^2+\|B^\top G\|^2.
+ \label{eq:true-grad-norm}
+\end{align}
+On $\mathcal K_{a,b}$,
+\begin{align}
+ \frac{1}{2b}\|Z\|^2\leq\|Z\|_g^2&\leq\frac1a\|Z\|^2,
+ \label{eq:metric-equivalence}\\
+ a\|P_{T_X}G\|^2\leq\|\operatorname{grad}_g f(X)\|_g^2
+ &\leq2b\|P_{T_X}G\|^2.
+ \label{eq:gradient-equivalence}
+\end{align}
+\end{theorem}
+\begin{proof}
+Write $L=D\pi_p$ and use the factor Euclidean inner product. Direct
+calculation gives $L^*G=(GA^\top,B^\top G)$ and
+$LL^*G=BB^\top G+GA^\top A=\mathcal K_X(G)$ at balanced factors.
+The minimum-norm lift in Proposition~\ref{prop:minimum-lift} is
+$L^*\mathcal K_X^\dagger Z$. Its squared norm is
+$\langle Z,\mathcal K_X^\dagger Z\rangle$, proving the metric formula.
+Moreover $B^\top GA^\top-B^\top GA^\top=0$, so $L^*G$ is horizontal.
+For every tangent $Z$,
+$g_X(LL^*G,Z)=\langle G,Z\rangle=Df(X)[Z]$, proving the gradient identity.
+
+In orthogonal bases $[U,U_\perp]$, $[V,V_\perp]$, the tangent has three
+blocks. On $U_iV_j^\top$, $\mathcal K_X$ acts by
+$\sigma_i+\sigma_j$; on $U_iV_\perp^\top$ it acts by $\sigma_i$; and
+on $U_\perp V_j^\top$ it acts by $\sigma_j$. Nonexistent blocks when
+$r=m$ or $r=d$ can simply be omitted. Every tangent eigenvalue lies in
+$[a,2b]$. Applying the spectral theorem to $\mathcal K_X$ and its
+inverse proves both equivalences.
+\end{proof}
+
+This calculation exposes an actual optimization mechanism. Balanced factor
+gradient descent is a product-space gradient method with the
+state-dependent preconditioner $\mathcal K_X$; it is not the ambient
+update $X-\eta\nabla f(X)$. Removing redundant parameters does not make
+this preconditioner uniformly well conditioned when $\sigma_r(X)\to0$.
+
+\begin{corollary}[Raw stochastic gradients are horizontal]
+\label{cor:raw-horizontal}
+For every individual example or minibatch loss $f_z(BA)$, its factor
+gradient satisfies $C_p(\nabla(f_z\circ\pi))=0$ exactly. Thus sampling
+product-only losses cannot itself create vertical gradient energy.
+Coordinatewise adaptive transformations, stale gradient coordinates,
+factor-specific penalties, and improperly transported state can create
+vertical update energy.
+\end{corollary}
+\begin{proof}
+The chain-rule identity in Eq.~\eqref{eq:true-gradient} applies to each
+$f_z$, before any expectation is taken. Applying $C_p$ cancels its two
+terms exactly. A nonlinear coordinatewise transformation need not commute
+with this cancellation. No such cancellation is available for an arbitrary
+penalty depending separately on $B$ and $A$.
+\end{proof}
+
+\subsection{Retraction and exact finite-step expansion}
+At a balanced pair and a horizontal lift $\xi$, define
+\begin{equation}
+ R_X(\xi)=(B+\xi_B)(A+\xi_A).
+ \label{eq:factor-retraction}
+\end{equation}
+Here and below a tangent on the quotient is identified with its horizontal
+lift when used as the argument of $R$. Balance the factors after this
+product is formed to obtain a representative for the next iteration.
+
+\begin{proposition}[A local second-order quotient retraction]
+\label{prop:second-order-retraction}
+Equation~\eqref{eq:factor-retraction} is a well-defined local retraction
+on the balanced quotient, independent of the residual orthogonal gauge.
+It is second order for the metric in Eq.~\eqref{eq:explicit-metric}.
+It remains in the regular stratum if
+\begin{equation}
+ \|\xi_B\|_2<\sigma_r(B),\qquad
+ \|\xi_A\|_2<\sigma_r(A).
+ \label{eq:rank-step}
+\end{equation}
+Its exact product expansion is
+\begin{equation}
+ R_X(-\eta\xi)=X-\eta D\pi_p[\xi]+\eta^2\xi_B\xi_A,
+ \qquad \|\xi_B\xi_A\|\leq\tfrac12\|\xi\|^2.
+ \label{eq:exact-retraction}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Residual orthogonal changes send $\xi$ to $(\xi_BR,R^\top\xi_A)$;
+the product in Eq.~\eqref{eq:factor-retraction} is unchanged. At zero
+the product equals $X$ and its derivative is $D\pi_p[\xi]$, the
+retraction axioms. Weyl's singular-value inequality proves
+Eq.~\eqref{eq:rank-step}. Multiplication gives the exact expansion, and
+$\|\xi_B\xi_A\|\leq\|\xi_B\|\|\xi_A\|\leq\|\xi\|^2/2$ gives its bound.
+
+For the second-order statement consider the factor line
+$q(t)=(B+t\xi_B,A+t\xi_A)$. Since $C_p(\xi)=0$, its balance defect is
+$t^2(\xi_B^\top\xi_B-\xi_A\xi_A^\top)$. A smooth local balancing gauge
+$Q(t)$ with $Q(0)=I$ can therefore be chosen with $Q'(0)=0$;
+the Sylvester invertibility in Lemma~\ref{lem:balanced-horizontal}
+justifies the implicit-function step without requiring simple singular
+values. The balanced curve $s(t)=\Phi_{Q(t)}q(t)$ has initial velocity
+$\xi$ and acceleration $s''(0)=V_p(Q''(0))$. This acceleration is
+orthogonal to $\mathcal H_p$. The horizontal part of the covariant
+acceleration of a curve in the embedded manifold $\mathcal S$ is its
+Euclidean acceleration projected onto $\mathcal H_p$. It is therefore
+zero at $t=0$. The Riemannian submersion from $\mathcal S$ to the quotient
+preserves this horizontal covariant acceleration
+\cite{boumal2023introduction}. Thus the quotient retraction is second order.
+\end{proof}
+
+\begin{proposition}[Correct horizontal--vertical finite-step discrepancy]
+\label{prop:correct-drift}
+Let $u=h+v$, $h=\Pi_pu$, and $v=(B\Omega,-\Omega A)$.
+The difference between the product after an unprojected update and that
+after a projected update at the same factors is exactly
+\begin{align}
+ &(B-\eta u_B)(A-\eta u_A)-(B-\eta h_B)(A-\eta h_A)\notag\\
+ &\quad=\eta^2\{-h_B\Omega A+B\Omega h_A-B\Omega^2A\}.
+ \label{eq:correct-cross-terms}
+\end{align}
+At balanced factors with $\sigma_1(X)\leq b$, its norm is bounded by
+\begin{equation}
+ \eta^2\left[\sqrt{2b}\,\|h\|\|\Omega\|+b\|\Omega\|^2\right].
+ \label{eq:correct-injection}
+\end{equation}
+Balancing after either update leaves the corresponding product unchanged.
+\end{proposition}
+\begin{proof}
+In the linear part, $D\pi_p[v]=0$ by Eq.~\eqref{eq:kernel-exact}.
+In the quadratic part,
+$(h_B+B\Omega)(h_A-\Omega A)-h_Bh_A$
+equals the braces in Eq.~\eqref{eq:correct-cross-terms}.
+Use $\|B\|_2=\|A\|_2\leq\sqrt b$,
+$\|\Omega\|_2\leq\|\Omega\|$, and
+$\|h_B\|+\|h_A\|\leq\sqrt2\|h\|$ to prove the bound.
+\end{proof}
+
+The mixed terms are of order $\eta^2\|h\|\|\Omega\|$, not
+$O(\eta^3)$. A bound retaining only $b\eta^2\|\Omega\|^2$ applies to
+a purely vertical step, not to the general optimizer update. Furthermore,
+vertical first-order transparency holds before balancing as well as after
+balancing. Balancing selects a controlled representative for subsequent
+steps; it does not cause the algebraic cancellation.
+
+\subsection{Numerical connection errors and transport}
+\begin{proposition}[Damping and inexact Sylvester solves]
+\label{prop:connection-error}
+At a balanced pair $H=B^\top B=AA^\top\succeq aI$, let $\Omega_0$
+solve $H\Omega_0+\Omega_0H=C$. Suppose $\widehat\Omega$ satisfies
+\begin{equation}
+ (H+\varepsilon I)\widehat\Omega+
+ \widehat\Omega(H+\varepsilon I)=C+E.
+\end{equation}
+Then
+\begin{align}
+ \|\Omega_\varepsilon-\Omega_0\|
+ &\leq\frac{\varepsilon}{2a(a+\varepsilon)}\|C\|,
+ \label{eq:damping-error}\\
+ \|\widehat\Omega-\Omega_\varepsilon\|
+ &\leq\frac{\|E\|}{2(a+\varepsilon)},\\
+ \|\widehat h-h_0\|
+ &\leq\sqrt{2b}\left\{
+ \frac{\varepsilon\|C\|}{2a(a+\varepsilon)}+
+ \frac{\|E\|}{2(a+\varepsilon)}\right\},
+ \label{eq:projector-error}\\
+ C_p(\widehat h)&=2\varepsilon\widehat\Omega-E.
+ \label{eq:damping-residual-exact}
+\end{align}
+Here $\widehat h=u-V_p\widehat\Omega$, $h_0=\Pi_pu$ and
+$\sigma_1(X)\leq b$. If each of the two Gram matrices is additionally
+perturbed by $\Delta H_i$ with spectral norm at most $\delta<a$, the
+inverse Sylvester norm is at most $[2(a-\delta+\varepsilon)]^{-1}$
+and the same perturbation argument applies with the induced right-hand
+error $-\Delta H_1\Omega-\Omega\Delta H_2$.
+\end{proposition}
+\begin{proof}
+Diagonalize $H$. The exact and damped inverse coefficients are
+$(\lambda_i+\lambda_j)^{-1}$ and
+$(\lambda_i+\lambda_j+2\varepsilon)^{-1}$. Their difference has magnitude
+at most $2\varepsilon/[2a(2a+2\varepsilon)]$, proving
+Eq.~\eqref{eq:damping-error}. The smallest damped denominator is
+$2(a+\varepsilon)$, proving the solve-error bound. The fundamental
+field satisfies
+$\|V_p\Omega\|^2\leq2b\|\Omega\|^2$; applying this inequality to the
+coefficient error proves Eq.~\eqref{eq:projector-error}. Substituting the
+inexact solve into $C_p(u-V_p\widehat\Omega)$ proves the exact residual
+identity. The last assertion follows from Weyl's inequality and subtracting
+the perturbed and unperturbed Sylvester equations.
+\end{proof}
+
+Thus a fixed residual threshold that ignores damping can reject a correct
+implementation. Damping controls inversion near a rank boundary but does
+not restore a full-rank quotient there. In particular, the error relative
+to the exact undamped projector can still become large as $a\to0$.
+
+\begin{proposition}[Coordinate transport and state compatibility]
+\label{prop:transport}
+If $(B',A')=(BQ,Q^{-1}A)$, the action on a factor tangent is
+\begin{equation}
+ D\Phi_Q(\xi_B,\xi_A)=(\xi_BQ,Q^{-1}\xi_A),
+ \quad D\pi_{p'}D\Phi_Q\xi=D\pi_p\xi.
+ \label{eq:coordinate-transport}
+\end{equation}
+Its factor norm is at most
+$\max\{\|Q\|_2,\|Q^{-1}\|_2\}\|\xi\|$. At a change between balanced
+representatives, $Q\in\mathrm O(r)$ and it is an isometry that commutes
+with horizontal projection. Between different quotient points one may
+use a smooth local transport $\mathcal T_{x\to y}$; this is distinct
+from the same-fiber coordinate change in Eq.~\eqref{eq:coordinate-transport}.
+On a compact regular neighborhood such a transport satisfies
+\begin{equation}
+ \|\mathcal T_{x\to y}\xi-P_{x\to y}\xi\|_y
+ \leq C_T d_g(x,y)\|\xi\|_x
+ \label{eq:transport-local-error}
+\end{equation}
+whenever it agrees with the identity on the diagonal and is continuously
+differentiable there. $P$ denotes parallel transport on a short unique
+geodesic in this neighborhood.
+\end{proposition}
+\begin{proof}
+Differentiate the two factors under the fixed group action and multiply
+out the product differential. Submultiplicativity proves the norm bound.
+For orthogonal $Q$, Frobenius norms and the Sylvester equation are invariant
+under conjugation, proving the balanced assertions. For the last statement,
+write both transport operators in a fixed smooth frame on a precompact
+chart. Their difference is zero at $y=x$ and has bounded first derivative
+on the chart. The mean-value bound gives Eq.~\eqref{eq:transport-local-error}.
+\end{proof}
+
+An elementwise second moment is not a tangent vector. Transporting a first
+moment using Eq.~\eqref{eq:coordinate-transport} while leaving elementwise
+second moments unchanged does not define an invariant Adam algorithm.
+Even an orthogonal rotation generally does not commute with elementwise
+division by a square root. The convergence results below therefore identify
+the analyzed momentum method separately from the archived adaptive heuristic.
+
+\subsection{Landscape equivalence and what it does not prove}
+\begin{theorem}[Critical points, Hessian inertia, and gauge nullity]
+\label{thm:landscape}
+Let $f$ be twice continuously differentiable near $\mathcal M_r$.
+A point of $\mathcal P/\mathrm{GL}(r)$ is critical if and only if its
+product is critical for $f|_{\mathcal M_r}$. At a critical point the
+Hessian bilinear forms in any two smooth quotient/product charts are
+related by congruence. They have identical numbers of positive, negative,
+and zero eigenvalues. If the product critical point is nondegenerate,
+the factor Hessian of $F=f\circ\pi$ has exactly $r^2$ zero directions,
+the gauge kernel, and the same positive and negative inertia as the
+quotient Hessian.
+\end{theorem}
+\begin{proof}
+The quotient-to-product map is a diffeomorphism by
+Theorem~\ref{thm:quotient-space}; its differential is an isomorphism.
+The chain rule proves the critical-point equivalence. In chart coordinates,
+the second derivative of a composition has a Hessian congruence term and
+a term multiplying the first derivative by the second derivative of the
+chart map. The latter term vanishes at a critical point. Sylvester's law
+of inertia proves the quotient statement.
+
+For the factor formulation, choose local coordinates consisting of a
+quotient chart and a group chart. The function is independent of the group
+coordinates, so its coordinate Hessian has a quotient block and a zero
+$r^2$-dimensional group block. At a critical point, conversion back to
+factor coordinates is again a congruence. Nondegeneracy of the quotient
+block proves exact nullity and identifies the kernel with the orbit tangent.
+\end{proof}
+
+Away from critical points, the factor Hessian is explicitly
+\begin{align}
+ D^2F(p)[\xi,\zeta]
+ &=\langle D\pi_p\xi,\nabla^2f(X)[D\pi_p\zeta]\rangle\notag\\
+ &\quad+\langle\nabla f(X),\xi_B\zeta_A+\zeta_B\xi_A\rangle.
+ \label{eq:factor-hessian-exact}
+\end{align}
+Thus simply deleting gauge eigenvectors from an ambient Hessian away from
+stationarity need not produce the quotient Hessian. At criticality,
+inertia is metric independent but eigenvalue magnitudes are not. A
+qualitative strict-saddle property transfers locally; a quantitative global
+escape time needs uniform conditioning, regularity, and a specified
+perturbation/update law. We do not infer an Adam or momentum saddle-escape
+theorem solely from the removal of gauge nullity.
+
+\subsection{Trajectory comparison requires an update-map assumption}
+\begin{theorem}[Perturbed quotient trajectories]
+\label{thm:trajectory}
+Suppose two product or joint-state recursions, driven by the same data and
+randomness, obey
+\begin{equation}
+ d_{t+1}\leq(1+L_U\eta_t)d_t+\eta_t e_t+\eta_t^2 q_t,
+ \qquad d_0=0.
+ \label{eq:trajectory-recursion}
+\end{equation}
+Here $e_t$ bounds first-order horizontal/state disagreement and $q_t$
+bounds finite-step injections such as Eq.~\eqref{eq:correct-injection}.
+Then
+\begin{equation}
+ d_T\leq\sum_{t<T}(\eta_te_t+\eta_t^2q_t)
+ \prod_{k=t+1}^{T-1}(1+L_U\eta_k).
+ \label{eq:trajectory-general}
+\end{equation}
+If instead the common state map is contractive with factor
+$1-\mu_U\eta$, $\mu_U>0$, at a constant step with
+$0\leq1-\mu_U\eta<1$, and $e_t\leq e$, $q_t\leq q$, then
+\begin{equation}
+ d_T\leq(1-\mu_U\eta)^T d_0+
+ \frac{e+\eta q}{\mu_U}\{1-(1-\mu_U\eta)^T\}.
+ \label{eq:trajectory-contract}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Repeated substitution in Eq.~\eqref{eq:trajectory-recursion} gives the
+product weights in Eq.~\eqref{eq:trajectory-general}. Under contraction,
+substitution gives a geometric sum with ratio $1-\mu_U\eta$; its value is
+the second term in Eq.~\eqref{eq:trajectory-contract}. These are statements
+about the actual update map, including optimizer state when present.
+\end{proof}
+
+\begin{proposition}[Strong convexity in $X$ alone is insufficient]
+\label{prop:convex-counterexample}
+Even a strongly convex product objective need not give a contractive
+balanced-factor gradient update on the whole positive rank-one stratum.
+For $m=d=r=1$, $x>0$, and $f(x)=\tfrac12(x-c)^2$, $c>0$, balanced
+gradient flow is $\dot x=-2x(x-c)$. Its explicit factor-gradient step is
+\begin{equation}
+ U_\eta(x)=x\{1-\eta(x-c)\}^2.
+\end{equation}
+For every sufficiently small $\eta>0$, $U_\eta'(x)>1$ at sufficiently
+small positive $x<c/2$. Thus $f''=1$ does not imply a product-map
+contraction factor $1-\eta$.
+\end{proposition}
+\begin{proof}
+At $B=A=\sqrt x$, both gradients equal $(x-c)\sqrt x$, proving the
+update formula. Differentiation gives
+$U_\eta'(x)=\{1-\eta(x-c)\}\{1-\eta(3x-c)\}$.
+Its limit as $x\downarrow0$ is $(1+\eta c)^2>1$.
+\end{proof}
+
+In addition, arbitrary adaptive-state differences can make $e_t$ nonzero.
+Neither a summed $O(T\eta^2)$ product-disagreement bound nor a
+time-independent $O(\eta)$ ceiling follows merely from balancing and
+strong convexity of $f$. The valid conditional version is
+Theorem~\ref{thm:trajectory}, with the update-map assumptions stated.
+
+\subsection{Joint geometry for deep factor chains}
+For $X=W_L\cdots W_1$ with full-rank compatible factors, let
+$\Omega_1,\ldots,\Omega_{L-1}$ denote the interface Lie-algebra elements.
+The joint vertical operator is
+\begin{align}
+ (\mathcal V_W\Omega)_1&=-\Omega_1W_1,\\
+ (\mathcal V_W\Omega)_i&=W_i\Omega_{i-1}-\Omega_iW_i,
+                      &&1<i<L,\\
+ (\mathcal V_W\Omega)_L&=W_L\Omega_{L-1}.
+ \label{eq:joint-vertical}
+\end{align}
+Its adjoint has interface blocks
+\begin{equation}
+ (\mathcal V_W^*u)_i=W_{i+1}^\top u_{i+1}-u_iW_i^\top.
+ \label{eq:joint-adjoint}
+\end{equation}
+
+\begin{proposition}[Joint projection and chain balance]
+\label{prop:joint-chain}
+The minimum-norm removal of all infinitesimal gauge directions solves
+\begin{equation}
+ (\mathcal V_W^*\mathcal V_W)\Omega=\mathcal V_W^*u,
+ \qquad u^{H}=u-\mathcal V_W\Omega.
+ \label{eq:joint-normal}
+\end{equation}
+The normal operator is self-adjoint and positive definite in the regular
+chain model with full-row-rank $W_1$, invertible internal factors and
+full-column-rank $W_L$. Neighboring interface blocks are coupled.
+For $X=U\Sigma V^\top$, a jointly balanced representative is
+\begin{equation}
+ W_1=\Sigma^{1/L}V^\top,\quad
+ W_i=\Sigma^{1/L}\ (1<i<L),\quad
+ W_L=U\Sigma^{1/L}.
+ \label{eq:joint-chain-balance}
+\end{equation}
+Its product is $X$ and $W_{i+1}^\top W_{i+1}=W_iW_i^\top$ at every
+interface. Each factor condition number is $\kappa(X)^{1/L}$.
+\end{proposition}
+\begin{proof}
+The product differential of Eq.~\eqref{eq:joint-vertical} telescopes to
+zero. Expanding the Frobenius inner products gives
+Eq.~\eqref{eq:joint-adjoint}. Least squares then gives the normal equations.
+If $\mathcal V_W\Omega=0$, its first block and the full row rank of
+$W_1$ imply $\Omega_1=0$. Induction through the invertible internal
+factors gives every $\Omega_i=0$. Hence the operator is positive definite.
+An internal factor belongs to two adjacent interface transformations,
+which explains the off-diagonal coupling of the normal equations.
+Multiplying Eq.~\eqref{eq:joint-chain-balance} and computing its Grams
+proves the remaining assertions.
+\end{proof}
+
+A single sweep of independent two-factor projections is generally not the
+solution of Eq.~\eqref{eq:joint-normal}. Its error need not scale as
+$(L-1)^2$ without further assumptions. The replacement implementation uses
+the joint normal equations, records the residual, and treats the older
+pairwise depth scans as evidence about that earlier heuristic. This
+proposition specifies a geometric correction; it does not predict that
+the corrected optimizer must outperform the heuristic on task metrics.

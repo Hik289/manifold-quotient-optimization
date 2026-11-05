@@ -1,0 +1,44 @@
+\section{Introduction}
+Low-rank adaptation represents a trainable update by $X=BA$, with $B\in\mathbb R^{m\times r}$ and $A\in\mathbb R^{r\times d}$ \cite{hu2022lora}. The identity $(BQ)(Q^{-1}A)=BA$ introduces an exact $\mathrm{GL}(r)$ symmetry. A loss depending only on $X$ is insensitive to this change of factors, whereas a coordinate-dependent optimizer can distinguish the representatives. This raises two separate questions: how to define a genuine quotient optimization algorithm, and whether its geometric corrections improve completed task outcomes.
+
+We construct the geometry on the balanced factor manifold modulo its residual orthogonal symmetry. This is necessary because the ordinary Euclidean metric on arbitrary factors is not invariant under $\mathrm{GL}(r)$. The resulting quotient is the rank-$r$ product manifold equipped with an explicit metric. Its gradient is a state-dependent product preconditioner, not the ambient matrix gradient. Balancing achieves orbit-optimal factor norms and condition numbers; it does not automatically improve the product condition number or the task loss.
+
+Our analysis distinguishes the raw gradient from the actual update. For every product-only minibatch loss, the raw factor gradient is horizontal exactly. Vertical update energy arises from optimizer transformations and state, rather than from sampling that product loss. Removing this energy preserves the product differential but changes the finite step through mixed horizontal--vertical terms. We derive these terms explicitly. A time-independent trajectory discrepancy bound additionally needs contraction of the actual update map, including state. Strong convexity of the ambient product objective alone does not supply that contraction; a rank-one counterexample demonstrates the distinction.
+
+The main second-order step is a pullback cancellation:
+Boumal's second-order retraction theorem
+\citep[Proposition 5.45]{boumal2023introduction} reduces the quotient
+Hessian to a factor Hessian restricted to horizontal lifts.
+This gives $\|\operatorname{Hess}_g f\|\leq2bL_f+\|\nabla f\|_2$,
+with residual coefficient one attained by a rank-one example.
+For Frobenius reconstruction, an Eckart--Young decomposition gives the
+complete residual-gap spectrum, including the $\sigma_i\pm\tau_k$ modes.
+The exact state Jacobian then yields the Schur stability interval,
+optimal local momentum factor, and a Lyapunov-certified nonlinear basin.
+The joint deep-chain normal-solve spectrum remains distinct from this
+task-Hessian spectrum.
+
+Statistical bounds are organized around covariance and curvature in
+the identifiable quotient coordinates. Laurent--Massart and
+Hsu--Kakade--Zhang concentration applied after Hessian whitening gives
+a local risk bound with a sharp quadratic-model coefficient $1/2$.
+Under the declared regular homoscedastic sensing model, influence
+functions and averaged iterates have leading prediction risk
+$\sigma_\varepsilon^2r(m+d-r)/(2n)$; the same constant appears in
+the Cram\'er--Rao inequality for locally unbiased tangent estimators.
+The design covariance cancels from this prediction-risk constant,
+whereas it remains in product Frobenius error.
+Global capacity bounds, nonconvex stationarity bounds, and the premises
+needed to enter the local statistical regime are stated separately.
+
+Our completed controlled studies evaluate graph prediction, synthetic
+implicit representations, matrix completion, and gauge-perturbed sensing.
+They include 208 matched-budget search attempts and 36 frozen-configuration
+initialization checks. With fixed data and three model initializations,
+validation-selected test loss improves over AdamW by $22.6\%$ on Cora
+and $82.2\%$ on SDF fitting. Balance-only isolates the contribution of
+section choice, while the sensing controls directly measure horizontal
+memory and product-trajectory consistency. Complete baseline outcomes,
+selection rules, loss trajectories, and numerical-stop records accompany
+the main comparisons. The mathematical analysis and the empirical
+measurements use the same declared first-moment update.

@@ -1,0 +1,16 @@
+\begin{table*}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.18}\setlength{\tabcolsep}{5pt}
+\caption{\textbf{Twelve-gauge sensing control.} Rank 4, 1000 updates, seed 42. $\Delta_T=\|X_T^{(Q)}-X_T^{(I)}\|_F/\|X_*\|_F$; the maximum uses completed gauges. $\bar\rho_{\rm upd}$ is mean update-direction vertical energy. Identity error reports final reconstruction without gauge perturbation. Failed gauges remain counted. All individual gauges and recovery controls are in Appendices~\ref{app:fresh-evidence-cases} and~\ref{app:failure-recovery}.}
+\label{tab:main-gauge}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Method & Finished & Max. $\Delta_T\downarrow$ & $\bar\rho_{\rm upd}\downarrow$ & Identity error $\downarrow$\\
+\midrule
+AdamW & 12/12 & $1.07\!\times\!10^{0}$ & $1.35\!\times\!10^{-1}$ & \textbf{\boldmath 0.0460}\\
+SGD-M & 7/12 & $8.86\!\times\!10^{-1}$ & $5.65\!\times\!10^{-5}$ & 0.3797\\
+Balance-only & 12/12 & $5.40\!\times\!10^{-5}$ & $1.91\!\times\!10^{-6}$ & 0.9994\\
+\rowcolor{oursbg}\textbf{QuotientOpt} & 12/12 & \cellcolor{oursgoodbg}\textbf{\boldmath $5.20\!\times\!10^{-5}$} & \cellcolor{oursgoodbg}\textbf{\boldmath $1.20\!\times\!10^{-14}$} & 0.9994\\
+\bottomrule
+\end{tabular}
+\end{table*}

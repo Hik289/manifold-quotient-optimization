@@ -1,0 +1,349 @@
+\section{Noise Covariance, Averaging, and Intrinsic Statistical Efficiency}
+\label{app:noise-averaging}
+\subsection{An exactly solvable stochastic tangent model}
+\begin{definition}
+In a $g_\star$-orthonormal tangent frame, let $\mathsf H\succ0$ and
+consider the quadratic model
+\begin{align}
+F(x)&=\tfrac12x^\top\mathsf Hx,\\
+m_{t+1}&=\beta m_t+(1-\beta)(\mathsf Hx_t+\zeta_t),\\
+x_{t+1}&=x_t-\eta m_{t+1},&
+\E\zeta_t&=0,&
+\E\zeta_t\zeta_t^\top&=\mathsf C .
+\label{eq:noise-linear-model}
+\end{align}
+The noise is IID and independent of the initial state, with finite
+second moment. Here $\eta,\beta$ are constant and satisfy
+Eq.~\eqref{eq:local-schur}. This model is the linearization of the
+stochastic quotient iteration, not an exact global representation
+of a nonlinear network loss.
+\end{definition}
+
+\begin{theorem}[Discrete Lyapunov covariance]
+\label{thm:noise-lyapunov}
+With $\alpha=\eta(1-\beta)$ and
+\begin{equation}
+\mathsf N=\begin{pmatrix}-\alpha I_D\\(1-\beta)I_D\end{pmatrix},
+\end{equation}
+the centered state covariance converges to the unique positive
+semidefinite solution
+\begin{align}
+\mathsf S&=\mathsf J\mathsf S\mathsf J^\top+
+\mathsf N\mathsf C\mathsf N^\top,\\
+\mathsf S&=\sum_{k=0}^\infty
+\mathsf J^k\mathsf N\mathsf C\mathsf N^\top(\mathsf J^k)^\top,\\
+\operatorname{vec}\mathsf S
+&=(I-\mathsf J\otimes\mathsf J)^{-1}
+\operatorname{vec}(\mathsf N\mathsf C\mathsf N^\top).
+\label{eq:noise-lyapunov}
+\end{align}
+\end{theorem}
+\begin{proof}
+For $s_t=(x_t,m_t)$,
+\begin{align}
+s_T&=\mathsf J^Ts_0+\sum_{t=0}^{T-1}
+\mathsf J^{T-1-t}\mathsf N\zeta_t,\\
+\operatorname{Cov}(s_T)
+&=\mathsf J^T\operatorname{Cov}(s_0)(\mathsf J^T)^\top
++\sum_{k=0}^{T-1}
+\mathsf J^k\mathsf N\mathsf C\mathsf N^\top(\mathsf J^k)^\top .
+\end{align}
+The initial term vanishes because $\rho(\mathsf J)<1$.
+Any difference of two stationary solutions satisfies
+$\Delta=\mathsf J^k\Delta(\mathsf J^k)^\top$ for all $k$, hence
+$\Delta=0$. Vectorization gives the final equation since
+$\rho(\mathsf J\otimes\mathsf J)=\rho(\mathsf J)^2<1$.
+\end{proof}
+
+\begin{theorem}[Exact modal variance and stationary excess risk]
+\label{thm:noise-modal-variance}
+Diagonalize $\mathsf H$ and put
+$\nu_i^2=e_i^\top\mathsf Ce_i$. At stationarity,
+\begin{align}
+\E x_i^2
+&=\frac{\eta(1+\beta)\nu_i^2}
+{\lambda_i\{2(1+\beta)-\eta(1-\beta)\lambda_i\}},\\
+\E m_i^2
+&=\frac{2(1-\beta)\nu_i^2}
+{2(1+\beta)-\eta(1-\beta)\lambda_i},\\
+\E[x_im_i]
+&=-\frac{(1-\beta)\lambda_i}{1+\beta}\E x_i^2,\\
+\E F(x)
+&=\frac{\eta}{2}\sum_{i=1}^D
+\frac{(1+\beta)\nu_i^2}
+{2(1+\beta)-\eta(1-\beta)\lambda_i}.
+\label{eq:noise-modal-variance}
+\end{align}
+The noise covariance need not commute with $\mathsf H$.
+\end{theorem}
+\begin{proof}
+Eliminate $m$ in a single mode:
+\begin{align}
+x_{t+1}&=a_ix_t-\beta x_{t-1}-\alpha\zeta_{t,i},&
+a_i&=1+\beta-\alpha\lambda_i .
+\end{align}
+Write $s_i=\E x_{t,i}^2$ and $c_i=\E[x_{t,i}x_{t-1,i}]$.
+Independence of the new noise gives
+\begin{align}
+c_i&=a_is_i-\beta c_i
+\Longrightarrow c_i=\frac{a_i}{1+\beta}s_i,\\
+s_i&=(a_i^2+\beta^2)s_i-2a_i\beta c_i+\alpha^2\nu_i^2,\\
+s_i\frac{1-\beta}{1+\beta}
+\{(1+\beta)^2-a_i^2\}&=\alpha^2\nu_i^2 .
+\end{align}
+Use
+\begin{equation}
+(1+\beta)^2-a_i^2
+=\alpha\lambda_i\{2(1+\beta)-\alpha\lambda_i\}
+\end{equation}
+and $\alpha=\eta(1-\beta)$ to obtain the first identity.
+Since $m_t=(x_{t-1}-x_t)/\eta$,
+\begin{align}
+\E m_{t,i}^2&=2(s_i-c_i)/\eta^2,&
+\E[x_{t,i}m_{t,i}]&=(c_i-s_i)/\eta .
+\end{align}
+Finally $F=\frac12\sum_i\lambda_i x_i^2$ uses only diagonal modal
+variances, regardless of cross-mode noise correlations.
+\end{proof}
+
+\begin{corollary}[The rate--variance distinction]
+For fixed $\beta<1$ and $\eta\downarrow0$,
+\begin{equation}
+\E F(x)
+=\frac{\eta}{4}\operatorname{tr}\mathsf C
++\frac{\eta^2(1-\beta)}{8(1+\beta)}
+\operatorname{tr}(\mathsf H\mathsf C)+O(\eta^3).
+\label{eq:noise-small-step}
+\end{equation}
+For any mode with $\nu_i^2>0$, its variance diverges as
+$\eta(1-\beta)\lambda_i\uparrow2(1+\beta)$.
+\end{corollary}
+\begin{proof}
+Expand each denominator in Eq.~\eqref{eq:noise-modal-variance} by
+$(1-u)^{-1}=1+u+O(u^2)$. The strict stability margin makes this
+expansion uniform over the finitely many modes.
+The divergence follows directly from the exact positive numerator.
+\end{proof}
+
+\subsection{Averaging removes the fixed-step modal variance inflation}
+\begin{theorem}[Exact boundary identity for the average]
+\label{thm:noise-average-boundary}
+For $\bar x_T=T^{-1}\sum_{t=0}^{T-1}x_t$ in
+Eq.~\eqref{eq:noise-linear-model},
+\begin{equation}
+\sqrt T\,\bar x_T
+=-\mathsf H^{-1}\frac1{\sqrt T}\sum_{t=0}^{T-1}\zeta_t
++\frac{\mathsf H^{-1}}{\sqrt T}
+\left\{\frac{x_0-x_T}{\eta}
++\frac{\beta}{1-\beta}(m_T-m_0)\right\}.
+\label{eq:noise-average-boundary}
+\end{equation}
+For square-integrable $s_0$,
+\begin{align}
+\sqrt T\,\bar x_T
+&\ \xrightarrow{\ d\ }\ 
+N(0,\mathsf H^{-1}\mathsf C\mathsf H^{-1}),\\
+T\,\E[\bar x_T\bar x_T^\top]
+&\longrightarrow\mathsf H^{-1}\mathsf C\mathsf H^{-1},\\
+T\,\E F(\bar x_T)&\longrightarrow
+\tfrac12\operatorname{tr}(\mathsf C\mathsf H^{-1}).
+\label{eq:noise-average-covariance}
+\end{align}
+\end{theorem}
+\begin{proof}
+Sum both update equations:
+\begin{align}
+\sum_{t<T}m_{t+1}&=(x_0-x_T)/\eta,\\
+(1-\beta)\mathsf H\sum_{t<T}x_t
+&=\sum_{t<T}(m_{t+1}-\beta m_t)
+-(1-\beta)\sum_{t<T}\zeta_t\\
+&=(1-\beta)\sum_{t<T}m_{t+1}
++\beta(m_T-m_0)-(1-\beta)\sum_{t<T}\zeta_t .
+\end{align}
+This proves the exact identity.
+Schur stability and the covariance series imply
+$\sup_T\E(\|x_T\|^2+\|m_T\|^2)<\infty$; the boundary term is
+therefore $O_{L^2}(T^{-1/2})$.
+The IID central limit theorem gives the distributional limit.
+The leading noise average has exactly covariance $\mathsf C$;
+Cauchy--Schwarz bounds its cross term with the boundary by
+$O(T^{-1/2})$. Taking the quadratic-risk trace proves the final claim.
+This is an averaging statement, not a claim that the unaveraged
+stationary covariance is independent of momentum.
+\end{proof}
+
+\subsection{A nonlinear quotient averaging theorem with declared moment stability}
+The next result gives the retraction and transport remainder
+calculation underlying stochastic averaging
+\cite{polyak1992averaging}.
+
+\begin{assumption}[Local stochastic approximation regime]
+\label{ass:noise-nonlinear}
+In one fixed regular chart around a population minimizer, let
+$\mathsf H=\nabla^2(R\circ\psi)(0)\succ0$,
+$0\leq\beta<1$ be fixed, and
+$\eta_t=c(t+1)^{-\gamma}$ with $1/2<\gamma<1$.
+The coordinate state satisfies
+\begin{align}
+m_{t+1}
+&=\beta m_t+(1-\beta)(\mathsf Hx_t+\zeta_{t+1})+r^m_{t+1},\\
+x_{t+1}&=x_t-\eta_tm_{t+1}+r^x_{t+1},\\
+\E_t\zeta_{t+1}&=0,&
+\frac1T\sum_{t<T}\E_t[\zeta_{t+1}\zeta_{t+1}^\top]
+&\xrightarrow{\ p\ }\mathsf C,\\
+\sup_t\E\|\zeta_{t+1}\|^{2+\delta}&<\infty
+\quad\text{for some }\delta>0,\\
+\E\|x_t\|^2&\leq C\eta_t,&
+\sup_t\E\|m_t\|^2&\leq C,\\
+\E\|r^m_{t+1}\|&\leq C\eta_t,&
+\E\|r^x_{t+1}\|&\leq C\eta_t^2 .
+\label{eq:noise-nonlinear-premises}
+\end{align}
+Iterates stay in the regular chart, or a localization event with
+probability tending to one is used. The displayed last-iterate
+moment stability is a premise; it is stronger than an averaged
+stationarity estimate.
+\end{assumption}
+
+\begin{proposition}[Where the geometric remainders enter]
+For the exact quotient iteration, the last two remainder bounds in
+Eq.~\eqref{eq:noise-nonlinear-premises} follow locally from the
+displayed moment bounds if the gradient has a quadratic Taylor
+remainder, retraction and transport have bounded local derivatives,
+and the pre-transport direction has uniformly bounded second moment.
+\end{proposition}
+\begin{proof}
+For constants uniform on the chart,
+\begin{align}
+g(x)&=\mathsf Hx+\mathcal R_g(x),&
+\|\mathcal R_g(x)\|&\leq C_g\|x\|^2,\\
+[\operatorname{Retr}_X(-\eta v)]_\psi
+&=x-\eta v+\mathcal R_R(x,v,\eta),&
+\|\mathcal R_R\|&\leq C_R\eta^2\|v\|^2,\\
+[\mathcal T_{X,X^+}]_{E(X),E(X^+)}
+&=I+\mathcal R_T,&
+\|\mathcal R_T\|_{\rm op}&\leq C_T\eta\|v\| .
+\end{align}
+With $\widetilde m=\beta m+(1-\beta)(g(x)+\zeta)$ and
+$m^+=\mathcal T\widetilde m$,
+\begin{align}
+r^m&=(1-\beta)\mathcal R_g(x)+
+\mathcal R_T\widetilde m,\\
+r^x&=\mathcal R_R+\eta(m^+-\widetilde m).
+\end{align}
+Cauchy--Schwarz, $\E\|x\|^2=O(\eta)$, and the second-moment
+bounds give $\E\|r^m\|=O(\eta)$ and
+$\E\|r^x\|=O(\eta^2)$. All frame and transport corrections are
+retained in these remainders.
+\end{proof}
+
+\begin{theorem}[Asymptotic linearity of averaged quotient iterates]
+\label{thm:noise-nonlinear-average}
+Under Assumption~\ref{ass:noise-nonlinear},
+\begin{align}
+\sqrt T\,\bar x_T
+&=-\mathsf H^{-1}\frac1{\sqrt T}
+\sum_{t<T}\zeta_{t+1}+o_p(1),\\
+\sqrt T\,\bar x_T
+&\xrightarrow{\ d\ }
+N(0,\mathsf H^{-1}\mathsf C\mathsf H^{-1}).
+\label{eq:noise-nonlinear-average}
+\end{align}
+If, in addition, $\sup_T\E\|\sqrt T\bar x_T\|^{2+\delta}<\infty$
+and the population Taylor remainder is
+$O(\|x\|^{2+\delta})$ for some $0<\delta\leq1$, then
+\begin{equation}
+T\,\E[R(\psi(\bar x_T))-R(X_\star)]
+\longrightarrow\tfrac12\operatorname{tr}(\mathsf C\mathsf H^{-1}).
+\label{eq:noise-nonlinear-risk}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Eliminate $m_{t+1}$ in the two recursions and sum:
+\begin{align}
+\mathsf H\sum_{t<T}x_t
+&=-\sum_{t<T}\zeta_{t+1}
++\sum_{t<T}\frac{x_t-x_{t+1}}{\eta_t}
++\frac{\beta}{1-\beta}(m_T-m_0)\notag\\
+&\quad+\sum_{t<T}\frac{r^x_{t+1}}{\eta_t}
+-\frac1{1-\beta}\sum_{t<T}r^m_{t+1}.
+\label{eq:noise-abel-identity}
+\end{align}
+Abel summation gives the exact boundary expansion
+\begin{align}
+\sum_{t<T}\frac{x_t-x_{t+1}}{\eta_t}
+&=\frac{x_0}{\eta_0}-\frac{x_T}{\eta_{T-1}}
++\sum_{t=1}^{T-1}x_t
+\left(\frac1{\eta_t}-\frac1{\eta_{t-1}}\right),\\
+\E\left\|\sum_{t<T}\frac{x_t-x_{t+1}}{\eta_t}\right\|
+&\leq C(1+T^{\gamma/2}),\\
+\E\sum_{t<T}
+\left(\|r^x_{t+1}\|/\eta_t+\|r^m_{t+1}\|\right)
+&\leq C\sum_{t<T}\eta_t=O(T^{1-\gamma}).
+\end{align}
+After division by $\sqrt T$, these errors are
+$O(T^{(\gamma-1)/2}+T^{1/2-\gamma})=o(1)$.
+The moment bound also makes the momentum endpoint term $o_{L^1}(1)$.
+Uniform $(2+\delta)$ moments give the conditional Lindeberg condition:
+\begin{equation}
+\frac1T\sum_{t<T}\E_t\left[
+\|\zeta_{t+1}\|^2\mathbf1_{\{\|\zeta_{t+1}\|>\epsilon\sqrt T\}}
+\right]\xrightarrow{\ p\ }0 .
+\end{equation}
+The martingale central limit theorem and the conditional covariance
+premise prove the Gaussian limit. For the final claim, uniform
+$(2+\delta)$ moments allow passage of quadratic expectations, while
+\begin{equation}
+T\,\E\|\bar x_T\|^{2+\delta}
+=T^{-\delta/2}\E\|\sqrt T\bar x_T\|^{2+\delta}\to0 .
+\end{equation}
+Expand the population risk to second order.
+\end{proof}
+
+\begin{corollary}[An implementable rank-preserving average]
+Let $\bar Y_T=T^{-1}\sum_{t<T}X_t$ and let
+$\Pi_r(\bar Y_T)$ be its best rank-$r$ Frobenius approximation.
+Under the preceding assumptions,
+\begin{equation}
+\sqrt T\{\Pi_r(\bar Y_T)-\psi(\bar x_T)\}\xrightarrow{\ p\ }0 .
+\label{eq:noise-rank-average}
+\end{equation}
+Thus its first-order product-space Gaussian limit is the same.
+\end{corollary}
+\begin{proof}
+Near a regular $X_\star$, the spectral gap
+$\sigma_r(X_\star)>0=\sigma_{r+1}(X_\star)$ gives a smooth local
+nearest-rank projection, with
+\begin{equation}
+\Pi_r(X_\star+E)=X_\star+P_{X_\star}E+O(\|E\|_F^2).
+\end{equation}
+No distinctness of the positive singular values is required.
+For $J=D\psi(0)$,
+\begin{align}
+X_t&=X_\star+Jx_t+O(\|x_t\|^2),\\
+\bar Y_T&=X_\star+J\bar x_T+
+O_p\!\left(T^{-1}\sum_{t<T}\eta_t\right)
+=X_\star+J\bar x_T+O_p(T^{-\gamma}).
+\end{align}
+Since $P_{X_\star}J=J$, the difference in the claim is
+$O_p(T^{-\gamma}+\|\bar x_T\|^2)$, which is $o_p(T^{-1/2})$.
+\end{proof}
+
+\begin{proposition}[Coordinate and gauge invariance of statistical efficiency]
+For $y=Tx+O(\|x\|^2)$ with invertible $T$,
+\begin{align}
+\mathsf H_y&=T^{-\top}\mathsf H_xT^{-1},&
+\mathsf C_y&=T^{-\top}\mathsf C_xT^{-1},\\
+\mathsf H_y^{-1}\mathsf C_y\mathsf H_y^{-1}
+&=T(\mathsf H_x^{-1}\mathsf C_x\mathsf H_x^{-1})T^\top,\\
+\operatorname{tr}(\mathsf C_y\mathsf H_y^{-1})
+&=\operatorname{tr}(\mathsf C_x\mathsf H_x^{-1}).
+\end{align}
+\end{proposition}
+\begin{proof}
+At a stationary population point, Hessians transform by congruence;
+per-example gradients transform as covectors. Apply the chain rule
+and the cyclic trace identity. Gauge representatives induce the
+same quotient estimator and therefore the same scalar efficiency
+constant.
+\end{proof}

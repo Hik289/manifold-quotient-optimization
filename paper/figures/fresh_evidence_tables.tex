@@ -1,0 +1,28 @@
+\begin{table}[t]
+\centering\small
+\caption{Fresh completed rank-one sensing gauge stress: 12 prescribed gauges per method, 1000 updates each, seed 42. $\Delta_T=\|X_T^{(Q)}-X_T^{(I)}\|_F/\|X_*\|_F$; the maximum uses completed runs, and failed attempts are counted explicitly. $\bar\rho_{\rm upd}$ averages the measured update-direction vertical-energy ratio. Identity error is the final reconstruction error without a gauge perturbation.}
+\label{tab:fresh-gauge}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrr}
+\toprule Method & Finished/12 & Max.\ $\Delta_T$ & $\bar\rho_{\rm upd}$ & Identity error\\\midrule
+AdamW & 12/12 & $1.07\!\times\!10^{0}$ & $1.35\!\times\!10^{-1}$ & 0.0460\\
+SGD-M & 7/12 & $8.86\!\times\!10^{-1}$ & $5.65\!\times\!10^{-5}$ & 0.3797\\
+Balance-only & 12/12 & $5.40\!\times\!10^{-5}$ & $1.91\!\times\!10^{-6}$ & 0.9994\\
+\rowcolor{oursbg}QuotientOpt & 12/12 & $5.20\!\times\!10^{-5}$ & $1.20\!\times\!10^{-14}$ & 0.9994\\
+\bottomrule
+\end{tabular}
+\end{table}
+\begin{table}[t]
+\centering\small
+\caption{Cora/GCN input adapter, rank 4, seed 42: the complete seven-learning-rate block at $\beta=0.9$, with 1000 epochs per run. Each run uses its earliest maximum-validation-accuracy checkpoint; each method then selects its learning rate by validation accuracy, breaking ties by smaller learning rate. Test metrics do not enter either selection rule; the final 1000-epoch metric is also shown.}
+\label{tab:fresh-cora}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrr}
+\toprule Method & LR & Epoch & Val.\ (\%) & Test sel.\ (\%) & Test 1000 (\%)\\\midrule
+AdamW & $10^{-2}$ & 25 & 67.2 & 67.6 & 66.5\\
+SGD-M & $10^{-2}$ & 56 & 74.2 & 74.0 & 73.0\\
+Balance-only & $10^{-2}$ & 67 & 73.0 & 72.0 & 69.8\\
+\rowcolor{oursbg}QuotientOpt & $10^{-2}$ & 67 & 73.0 & 71.9 & 69.8\\
+\bottomrule
+\end{tabular}
+\end{table}

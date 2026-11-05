@@ -1,0 +1,16 @@
+\begin{table}[t]
+\centering\small
+\setlength{\tabcolsep}{3pt}
+\caption{\textbf{Frozen Poisson/PINN initialization check.} Validation-MSE-selected held-out relative $L_2$ error, rank 16, 2000 epochs, learning rate $10^{-3}$. Data and shuffle seed are fixed at 42; columns vary only model initialization. Mean $\pm$ sample SD is conditional on that fixed data. All four methods use the same frozen settings.}
+\label{tab:poisson-initializations}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Method & 42 & 43 & 44 & Mean $\pm$ SD\\
+\midrule
+AdamW & 0.06143 & 0.05875 & 0.06472 & 0.06163 $\pm$ 0.00299\\
+SGD-M & 0.07777 & 0.06438 & 0.07450 & 0.07221 $\pm$ 0.00698\\
+Balance-only & 0.05022 & 0.04655 & 0.05255 & 0.04977 $\pm$ 0.00302\\
+\rowcolor{oursbg}\textbf{QuotientOpt} & 0.04994 & 0.04663 & 0.05255 & \cellcolor{oursgoodbg}\textbf{\boldmath 0.04971 $\pm$ 0.00297}\\
+\bottomrule
+\end{tabular}
+\end{table}

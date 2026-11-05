@@ -1,0 +1,52 @@
+\section{Numerical Verification of the Geometric Identities}
+A separate seed-42 numerical check uses balanced factors of shape $7\times3$ and $3\times6$ with nonzero product spectrum $(2,.7,.2)$. It verifies identities rather than treating a small residual as a task-performance result. In double precision the horizontal residual is $8.00\times10^{-16}$, differential-preservation error $6.16\times10^{-16}$, full mixed-term finite-step identity error $2.17\times10^{-16}$, and damped residual identity error $1.06\times10^{-15}$. The full-observation Hessian at an exact solution has nine gauge zero eigenvalues, matching $r^2=9$. Its positive spectrum agrees with the block spectrum of $\mathcal K_X$ within $2.22\times10^{-15}$.
+
+A single-precision forward check of a product-only sine layer changes the output by at most $7.59\times10^{-6}$ after balancing, consistent with floating-point product reconstruction. This checks that balancing preserves the architecture's function; it does not claim an improvement in fitting quality. A fresh backward pass after the section change has horizontal residual $5.49\times10^{-10}$. The script, shapes, thresholds, and measured values are retained in the geometry-check artifact. All checks pass their declared tolerances. These controlled checks accompany the analytic proofs and are distinct from the complete task-family runs.
+
+The extended calculus has a separate float64 check with seed 918,
+$(m,d,r)=(5,4,2)$ and spectrum $(3.2,.7)$. Central differences use
+step $10^{-5}$ along an exactly rank-preserving Schur-chart curve.
+The measured identities are
+\begin{align}
+\frac{\|D_{\rm FD}K-DK\|}{\|DK\|}&=1.03\times10^{-10},&
+\frac{\|D_{\rm FD}K^\dagger-DK^\dagger\|}{\|DK^\dagger\|}
+&=1.51\times10^{-10},\\
+\|D_{\rm FD}P[Z]Y-DP[Z]Y\|_F&=5.96\times10^{-11},&
+\|\nabla^g_{\dot\gamma}\dot\gamma(0)\|_F&=2.54\times10^{-15},\\
+|g(\qHess_g f[Z],Y)-{\rm Hess}_g f[Z,Y]|
+&=6.63\times10^{-15}.
+\end{align}
+For canonical rank-three chains of depths $2,3,5,9$,
+\begin{align}
+\max_L\|\operatorname{eig}(\mathcal N_W)
+-\operatorname{sort}(\lambda_{abk})\|_\infty
+&=7.99\times10^{-15},\\
+\max_L\frac{\|\mathcal N_W\Omega_{\rm DST}-F\|_F}{\|F\|_F}
+&=1.24\times10^{-15}.
+\end{align}
+These are consistency checks of analytic identities, not substitutes
+for their proofs or for task-family experiments.
+
+The refined local theory has an additional float64 check with seed
+11903. A nonzero ambient normal residual is retained so that the
+quotient Hessian differs from the zero-residual product preconditioner.
+The measured errors are
+\begin{align}
+\|D_{\rm FD}\mathscr U-D\mathscr U\|/
+\|D\mathscr U\|&\leq6.12\times10^{-11},\\
+\|\operatorname{eig}(\qHess_g f)
+-\operatorname{sort}\{\sigma_i+\sigma_j,\sigma_i\pm\tau_k,\sigma_i\}\|
+&=2.90\times10^{-15},\\
+\|\mathsf J^\top\mathsf P\mathsf J-\mathsf P+I\|_F
+&=4.78\times10^{-16}.
+\end{align}
+The Jacobian check includes exact projection, positive damping, and
+balance-only state updates. The stationary modal position and momentum
+variance formulas agree with the full discrete Lyapunov solve within
+$1.01\times10^{-16}$; the exact averaging boundary identity has error
+$5.07\times10^{-15}$. The identifiable Fisher covariance has trace
+$14$ under both a balanced factor pair and a nonorthogonal gauge, with
+product-projector error at most $2.74\times10^{-14}$.
+A separate strict-saddle example verifies the complete residual-gap
+spectrum within $1.38\times10^{-15}$ and has exactly one negative mode,
+as predicted.

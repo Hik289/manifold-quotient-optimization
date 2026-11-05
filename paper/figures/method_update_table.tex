@@ -1,0 +1,19 @@
+\begin{table*}[t]
+\centering\small
+\renewcommand{\arraystretch}{1.22}\setlength{\tabcolsep}{5pt}
+\caption{\textbf{QuotientOpt update, in execution order.} $X_t=B_tA_t$, $G_t=\nabla f_{I_t}(X_t)$, $\beta\in[0,1)$, $\eta_t>0$. Exact horizontal projection uses $\varepsilon=0$; the implemented regularized solve has residual $2\varepsilon\Omega_t$. Balance-only retains stages 1--4 and 6 with $M_t=U_t$.}
+\label{tab:method-update}
+\begin{tabularx}{\linewidth}{@{}clX@{}}
+\toprule
+Step & Operation & Update / invariant \\
+\midrule
+1 & Balance & $(\bar B_t,\bar A_t)=(B_tQ_t,Q_t^{-1}A_t)$; $\bar B_t^\top\bar B_t=\bar A_t\bar A_t^\top=H_t$.\\
+2 & Transport memory & $(\widetilde M_B,\widetilde M_A)=(M_{B,t-1}Q_t,Q_t^{-1}M_{A,t-1})$.\\
+3 & Differentiate & $(g_B,g_A)=(G_t\bar A_t^\top,\bar B_t^\top G_t)$; $\bar B_t^\top g_B-g_A\bar A_t^\top=0$.\\
+4 & Accumulate & $(U_B,U_A)=\beta(\widetilde M_B,\widetilde M_A)+(1-\beta)(g_B,g_A)$.\\
+\rowcolor{oursbg}
+5 & \textbf{Horizontal memory} & $(H_t+\varepsilon I)\Omega_t+\Omega_t(H_t+\varepsilon I)=\bar B_t^\top U_B-U_A\bar A_t^\top$;\newline $(M_B,M_A)=(U_B-\bar B_t\Omega_t,U_A+\Omega_t\bar A_t)$.\\
+6 & Factor step & $(B_{t+1},A_{t+1})=(\bar B_t-\eta_tM_B,\bar A_t-\eta_tM_A)$.\\
+\bottomrule
+\end{tabularx}
+\end{table*}

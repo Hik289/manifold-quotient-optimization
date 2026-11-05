@@ -1,0 +1,504 @@
+\section{Generalization: Stability, Capacity, and Optimization Error}
+\label{app:generalization}
+
+Generalization is a statement about the represented predictor and the data
+distribution. It cannot be deduced from a small vertical-energy statistic.
+We give two complementary analyses. Algorithmic stability controls the
+sensitivity of the actual training procedure to one changed example.
+Capacity bounds control a specified class of products, independently of the
+training procedure. The former needs update-map regularity, including state;
+the latter needs explicit bounds on the represented weights. Balanced factor
+norms make these statements invariant to the arbitrary $\mathrm{GL}(r)$
+coordinates, but balancing alone does not impose either assumption.
+
+\subsection{Statistical setting and loss sensitivity}
+Let $S=(z_1,\ldots,z_n)$ be independent samples from a distribution
+$\mathcal D$. For a product parameter $X$ define
+\begin{equation}
+ R(X)=\mathbb E_{z\sim\mathcal D}\ell(X;z),\qquad
+ R_S(X)=\frac1n\sum_{i=1}^n\ell(X;z_i).
+\end{equation}
+Unless otherwise indicated, assume $0\leq\ell\leq1$ and
+\begin{equation}
+ |\ell(X;z)-\ell(Y;z)|\leq L_\ell\|X-Y\|.
+ \label{eq:loss-product-lipschitz}
+\end{equation}
+Squared loss or cross-entropy is not globally bounded without restricting
+outputs or the parameter domain; the bounded-loss theorems apply to a
+bounded or clipped loss, or to a domain on which an explicit bound is
+available. Replacing the unit range by $[0,M]$ multiplies the concentration
+terms by $M$.
+
+\begin{lemma}[Product sensitivity along the quotient]
+\label{lem:product-sensitive}
+If a connecting quotient path lies in $\mathcal K_{a,b}$, then
+\begin{equation}
+ \|X-Y\|\leq\sqrt{2b}\,d_g(X,Y),
+ \quad |\ell(X;z)-\ell(Y;z)|
+       \leq L_\ell\sqrt{2b}\,d_g(X,Y),
+ \label{eq:loss-quotient-lipschitz}
+\end{equation}
+where $d_g$ is the infimum of lengths of such admissible connecting paths.
+\end{lemma}
+\begin{proof}
+For every path $\gamma$, Eq.~\eqref{eq:metric-equivalence} implies
+$\|\dot\gamma\|\leq\sqrt{2b}\|\dot\gamma\|_g$.
+Integrate and use $\|X-Y\|\leq\int\|\dot\gamma\|$; take the infimum
+over paths. Apply Eq.~\eqref{eq:loss-product-lipschitz} for the loss bound.
+\end{proof}
+
+This is a product/quotient comparison on a spectral band. Comparing
+$\|B-B'\|+\|A-A'\|$ without aligning or quotienting the gauge has no
+such meaning: equivalent predictors can have arbitrarily distant factors.
+
+\subsection{Uniform stability of the actual update map}
+Consider two datasets differing only at index $j$, trained with the same
+initial quotient state and the same random sample indices $I_t$. Write
+$s_t$ for the full algorithmic state, including momentum or adaptive
+statistics when present. Let $d_*(s,s')$ be a metric that dominates
+$d_g(X,X')$. A first-order gradient method can use $s=X$ and $d_*=d_g$.
+
+\begin{assumption}[State-map regularity for stability]
+\label{ass:state-stability}
+For a common example $z$, the actual state update $U_{t,z}$ obeys
+\begin{equation}
+ d_*(U_{t,z}s,U_{t,z}s')\leq(1+L_U\eta_t)d_*(s,s').
+ \label{eq:update-lipschitz}
+\end{equation}
+Changing the example at the same state obeys
+\begin{equation}
+ d_*(U_{t,z}s,U_{t,z'}s)\leq2C_U\eta_t.
+ \label{eq:sample-injection}
+\end{equation}
+The output loss is $C_\ell$-Lipschitz in this metric, uniformly in $z$.
+For a pure quotient parameter, Lemma~\ref{lem:product-sensitive} permits
+$C_\ell=L_\ell\sqrt{2b}$. These inequalities are assumptions on the
+implemented update. They do not follow from loss smoothness alone for an
+arbitrary optimizer with state.
+\end{assumption}
+
+\begin{theorem}[Nonconvex quotient-state stability]
+\label{thm:stability}
+Under Assumption~\ref{ass:state-stability}, one-example stochastic
+sampling with $I_t$ uniform on $\{1,\ldots,n\}$ gives
+\begin{align}
+ \mathbb E d_*(s_T,s_T')
+ &\leq\frac{2C_U}{n}\sum_{t<T}\eta_t
+                  \prod_{k=t+1}^{T-1}(1+L_U\eta_k),
+ \label{eq:stability-distance}\\
+ \epsilon_{\rm stab}
+ &\leq\frac{2C_\ell C_U}{n}\sum_{t<T}\eta_t
+                  \prod_{k=t+1}^{T-1}(1+L_U\eta_k).
+ \label{eq:stability-loss}
+\end{align}
+Here the supremum is over adjacent datasets and test examples, and the
+expectation is over the common training randomness. In particular,
+\begin{equation}
+ \epsilon_{\rm stab}\leq\frac{2C_\ell C_U}{n}
+    \exp\left(L_U\sum_{t<T}\eta_t\right)\sum_{t<T}\eta_t.
+ \label{eq:nonconvex-stability-exp}
+\end{equation}
+The expected generalization gap satisfies
+$|\mathbb E[R(X_T)-R_S(X_T)]|\leq\epsilon_{\rm stab}$.
+\end{theorem}
+\begin{proof}
+If $I_t\ne j$, both updates use the same example, so
+Eq.~\eqref{eq:update-lipschitz} applies directly. If $I_t=j$, insert an
+intermediate update using the first dataset's example at $s_t'$.
+The triangle inequality gives
+\begin{equation}
+ d_*(s_{t+1},s_{t+1}')\leq
+ (1+L_U\eta_t)d_*(s_t,s_t')+2C_U\eta_t.
+\end{equation}
+The event has probability $1/n$. Conditional expectation therefore yields
+\begin{equation}
+ \mathbb E_t d_*(s_{t+1},s_{t+1}')\leq
+ (1+L_U\eta_t)d_*(s_t,s_t')+2C_U\eta_t/n.
+\end{equation}
+Unrolling from zero initial distance proves
+Eq.~\eqref{eq:stability-distance}. Loss Lipschitzness proves
+Eq.~\eqref{eq:stability-loss}, and $1+x\leq e^x$ proves the simpler
+exponential bound.
+
+For completeness, take an independent replacement $z_i'$ for each $z_i$
+and let $S^{(i)}$ be the dataset with only that replacement. Exchangeability
+gives
+\begin{align}
+ \mathbb E[R(X_T(S))-R_S(X_T(S))]
+ =\frac1n\sum_i\mathbb E\big[
+ \ell(X_T(S^{(i)});z_i)-\ell(X_T(S);z_i)\big].
+\end{align}
+Each summand is bounded in absolute value by the uniform stability
+estimate. This is the replace-one argument for stability-based
+generalization \cite{bousquet2002stability,hardt2016train}.
+\end{proof}
+
+The exponential factor in Eq.~\eqref{eq:nonconvex-stability-exp} is
+necessary in this general nonconvex argument. A claim of only
+$O(\sum_t\eta_t/n)$ needs a nonexpansive update, convexity-like structure,
+or another argument that controls expansion. Quotienting does not remove
+all expansive directions of the task loss.
+
+\begin{corollary}[Contractive stability ceiling]
+\label{cor:contractive-stability}
+If common-example updates instead contract with factor $1-\mu_U\eta$
+at a constant step and the same sample-injection bound holds, then
+\begin{equation}
+ \epsilon_{\rm stab}\leq
+ \frac{2C_\ell C_U}{\mu_Un}
+       \{1-(1-\mu_U\eta)^T\}
+ \leq\frac{2C_\ell C_U}{\mu_Un}.
+ \label{eq:contractive-stability}
+\end{equation}
+\end{corollary}
+\begin{proof}
+Replace the multiplier in the preceding recursion by
+$1-\mu_U\eta$ and sum the resulting geometric series.
+\end{proof}
+
+The contraction in this corollary concerns the stochastic per-example state
+map. A PL inequality for the average training objective is not enough to
+establish it. Proposition~\ref{prop:convex-counterexample} already shows
+why even ambient product convexity can fail to imply the required
+contraction for a factor-induced update.
+
+\subsection{Why momentum requires a state metric}
+To see the role of optimizer state explicitly, first consider a flat chart
+with an exact transported identification and a constant step. For
+$v^+=\beta v+(1-\beta)\nabla\ell_z(x)$, $x^+=x-\eta v^+$,
+assume gradients have norm at most $G$ and are $L$-Lipschitz. Then
+\begin{align}
+ \delta_v^+&\leq\beta\delta_v+(1-\beta)L\delta_x,\\
+ \delta_x^+&\leq\delta_x+\eta\delta_v^+.
+\end{align}
+For $0<\beta<1$, define the weighted state distance
+\begin{equation}
+ D=\delta_x+\frac{\eta\beta}{1-\beta}\delta_v.
+ \label{eq:momentum-state-metric}
+\end{equation}
+Multiplication and collection of coefficients give
+\begin{equation}
+ D^+\leq(1+\eta L)D.
+ \label{eq:momentum-state-lipschitz}
+\end{equation}
+Changing a single sampled gradient contributes at most $2\eta G$ to $D^+$:
+the velocity injection is $2(1-\beta)G$ and its combined coefficient is
+$\eta+\eta\beta/(1-\beta)=\eta/(1-\beta)$.
+Thus Theorem~\ref{thm:stability} applies in this flat model with
+$C_U=G$, rather than ignoring the velocity state.
+
+On the quotient manifold one must add the sensitivity of the retraction,
+the dependence of tangent identification on the base point, and the
+transported-state norm. Smoothness on a compact regular chart makes the
+associated constants finite, but they can depend on $a^{-1}$, the velocity
+bound, and $\beta$. The appropriate statement is
+Assumption~\ref{ass:state-stability} with these constants included.
+For a time-varying stepsize the weight in
+Eq.~\eqref{eq:momentum-state-metric} also changes; its change must be
+controlled instead of reusing the constant-step calculation verbatim.
+For Adam, the state additionally contains the elementwise second moment
+and the regularizing denominator. A quotient stability theorem for that
+state requires its own coordinate-consistent update definition.
+
+\subsection{Function-space capacity from a nuclear-norm budget}
+We next give a result that does not depend on the algorithm. Let a scalar
+linear prediction use a matrix feature $Z(z)$ and product $X$:
+$h_X(z)=\langle X,Z(z)\rangle$. Suppose
+$\|Z(z)\|\leq R_Z$ and consider $\mathcal X_\tau=\{X:\|X\|_*\leq\tau\}$.
+The frozen base matrix contributes only a fixed offset and does not affect
+the centered Rademacher complexity.
+
+\begin{theorem}[Gauge-invariant nuclear-norm generalization]
+\label{thm:nuclear-generalization}
+For the scalar predictor class just defined, its empirical Rademacher
+complexity obeys
+\begin{equation}
+ \widehat{\mathfrak R}_n(\mathcal H_\tau)
+ =\frac{\tau}{n}\mathbb E_\epsilon
+       \left\|\sum_{i=1}^n\epsilon_i Z(z_i)\right\|_2
+ \leq\frac{\tau R_Z}{\sqrt n}.
+ \label{eq:nuclear-rademacher}
+\end{equation}
+If $\ell(h;z)\in[0,1]$ is $L_h$-Lipschitz in its scalar prediction,
+then with probability at least $1-\delta$, simultaneously for this class,
+\begin{equation}
+ R(X)\leq R_S(X)+\frac{2L_h\tau R_Z}{\sqrt n}
+                   +3\sqrt{\frac{\log(2/\delta)}{2n}}.
+ \label{eq:nuclear-gen}
+\end{equation}
+For balanced factors, the budget is exactly
+$\tau\geq\tfrac12(\|B\|^2+\|A\|^2)=\|X\|_*$.
+For rank at most $r$ and $\|X\|_2\leq b$, one may take $\tau=rb$.
+\end{theorem}
+\begin{proof}
+The dual norm of the nuclear norm is the spectral norm. Taking the
+supremum over $\|X\|_*\leq\tau$ inside the Rademacher definition gives
+the equality in Eq.~\eqref{eq:nuclear-rademacher}. The spectral norm is
+at most the Frobenius norm, and Jensen's inequality and independence of
+the signs give
+\begin{equation}
+ \mathbb E_\epsilon\left\|\sum_i\epsilon_i Z_i\right\|_2
+ \leq\left(\mathbb E_\epsilon\left\|\sum_i\epsilon_i Z_i\right\|^2\right)^{1/2}
+ =\left(\sum_i\|Z_i\|^2\right)^{1/2}\leq R_Z\sqrt n.
+\end{equation}
+The scalar contraction inequality bounds the loss complexity by $L_h$
+times predictor complexity; centering the loss by its value at the fixed
+zero predictor leaves that bound unchanged. The standard empirical
+Rademacher uniform-deviation inequality for bounded losses gives
+Eq.~\eqref{eq:nuclear-gen} \cite{bartlett2002rademacher}.
+The factor identity is Theorem~\ref{thm:balanced-optimal}; the rank/spectral
+bound follows by summing at most $r$ singular values each at most $b$.
+\end{proof}
+
+The capacity depends on the product budget, not on the energy of an
+arbitrarily rescaled representative. Conversely, balancing a product with
+a large nuclear norm does not shrink that nuclear norm. Therefore this
+theorem does not establish a smaller function class for balance-only than
+for an unbalanced method reaching exactly the same products.
+
+\subsection{Intrinsic-dimension bounds in regular charts}
+To expose the quotient dimension more directly, let
+$\Psi_j:\Theta_j\subset\mathbb R^{D}\to\mathcal M_r$,
+$D=r(m+d-r)$, be a finite atlas covering a compact product class
+$\mathcal C$. Suppose each $\Theta_j$ lies in a Euclidean ball of radius
+$R_j$ and
+\begin{equation}
+ \|\Psi_j(\theta)-\Psi_j(\theta')\|\leq C_j\|\theta-\theta'\|.
+ \label{eq:chart-lipschitz}
+\end{equation}
+Such bounds exist after refining charts on a compact regular class;
+their sizes and number can deteriorate when the class approaches a rank
+boundary. Let $J$ be the number of charts, $C=\max C_j$, and
+$R_\Theta=\max R_j$.
+
+\begin{theorem}[Local quotient dimension in a uniform bound]
+\label{thm:chart-generalization}
+Under Eq.~\eqref{eq:loss-product-lipschitz}, for every $\varepsilon>0$,
+with probability at least $1-\delta$,
+\begin{equation}
+ \sup_{X\in\mathcal C}|R(X)-R_S(X)|
+ \leq2L_\ell\varepsilon+
+ \sqrt{\frac{\log(2J/\delta)+
+ D\log(1+2CR_\Theta/\varepsilon)}{2n}}.
+ \label{eq:chart-generalization}
+\end{equation}
+\end{theorem}
+\begin{proof}
+A bounded subset of a $D$-dimensional radius-$R_\Theta$ Euclidean ball
+has an $\varepsilon/C$ net with at most
+$(1+2CR_\Theta/\varepsilon)^D$ elements, by the disjoint-ball volume
+argument. Choose the centers within the chart domain. Mapping these nets
+through Eq.~\eqref{eq:chart-lipschitz} gives an $\varepsilon$ net for
+$\mathcal C$ with at most $J(1+2CR_\Theta/\varepsilon)^D$ elements.
+Hoeffding's inequality and a union bound control the absolute
+population--empirical difference on this finite net by the square-root
+term. Approximating an arbitrary predictor by a net point changes both
+its population and empirical losses by at most $L_\ell\varepsilon$,
+which proves Eq.~\eqref{eq:chart-generalization}.
+\end{proof}
+
+This bound removes the $r^2$ redundant coordinates in the dimension of a
+regular local parametrization, with explicit chart constants rather than
+a claim that geometry provides $r^2$ fewer statistical samples for free.
+A coarse global factor-based covering bound can use a larger exponent
+and different constants; comparing those two upper bounds alone does not
+prove a statistical advantage of one optimizer.
+
+\subsection{Multilayer networks and spectral propagation}
+Consider a depth-$H$ feed-forward predictor with weights
+\begin{equation}
+ W_l=W_{0,l}+c_lX_l,\qquad\operatorname{rank}X_l=r_l,
+ \quad\|X_l\|_2\leq b_l,
+\end{equation}
+and fixed biases, or biases included in the parameter covers below.
+Assume the activations are one-Lipschitz and map zero to zero, and
+$\|x\|_2\leq R_x$. Define
+\begin{equation}
+ s_l=\|W_{0,l}\|_2+|c_l|b_l,
+ \qquad A_l=R_x|c_l|\prod_{j\ne l}s_j.
+ \label{eq:network-spectral-constants}
+\end{equation}
+For activations with Lipschitz constants $\rho_l$, insert the corresponding
+products of $\rho_l$ in these constants. In particular a frequency-scaled
+sine activation cannot be silently treated as one-Lipschitz.
+
+\begin{lemma}[Telescoping sensitivity of a product-parametrized network]
+\label{lem:network-sensitivity}
+For two networks in the stated class with the same frozen weights,
+\begin{equation}
+ \|h_X(x)-h_Y(x)\|_2
+       \leq\sum_{l=1}^H A_l\|X_l-Y_l\|_2.
+ \label{eq:network-telescope}
+\end{equation}
+If a layer also multiplies a fixed propagation operator $P_l$, its spectral
+norm contributes a factor $\|P_l\|_2$ in the appropriate propagation
+products. Symmetric degree-normalized adjacency with self-loops has
+spectral norm at most one, so it does not enlarge those products.
+\end{lemma}
+\begin{proof}
+Replace the layers one at a time and telescope the output differences.
+Before layer $l$, the input norm is at most
+$R_x\prod_{j<l}s_j$. The weight replacement changes that layer's
+preactivation by at most $|c_l|\|X_l-Y_l\|_2$ times the input norm.
+The remaining layers amplify it by at most $\prod_{j>l}s_j$ because
+each activation is one-Lipschitz. Sum over $l$. Fixed propagation
+operators are bounded by submultiplicativity. The normalized adjacency
+is similar to a stochastic matrix and is symmetric, so all its
+eigenvalues lie in $[-1,1]$.
+\end{proof}
+
+\begin{theorem}[A network capacity bound with quotient coordinates]
+\label{thm:network-generalization}
+Suppose layer $l$ has a cover satisfying Theorem~\ref{thm:chart-generalization}
+with dimension $D_l=r_l(m_l+d_l-r_l)$, chart count $J_l$, and constants
+$C_l,R_l$. The scalar loss is $L_{\rm out}$-Lipschitz in the network
+output and lies in $[0,1]$. Then, with probability at least $1-\delta$,
+\begin{align}
+ \sup_X|R(X)-R_S(X)|
+ &\leq2L_{\rm out}\sum_l A_l\varepsilon_l\notag\\
+ &\quad+\sqrt{\frac{\log(2/\delta)+\sum_l\log J_l+
+ \sum_lD_l\log(1+2C_lR_l/\varepsilon_l)}{2n}}.
+ \label{eq:network-generalization}
+\end{align}
+Additional trainable dense layers, embeddings, attention parameters, and
+biases require their own covering terms; they cannot be omitted because
+only the adapters are called the method's parameters.
+\end{theorem}
+\begin{proof}
+Take the Cartesian product of layerwise nets. Their cardinalities
+multiply, so their logarithms add. By Lemma~\ref{lem:network-sensitivity},
+each resulting output approximation has norm error at most
+$\sum_l A_l\varepsilon_l$, using $\|\cdot\|_2\leq\|\cdot\|$ for the
+layer net errors. Apply Hoeffding and a union bound on this finite product
+net, then pay the output-loss Lipschitz approximation cost twice.
+\end{proof}
+
+These network formulas concern the stated feed-forward class. Transformer
+attention contains a data-dependent softmax operator; its Lipschitz and
+norm constants must be bounded as part of a corresponding full-network
+cover. The theorem is not a shortcut to a dimension-free Transformer
+generalization guarantee. Similarly, transductive nodes in a single graph
+are not independent graph observations. Applying the IID concentration
+steps to Cora, Citeseer, PubMed, or ogbn-arxiv requires an appropriate
+sampling model or a separate transductive bound. Sequential language tokens
+also do not constitute IID examples. We use held-out task metrics for
+those experiments and do not present them as empirical confirmations of
+the IID theorems.
+
+\subsection{Model selection across the full proposal grid}
+Let $M$ predictors be trained without using a validation sample of size
+$n_v$. They may include every successful hyperparameter configuration,
+checkpoint, rank, and architecture under consideration. Conditional on the
+training data and algorithmic randomness, the predictors are fixed.
+
+\begin{proposition}[Validation selection cost]
+\label{prop:selection}
+For bounded validation losses, with probability at least $1-\delta$,
+the predictor $\widehat h$ minimizing validation loss among the $M$
+candidates obeys
+\begin{equation}
+ R(\widehat h)\leq\min_{1\leq j\leq M}R(h_j)
+           +2\sqrt{\frac{\log(2M/\delta)}{2n_v}}.
+ \label{eq:validation-selection}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Hoeffding and a union bound yield simultaneous deviations at most
+$a=\sqrt{\log(2M/\delta)/(2n_v)}$. Thus
+$R(\widehat h)\leq\widehat R_v(\widehat h)+a
+\leq\widehat R_v(h_\star)+a\leq R(h_\star)+2a$,
+where $h_\star$ is the best population-risk candidate.
+\end{proof}
+
+The candidate count includes searched checkpoints when validation selects
+an epoch. Replicating configurations whose damping or balance interval
+does not affect a baseline is an execution alias, not independent evidence.
+If the grid itself is adaptively redesigned using validation feedback,
+the fixed-candidate conditional argument no longer applies without
+accounting for that adaptivity. Test data are not used to pick the grid's
+winning method or checkpoint. Reporting all attempted tasks and failed
+configurations is necessary for interpreting a broad search for positive
+results.
+
+\subsection{Combining generalization with actual optimization guarantees}
+\begin{theorem}[Population excess risk under explicit empirical optimization]
+\label{thm:excess-risk}
+Let $\mathcal C$ be a fixed predictor class containing the output $X_T$.
+If a uniform deviation bound
+$\sup_{X\in\mathcal C}|R(X)-R_S(X)|\leq U_n$ holds and the algorithm
+achieves
+\begin{equation}
+ R_S(X_T)-\inf_{X\in\mathcal C}R_S(X)\leq\varepsilon_{\rm opt},
+\end{equation}
+then on that event
+\begin{equation}
+ R(X_T)-\inf_{X\in\mathcal C}R(X)
+           \leq\varepsilon_{\rm opt}+2U_n.
+ \label{eq:excess-risk-uniform}
+\end{equation}
+Alternatively, if the algorithm has expected uniform stability
+$\epsilon_{\rm stab}$ and expected empirical suboptimality at most
+$\varepsilon_{\rm opt}$, then
+\begin{equation}
+ \mathbb E[R(X_T)]-\inf_{X\in\mathcal C}R(X)
+           \leq\varepsilon_{\rm opt}+\epsilon_{\rm stab}.
+ \label{eq:excess-risk-stable}
+\end{equation}
+The statements allow infima by taking limits; attainment is unnecessary.
+\end{theorem}
+\begin{proof}
+For any $X\in\mathcal C$, add and subtract empirical risks:
+\begin{align}
+ R(X_T)-R(X)
+ &=[R(X_T)-R_S(X_T)]+[R_S(X_T)-R_S(X)]
+                         +[R_S(X)-R(X)]\\
+ &\leq2U_n+\varepsilon_{\rm opt}.
+\end{align}
+Take an infimizing sequence to prove Eq.~\eqref{eq:excess-risk-uniform}.
+For the expectation bound, compare to any fixed $X$ independent of $S$.
+Expected stability bounds the first bracket by $\epsilon_{\rm stab}$,
+and the expected third bracket is zero by IID sampling. The empirical
+optimization guarantee bounds the middle bracket. Take the infimum over
+fixed comparison points.
+\end{proof}
+
+If the empirical objective has the quotient PL property over an invariant
+optimization region containing its class minimum, Theorem~\ref{thm:pl}
+provides $\varepsilon_{\rm opt}\leq(1-\mu_g\eta)^T\Delta_0$ in the
+deterministic case. Corollary~\ref{cor:stochastic-pl} supplies the
+corresponding noisy optimization floor. In contrast, the nonconvex
+stationarity bounds in Theorems~\ref{thm:stochastic} and
+\ref{thm:momentum} do not give empirical suboptimality without an
+additional landscape assumption. Substituting a squared-gradient bound
+for $\varepsilon_{\rm opt}$ would be invalid.
+
+Any approximation error from restricting to low rank is separate:
+\begin{equation}
+ R(X_T)-\inf_{h\in\mathcal H}R(h)
+ =\big[R(X_T)-\inf_{X\in\mathcal C}R(X)\big]
+  +\big[\inf_{X\in\mathcal C}R(X)-\inf_{h\in\mathcal H}R(h)\big].
+\end{equation}
+Increasing rank can reduce this approximation term while enlarging capacity
+and computational cost. Quotient optimization changes how the rank-$r$
+class is traversed; it does not remove that tradeoff.
+
+\subsection{Consequences for the empirical claims}
+The theory supports monitoring a coherent list of quantities: product rank
+margin, actual tangent-gradient norm, update-map sensitivity, represented
+spectral and nuclear norms, training loss, and validation-selected task
+performance. It does not support declaring improved generalization from
+factor balancing alone. At a fixed product, balancing preserves the entire
+predictor, including its training and population risks. If a SIREN layer
+computes its factors only through $BA$ before applying a sine, balancing
+also preserves that layer exactly; a claim that it removes a useful
+factor-scale-dependent representation is false for that architecture.
+Different results after training can reflect different product-space
+optimization paths, frequency-sensitive conditioning, optimizer state, or
+implementation error, and must be investigated as such.
+
+The generalization analysis is therefore both constructive and scoped:
+it gives explicit bounds when their statistical and optimization assumptions
+hold, identifies the intrinsic rank-$r$ dimension in regular coordinates,
+and explains why gauge-invariant quantities are the appropriate objects.
+It leaves real task superiority and the sign of a train--test gap difference
+to completed, properly controlled experiments.
