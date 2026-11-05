@@ -26,7 +26,7 @@ Low-rank products admit many factorizations: $X=BA=(BQ)(Q^{-1}A)$. QuotientOpt f
 |:--|:--|
 | [`experiments/`](experiments/) | All experiment and numerical-test source code, including the full-grid generator, task runners, campaign variants, and analysis builders. |
 | [`paper/`](paper/) | Manuscript source, bibliography, style files, tables, figures, and compiled PDF. |
-| [`figures/`](figures/) | Plotting scripts, including the code for the intuition diagram above. |
+| [`figures/`](figures/) | Plotting scripts, the README figure specification, and an editable schematic variant. |
 | [`figure_code/`](figure_code/) | Standalone code and compact curve data for the two central loss figures. |
 | [`examples/`](examples/) | A small synthetic configuration for a local smoke run. |
 
@@ -58,7 +58,7 @@ python experiments/full_proposal/run.py path/to/config.json --device cuda:0 --ou
 For balanced factors $(\bar B,\bar A)$ with shared Gram matrix $H=\bar B^\top\bar B=\bar A\bar A^\top$, a provisional factor update $U=(U_B,U_A)$ is projected by solving
 
 $$
-H\Omega+\Omega H=\bar B^\top U_B-U_A\bar A^\top,
+(H+\varepsilon I)\Omega+\Omega(H+\varepsilon I)=\bar B^\top U_B-U_A\bar A^\top,
 \qquad
 \Pi_H(U)=(U_B-\bar B\Omega,\;U_A+\Omega\bar A).
 $$
@@ -75,7 +75,7 @@ Prespecified campaign configurations are in the `plan.json` files beside their c
 
 ## Figures and paper
 
-Regenerate the README method overview:
+The README overview is the 1933 × 813 PNG in [`assets/quotientopt_method_overview.png`](assets/quotientopt_method_overview.png). Its exact labels, equations, layout, and reference style are recorded in [`figures/method_overview_prompt.md`](figures/method_overview_prompt.md). A code-drawn schematic variant is also available:
 
 ```bash
 python figures/draw_method_overview.py
