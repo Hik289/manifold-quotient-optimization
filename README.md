@@ -1,19 +1,22 @@
 <div align="center">
-
-# QuotientOpt
-
-### Balanced quotient geometry for low-rank optimization
-
-[![Paper](https://img.shields.io/badge/Paper-PDF-b31b1b?style=for-the-badge)](paper/main.pdf)
-[![Quickstart](https://img.shields.io/badge/Run-Quickstart-087f72?style=for-the-badge)](#quickstart)
-[![Experiments](https://img.shields.io/badge/Explore-Experiments-3168ad?style=for-the-badge)](#experiments)
-[![Figures](https://img.shields.io/badge/Rebuild-Figures-cf7431?style=for-the-badge)](#figures-and-paper)
-
-Research code and an ICML-style working manuscript. The manuscript uses a draft adapter to the official ICML 2026 style while a 2027 style is unavailable; this repository does **not** claim conference acceptance.
-
+  <h1>QuotientOpt: Gauge-Invariant Low-Rank Optimization</h1>
+  <p><strong>Balanced Quotient Geometry, Convergence, and Generalization</strong></p>
+  <p>
+    <a href="paper/main.pdf"><img alt="Paper PDF" src="https://img.shields.io/badge/Paper-PDF-b31b1b.svg"></a>
+    <a href="#quickstart"><img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10%2B-3776AB.svg"></a>
+    <a href="experiments/full_proposal/geometry_torch.py"><img alt="PyTorch implementation" src="https://img.shields.io/badge/Framework-PyTorch-EE4C2C.svg"></a>
+    <a href="#experiments"><img alt="Reproducible experiments" src="https://img.shields.io/badge/Experiments-Protocols-0B877A.svg"></a>
+  </p>
+  <p>Research code for balanced quotient optimization of low-rank factors with gauge-consistent momentum.</p>
 </div>
 
-![QuotientOpt intuition: gauge orbit, balanced factors, and horizontal update](assets/quotientopt_intuition.png)
+> Many factor pairs represent the same matrix. QuotientOpt balances the representative, transports persistent state, and removes update motion along the gauge orbit.
+
+<p align="center">
+  <a href="assets/quotientopt_method_overview.png"><img src="assets/quotientopt_method_overview.png" width="98%" alt="QuotientOpt factorization, balance, gradient, horizontal memory, and factor update"></a>
+</p>
+
+The manuscript is an ICML-style working draft. Its local 2027 draft adapter uses the official ICML 2026 style and does not imply conference acceptance.
 
 Low-rank products admit many factorizations: $X=BA=(BQ)(Q^{-1}A)$. QuotientOpt first balances the factors without changing $X$, transports persistent momentum to the balanced coordinates, and projects the update onto the horizontal space. The projection solves a small Sylvester equation, removing motion that only changes the factor representation.
 
@@ -72,10 +75,10 @@ Prespecified campaign configurations are in the `plan.json` files beside their c
 
 ## Figures and paper
 
-Regenerate the README diagram:
+Regenerate the README method overview:
 
 ```bash
-python figures/draw_intuition.py
+python figures/draw_method_overview.py
 ```
 
 Regenerate the two main loss figures from the bundled compact curve data:
