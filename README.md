@@ -7,34 +7,20 @@
     <a href="experiments/full_proposal/geometry_torch.py"><img alt="PyTorch implementation" src="https://img.shields.io/badge/Framework-PyTorch-EE4C2C.svg"></a>
     <a href="#experiments"><img alt="Reproducible experiments" src="https://img.shields.io/badge/Experiments-Protocols-0B877A.svg"></a>
   </p>
-  <p>Research code for balanced quotient optimization of low-rank factors with gauge-consistent momentum.</p>
+  <p>Balanced quotient geometry · coordinate-consistent momentum · horizontal updates</p>
 </div>
-
-> Many factor pairs represent the same matrix. QuotientOpt balances the representative, transports persistent state, and removes update motion along the gauge orbit.
 
 <p align="center">
   <a href="assets/quotientopt_method_overview.png"><img src="assets/quotientopt_method_overview.png" width="98%" alt="QuotientOpt factorization, balance, gradient, horizontal memory, and factor update"></a>
 </p>
 
-The manuscript is an ICML-style working draft. Its local 2027 draft adapter uses the official ICML 2026 style and does not imply conference acceptance.
+## Overview
 
-Low-rank products admit many factorizations: $X=BA=(BQ)(Q^{-1}A)$. QuotientOpt first balances the factors without changing $X$, transports persistent momentum to the balanced coordinates, and projects the update onto the horizontal space. The projection solves a small Sylvester equation, removing motion that only changes the factor representation.
-
-## What is in this repository
-
-| Directory | Contents |
-|:--|:--|
-| [`experiments/`](experiments/) | All experiment and numerical-test source code, including the full-grid generator, task runners, campaign variants, and analysis builders. |
-| [`paper/`](paper/) | Manuscript source, bibliography, style files, tables, figures, and compiled PDF. |
-| [`figures/`](figures/) | Plotting scripts, the README figure specification, and an editable schematic variant. |
-| [`figure_code/`](figure_code/) | Standalone code and compact curve data for the two central loss figures. |
-| [`examples/`](examples/) | A small synthetic configuration for a local smoke run. |
-
-Generated datasets, full training trajectories, checkpoints, and machine-specific logs are intentionally outside the source repository. The paper records selection rules and complete comparison tables, including mixed outcomes.
+A low-rank matrix has many equivalent factor pairs: $X=BA=(BQ)(Q^{-1}A)$. Optimizer state can therefore change with the chosen coordinates even when $X$ does not. **QuotientOpt** balances the factors without changing their product, transports persistent momentum to the new coordinates, and removes gauge motion with a small Sylvester solve. The [paper](paper/main.pdf) develops the geometry, convergence and generalization analysis; this repository provides the implementation and experiment protocols.
 
 ## Quickstart
 
-Use Python 3.10 or newer. A CPU-only synthetic smoke run needs no downloaded benchmark data.
+Use Python 3.10 or newer. The synthetic CPU smoke run needs no downloaded benchmark data.
 
 ```bash
 python -m venv .venv
@@ -44,9 +30,9 @@ python experiments/full_proposal/run.py examples/matrix_sensing_smoke.json \
   --device cpu --smoke-epochs 2 --output outputs
 ```
 
-The run writes `config.json`, checkpoints, and `trajectory.jsonl` under `outputs/<run-id>/`. A smoke run verifies the code path; it is **not** a paper result. To run the complete horizon for a configuration, omit `--smoke-epochs` and set the desired `epochs` in the JSON file.
+The run writes its configuration, checkpoints, and trajectory to `outputs/<run-id>/`. The two-epoch smoke run checks the code path; it is **not** a paper result. For a full run, set `epochs` in the configuration and omit `--smoke-epochs`.
 
-For vision, graph, and language benchmarks, install the additional dependencies in [`requirements-benchmarks.txt`](requirements-benchmarks.txt). The loaders are in [`experiments/full_proposal/datasets_full.py`](experiments/full_proposal/datasets_full.py). Set `QUOTIENT_DATA` to choose a cache directory; set `QUOTIENT_VISION_DATA` to use an existing CIFAR cache. Dataset downloads and access requirements remain those of the original data providers.
+Benchmark runs use the additional dependencies in [`requirements-benchmarks.txt`](requirements-benchmarks.txt) and the loaders in [`datasets_full.py`](experiments/full_proposal/datasets_full.py). Set `QUOTIENT_DATA` for the data cache and, when needed, `QUOTIENT_VISION_DATA` for an existing CIFAR cache.
 
 ```bash
 export QUOTIENT_DATA="$PWD/datasets"
@@ -63,43 +49,21 @@ $$
 \Pi_H(U)=(U_B-\bar B\Omega,\;U_A+\Omega\bar A).
 $$
 
-The PyTorch implementation is [`experiments/full_proposal/geometry_torch.py`](experiments/full_proposal/geometry_torch.py). [`experiments/geometry.py`](experiments/geometry.py) contains the earlier NumPy geometry implementation and [`experiments/tests/test_numerics.py`](experiments/tests/test_numerics.py) its numerical checks.
+With $\varepsilon=0$, the update is exactly horizontal; the regularized solve has residual $2\varepsilon\Omega$. The PyTorch implementation is [`geometry_torch.py`](experiments/full_proposal/geometry_torch.py), with [numerical checks](experiments/tests/test_numerics.py).
 
 ## Experiments
 
-The code covers synthetic matrix sensing and completion, deep linear networks, graph learning, implicit neural representations, scientific ML, vision, and language modeling. [`experiments/full_proposal/grid.py`](experiments/full_proposal/grid.py) defines the proposal grid. The original exhaustive grid is much larger than the completed evidence in the manuscript; treat the generator as a protocol definition, not a claim that every configuration was run.
+The code covers matrix sensing and completion, deep linear networks, graph learning, implicit neural representations, scientific ML, vision, and language modeling. The [proposal grid](experiments/full_proposal/grid.py) specifies configurations; the manuscript reports the subset completed and analyzed. Its [experiment section](paper/sections/5_experiments.tex) and [full protocol](paper/sections/full_protocol.tex) give the comparison settings, selection rules, and outcomes, including mixed results.
 
-The manuscript reports favorable comparisons on several specified Cora/GCN, SDF/SIREN, and Poisson/PINN protocols, alongside close balance-only controls and mixed results in other families. Checkpoint selection uses validation metrics; held-out test outcomes are read after selection. See the [experiment section](paper/sections/5_experiments.tex) and [full protocol](paper/sections/full_protocol.tex) for the exact settings and denominators.
+The reported Cora/GCN, SDF/SIREN, and Poisson/PINN studies include matched-budget optimizer comparisons and balance-only controls. Formal configurations are stored in campaign `plan.json` files beside their runners. Checkpoints are selected on validation metrics before held-out test evaluation.
 
-Prespecified campaign configurations are in the `plan.json` files beside their corresponding runners. Results are keyed by a hash of the complete configuration. The full-grid worker and multi-device launch scripts are intended for dedicated compute and can generate many long runs; the quickstart above is the small local entry point.
+## Repository
 
-## Figures and paper
-
-The README overview is the 1933 × 813 PNG in [`assets/quotientopt_method_overview.png`](assets/quotientopt_method_overview.png). Its exact labels, equations, layout, and reference style are recorded in [`figures/method_overview_prompt.md`](figures/method_overview_prompt.md). A code-drawn schematic variant is also available:
-
-```bash
-python figures/draw_method_overview.py
-```
-
-Regenerate the two main loss figures from the bundled compact curve data:
-
-```bash
-python figure_code/plot_core_figures.py
-```
-
-The other plot builders remain in `experiments/full_proposal/build_*.py` and `analysis/plot_replacement.py`. They use full result records, which are not included in this source release. Pre-rendered PDF figures are included in `paper/figures/` so the paper can compile directly:
-
-```bash
-cd paper
-latexmk -pdf main.tex
-```
-
-The entry point is [`paper/main.tex`](paper/main.tex). The adapter `icml2027_draft.sty` loads the bundled official `icml2026.sty`; it is explicitly a working-draft style, not an official 2027 template.
-
-## Reproducibility notes
-
-- Every formal run writes its configuration, per-epoch trajectory, validation-selected checkpoint, final metrics, and source hashes.
-- The focused Poisson follow-up varies model initialization over 42, 43, and 44 while keeping its data and shuffle seed fixed at 42.
-- Some campaigns include stopped numerical trials and recovery variants. Their source code and protocols are retained rather than folding them into successful-run counts.
-- The repository publishes source and compact figure inputs. It does not publish downloaded datasets or model checkpoints.
+| Path | Contents |
+|:--|:--|
+| [`experiments/`](experiments/) | Task runners, optimizer implementations, campaign plans, grid generator, and numerical tests. |
+| [`paper/`](paper/) | [Manuscript source](paper/main.tex), bibliography, figures, and [PDF](paper/main.pdf). |
+| [`figure_code/`](figure_code/) | [Loss-curve builder](figure_code/plot_core_figures.py) and bundled compact curve data. |
+| [`figures/`](figures/) | Diagram specification and plotting scripts. |
+| [`examples/`](examples/) | CPU smoke-run configuration. |
 
