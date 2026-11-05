@@ -2,10 +2,8 @@
   <h1>QuotientOpt: Gauge-Invariant Low-Rank Optimization</h1>
   <p><strong>Balanced Quotient Geometry, Convergence, and Generalization</strong></p>
   <p>
-    <a href="paper/main.pdf"><img alt="Paper PDF" src="https://img.shields.io/badge/Paper-PDF-b31b1b.svg"></a>
+    <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-2ea44f.svg"></a>
     <a href="#quickstart"><img alt="Python 3.10+" src="https://img.shields.io/badge/Python-3.10%2B-3776AB.svg"></a>
-    <a href="experiments/full_proposal/geometry_torch.py"><img alt="PyTorch implementation" src="https://img.shields.io/badge/Framework-PyTorch-EE4C2C.svg"></a>
-    <a href="#experiments"><img alt="Reproducible experiments" src="https://img.shields.io/badge/Experiments-Protocols-0B877A.svg"></a>
   </p>
   <p>Balanced quotient geometry · coordinate-consistent momentum · horizontal updates</p>
 </div>
@@ -16,7 +14,7 @@
 
 ## Overview
 
-A low-rank matrix has many equivalent factor pairs: $X=BA=(BQ)(Q^{-1}A)$. Optimizer state can therefore change with the chosen coordinates even when $X$ does not. **QuotientOpt** balances the factors without changing their product, transports persistent momentum to the new coordinates, and removes gauge motion with a small Sylvester solve. The [paper](paper/main.pdf) develops the geometry, convergence and generalization analysis; this repository provides the implementation and experiment protocols.
+A low-rank matrix has many equivalent factor pairs: $X=BA=(BQ)(Q^{-1}A)$. Optimizer state can therefore change with the chosen coordinates even when $X$ does not. **QuotientOpt** balances the factors without changing their product, transports persistent momentum to the new coordinates, and removes gauge motion with a small Sylvester solve. The [manuscript source](paper/main.tex) develops the geometry, convergence and generalization analysis; this repository provides the implementation and experiment protocols.
 
 ## Quickstart
 
@@ -62,7 +60,7 @@ The reported Cora/GCN, SDF/SIREN, and Poisson/PINN studies include matched-budge
 | Path | Contents |
 |:--|:--|
 | [`experiments/`](experiments/) | Task runners, optimizer implementations, campaign plans, grid generator, and numerical tests. |
-| [`paper/`](paper/) | [Manuscript source](paper/main.tex), bibliography, figures, and [PDF](paper/main.pdf). |
+| [`paper/`](paper/) | [Manuscript source](paper/main.tex), bibliography, and PNG figures. |
 | [`figure_code/`](figure_code/) | [Loss-curve builder](figure_code/plot_core_figures.py) and bundled compact curve data. |
 | [`figures/`](figures/) | Diagram specification and plotting scripts. |
 | [`examples/`](examples/) | CPU smoke-run configuration. |
