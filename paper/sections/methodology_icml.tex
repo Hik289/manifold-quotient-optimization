@@ -1,9 +1,22 @@
 \section{QuotientOpt and Mathematical Guarantees}
 \label{sec:theory}
-Table~\ref{tab:method-update} specifies the update. Balance precedes
+Figure~\ref{fig:method-main} shows one iteration; Table~\ref{tab:method-update}
+gives the update in execution order. Balance precedes
 differentiation, and persistent state is expressed in the same
 representative as the new gradient. The complete iteration and expanded
 guarantees are in Appendix~\ref{app:expanded-guarantees}.
+\begin{figure*}[t]
+\centering
+\includegraphics[width=.99\textwidth]{figures/fig_method_main}
+\caption{\textbf{One QuotientOpt iteration.} Gauge-equivalent factor pairs
+represent the same $X_t$. The algorithm balances the factors, transports
+persistent momentum to the balanced coordinates, forms a stochastic gradient,
+and corrects the vertical component of the proposed momentum before the factor
+step. The result is exactly horizontal for $\varepsilon=0$; with regularization,
+the horizontal residual is $2\varepsilon\Omega_t$. Table~\ref{tab:method-update}
+gives the full formulas.}
+\label{fig:method-main}
+\end{figure*}
 \input{figures/method_update_table}
 \input{figures/icml_task_results}
 

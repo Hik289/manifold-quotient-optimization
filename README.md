@@ -9,7 +9,7 @@
 </div>
 
 <p align="center">
-  <a href="assets/quotientopt_method_overview.png"><img src="assets/quotientopt_method_overview.png" width="98%" alt="QuotientOpt workflow: factorize, balance, compute gradients, update momentum, and rebuild the matrix"></a>
+  <a href="assets/quotientopt_method_overview.svg"><img src="assets/quotientopt_method_overview.png" width="98%" alt="QuotientOpt update: gauge orbit, balancing, transported state, horizontal projection, and factor step"></a>
 </p>
 
 ## Overview
